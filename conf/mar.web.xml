@@ -1,20 +1,35 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE struts PUBLIC 
-	"-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" 
-	"http://struts.apache.org/dtds/struts-2.1.dtd">
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" 
+    "http://struts.apache.org/dtds/struts-2.1.dtd">
 <struts>
-	<package namespace="/mar" name="mar" extends="struts-default">
-		
-		<!-- invite -->
-		
-		<action name="invitePage" class="com.moemao.tgks.mar.invite.InveteAction" method="invitePage">
-            <result name="success">/WEB-INF/jsp/mar/invite/invite.jsp</result>
-        </action>
-        
-		<action name="invite" class="com.moemao.tgks.mar.invite.InveteAction" method="invite">
-			<result name="success">/WEB-INF/jsp/common/success.jsp</result>
-            <result name="error">/WEB-INF/jsp/common/error.jsp</result>
-		</action>
-		
-	</package>
+  <package namespace="/mar" name="mar" extends="struts-default">
+
+    <!-- mar_passwordcard -->
+    <action name="passwordCardManager" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="passwordCardManager">
+        <result name="success">/WEB-INF/jsp/mar/passwordcard/passwordCardManager.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="queryPasswordCard" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="queryPasswordCard">
+        <result name="success">/WEB-INF/jsp/mar/passwordcard/passwordCardList.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="editPasswordCardPage" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="editPasswordCardPage">
+        <result name="success">/WEB-INF/jsp/mar/passwordcard/passwordCardEdit.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="editPasswordCard" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="editPasswordCard">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="deletePasswordCard" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="deletePasswordCard">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+  </package>
 </struts>
