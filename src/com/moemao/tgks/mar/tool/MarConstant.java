@@ -1,7 +1,9 @@
 package com.moemao.tgks.mar.tool;
 
-public class Constant
+public class MarConstant
 {
+    public static final String MODULE_TAG = "MARZ";
+    
     /**
      * 注册
      */

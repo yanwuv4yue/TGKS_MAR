@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import com.moemao.tgks.common.core.action.TGKSAction;
 import com.moemao.tgks.mar.net.HttpRequest;
-import com.moemao.tgks.mar.tool.Constant;
+import com.moemao.tgks.mar.tool.MarConstant;
 
 public class InveteAction extends TGKSAction
 {
@@ -87,7 +87,7 @@ public class InveteAction extends TGKSAction
     public String regist()
     {
         String paramStr = "{\"uuid\":\"" + UUID.randomUUID().toString() + "\",\"clver\":\"1\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
-        String result = httpRequest.sendPost(Constant.URL_REGIST, paramStr);
+        String result = httpRequest.sendPost(MarConstant.URL_REGIST, paramStr);
         System.out.println("regist");
         System.out.println(result);
         
@@ -97,7 +97,7 @@ public class InveteAction extends TGKSAction
     public String connect(String sid)
     {
         String paramStr = sid + "=";
-        String result = httpRequest.sendPost(Constant.URL_CONNECT, paramStr);
+        String result = httpRequest.sendPost(MarConstant.URL_CONNECT, paramStr);
         System.out.println("connect");
         System.out.println(result);
         
@@ -107,7 +107,7 @@ public class InveteAction extends TGKSAction
     public String userCreate(String sid, String name, String chara)
     {
         String paramStr = sid + "=" + "{\"name\":\"" + name + "\",\"arthur_type\":" + chara + "}";
-        String result = httpRequest.sendPost(Constant.URL_USERCREATE, paramStr);
+        String result = httpRequest.sendPost(MarConstant.URL_USERCREATE, paramStr);
         System.out.println("userCreate");
         System.out.println(result);
         
@@ -117,7 +117,7 @@ public class InveteAction extends TGKSAction
     public String homeShow(String sid)
     {
         String paramStr = sid + "=";
-        String result = httpRequest.sendPost(Constant.URL_HOMESHOW, paramStr);
+        String result = httpRequest.sendPost(MarConstant.URL_HOMESHOW, paramStr);
         System.out.println("connect");
         System.out.println(result);
         
@@ -127,7 +127,7 @@ public class InveteAction extends TGKSAction
     public String inviteCodeEnter(String sid, String inviteCode)
     {
         String paramStr = sid + "=" + "{\"inviteid\":\"" + inviteCode + "\"}";
-        String result = httpRequest.sendPost(Constant.URL_INVITECODEENTER, paramStr);
+        String result = httpRequest.sendPost(MarConstant.URL_INVITECODEENTER, paramStr);
         System.out.println("inviteCodeEnter");
         System.out.println(result);
         
