@@ -13,6 +13,7 @@
         <table>
             <tr>
                 <td><label>招待ID：</label></td><td><input type="text" name="inviteCode" id="inviteCode" /></td>
+                <td><label>神秘代码：</label></td><td><input type="text" name="password" id="password" /></td>
                 <td>
                 
                 </td>
