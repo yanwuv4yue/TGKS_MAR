@@ -1,6 +1,7 @@
 package com.moemao.tgks.mar.passwordcard.action;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,6 +13,7 @@ import com.moemao.tgks.common.tool.StringUtil;
 import com.moemao.tgks.mar.passwordcard.entity.PasswordCardEvt;
 import com.moemao.tgks.mar.passwordcard.entity.PasswordCardReq;
 import com.moemao.tgks.mar.passwordcard.service.PasswordCardService;
+import com.moemao.tgks.mar.tool.MarConstant;
 
 public class PasswordCardAction extends TGKSAction
 {
@@ -41,7 +43,7 @@ public class PasswordCardAction extends TGKSAction
     /**
      * ﻿PasswordCard查询条件封装对象（自动生成代码后需要new对象）
      */
-    private PasswordCardReq passwordCardReq;
+    private PasswordCardReq passwordCardReq = new PasswordCardReq();
     
     public String passwordCardManager()
     {
@@ -92,6 +94,30 @@ public class PasswordCardAction extends TGKSAction
     CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_EXECUTE_NUMS, StringUtil.toBeString(result));
     CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "PasswordCardAction.deletePasswordCard");
     return SUCCESS;
+    }
+    
+    /**
+     * 
+     * @Title: createPasswordCard
+     * @Description: 创建一批卡密
+     * @return
+     * @return String 返回类型
+     * @throws
+     */
+    public String createPasswordCard()
+    {
+        int num = 30;
+        
+        for (int i = 0; i < num; i++)
+        {
+            passwordCardEvt = new PasswordCardEvt();
+            passwordCardEvt.setStatus(MarConstant.PASSWORDCARD_STATUS_0);
+            passwordCardEvt.setPassword(UUID.randomUUID().toString().replace("-", ""));
+            
+            this.mar_passwordCardService.addPasswordCard(passwordCardEvt);
+        }
+        
+        return SUCCESS;
     }
     
     /**

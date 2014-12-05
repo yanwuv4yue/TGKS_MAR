@@ -3,6 +3,9 @@ package com.moemao.tgks.mar.tool;
 public class MarConstant
 {
     public static final String MODULE_TAG = "MARZ";
+
+    public static final String PASSWORDCARD_STATUS_0 = "0";
+    public static final String PASSWORDCARD_STATUS_1 = "1";
     
     /**
      * 注册

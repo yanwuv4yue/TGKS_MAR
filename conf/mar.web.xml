@@ -4,6 +4,16 @@
     "http://struts.apache.org/dtds/struts-2.1.dtd">
 <struts>
   <package namespace="/mar" name="mar" extends="struts-default">
+  
+    <action name="login" class="com.moemao.tgks.mar.login.action.LoginAction" method="login">
+        <result name="success">/WEB-INF/jsp/mar/invite/index.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="invite" class="com.moemao.tgks.mar.invite.InviteAction" method="invite">
+        <result name="success">/WEB-INF/jsp/mar/invite/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/mar/invite/error.jsp</result>
+    </action>
 
     <!-- mar_passwordcard -->
     <action name="passwordCardManager" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="passwordCardManager">
@@ -30,6 +40,11 @@
         <result name="success">/WEB-INF/jsp/common/success.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
-
+    
+    
+    <action name="createPasswordCard" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="createPasswordCard">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
   </package>
 </struts>
