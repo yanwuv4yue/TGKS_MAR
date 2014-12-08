@@ -6,6 +6,7 @@ public class MarConstant
 
     public static final String PASSWORDCARD_STATUS_0 = "0";
     public static final String PASSWORDCARD_STATUS_1 = "1";
+    public static final String PASSWORDCARD_STATUS_2 = "2";
     
     /**
      * 注册
