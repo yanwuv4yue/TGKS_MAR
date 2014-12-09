@@ -12,11 +12,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta charset="UTF-8" />
   <title>乖离性百万亚瑟王 自助招待系统 | 乖離性ミリオンアーサー</title>
+  <script type="text/javascript" async="" src="<%=basePath%>resources/js/jquery-1.8.2.js"></script>
+  <script type="text/javascript" async="" src="<%=basePath%>resources/js/jquery.form.js"></script>
   <script type="text/javascript" async="" src="<%=basePath%>resources/mar/invite/conversion_async.js"></script>
   <script type="text/javascript" async="" src="<%=basePath%>resources/mar/invite/analytics.js"></script>
   <script type="text/javascript" async="" src="<%=basePath%>resources/mar/invite/cse.js"></script>
-  <script async="" src="<%=basePath%>resources/mar/invite/gtm.js"></script>
-  <script src="<%=basePath%>resources/mar/invite/html5media.min.js"></script>
+  <script type="text/javascript" async="" src="<%=basePath%>resources/mar/invite/gtm.js"></script>
+  <script type="text/javascript" async="" src="<%=basePath%>resources/mar/invite/html5media.min.js"></script>
   <meta content="authenticity_token" name="csrf-param" /> 
   <meta content="0GzJWtkVKEK3qgfeGcNf/3g+P0lsjt1S98NW53Fnjk0=" name="csrf-token" />
   <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
@@ -184,23 +186,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     {
         margin-left: 20px;
         margin-top: 18px;
+        width: 220px;
     }
     #password
     {
         margin-left: 30px;
         margin-top: 18px;
-        width: 510px;
+        width: 440px;
     }
     #inviteCodeLabel
     {
         margin-left: 10px;
-        font-size: 14px;
+        font-size: 15px;
     }
     #passwordLabel
     {
         margin-left: 20px;
-        font-size: 14px;
+        font-size: 15px;
     }
+    #buyPassword
+    {
+        margin-left: 10px;
+    }
+    body
+    {
+	  font-family:宋体;
+	}
 </style>
  </head>
  <body>
@@ -216,7 +227,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <!--End Google Tag Manager-->
   <div id="wrapper">
    <div id="sqexHeader-black">
+    <!-- 
     <a href="http://www.square-enix.com/jp/" id="sqexlogo" target="_blank"><img alt="SQUARE ENIX" border="0" height="14" src="<%=basePath%>resources/mar/invite/logo-black.gif" width="130" /></a>
+      -->
    </div>
    <div id="container" style="margin: 50px 0px; opacity: 1;">
     <div id="bg_line_e">
@@ -236,7 +249,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           test
          </div>
          <div id="term_finished">
-          ☆ 请在输入框中填写您的 招待ID（9位数字 中间请勿加逗号空格）以及 神秘代码 ，点击获取招待按钮即可 ☆
+          ☆ 请在输入框中填写您的 招待ID（9位数字 中间请勿加逗号空格）以及 <a href="http://item.taobao.com/item.htm?id=42502732828"><b>神秘代码</b></a> ，点击 获取招待 按钮即可 ☆
          </div>
          <div id="contentsBox">
           <div id="countBox">
@@ -246,16 +259,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 			        <table>
 			            <tr>
 			                <td>
-								<div style="width:300px;height:100px;margin:0px auto">
 									<input class="invite_code" type="text" required="" name="inviteCode" id="inviteCode" />
 									<label alt="请输入招待号码（9位数字）" placeholder="招待号码"  id="inviteCodeLabel"></label>
-								</div>
 			                </td>
                             <td>
-								<div style="width:300px;height:100px;margin:0px auto">
 								    <input class="password_code" type="text" required="" name="password" id="password" />
 								    <label alt="请输入神秘代码（很长的那串）" placeholder="神秘代码" id="passwordLabel" ></label>
-								</div>
+                            </td>
+                            <td>
+                                    <a id="buyPassword" onclick="window.open('http://item.taobao.com/item.htm?id=42502732828')"><b>→点击购买神秘代码←</b></a>
                             </td>
 			            </tr>
 			        </table>
@@ -264,7 +276,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </div>
           <div id="achieve">
            <ul class="nav sp">
-            <li class="twitter"><a href="https://pre.kairisei-ma.jp/users/auth/twitter">招待┏ (゜ω゜)=☞</a></li>
+            <li class="twitter"><a href="http://www.moemao.com">招待┏ (゜ω゜)=☞</a></li>
            </ul>
            <figure class="sp">
             <img alt="Achieve01" class="achieve01" src="<%=basePath%>resources/mar/invite/bigleft.png" />
@@ -273,7 +285,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <img alt="Achieve02" class="achieve02" src="<%=basePath%>resources/mar/invite/bigright.png" />
            </figure>
            <ul class="nav">
-            <li class="twitter"><a href="https://pre.kairisei-ma.jp/users/auth/twitter">招待┏ (゜ω゜)=☞</a></li>
+            <li class="twitter"><a id="inviteGo">招待┏ (゜ω゜)=☞</a></li>
            </ul>
           </div>
          </div>
@@ -283,6 +295,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      </div>
     </div>
    </div>
+<div id="passwordCardEdit" title="PasswordCard Edit">
+    <form id="passwordCardForm" action="../mar/editPasswordCard.action" method="post"></form>
+</div>
    <div id="foot_home">
     <div class="bannerLink">
      <ul>
@@ -354,5 +369,103 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div id="animation_layer"></div>
   <script src="<%=basePath%>resources/mar/invite/application.js"></script>
   <div id="sqexFooterDialog"></div>
+  <input type="hidden" id="lock" value="0" />
  </body>
+<script type="text/javascript">
+$(document).ready(function(){
+    // 删除
+    $( "#inviteGo" ).click(function() {
+        // 校验锁
+        if ("1" == $("#lock").val())
+        {
+            alert("招待正在执行，请稍等片刻 _(:з」∠)_");
+            return;
+        }
+        
+        if (!validate())
+        {
+            return;
+        }
+
+        var options = {
+            url : "../mar/invite.action",
+            type : "POST",
+            success : function(result){
+                $.ajax({url:"../mar/invite.action", data:$("#inviteReq").formSerialize(), async:false});
+                dealResult(result);
+                // 解锁
+                $("#lock").val(0);
+                $("#achieve").css("background", "url(../resources/mar/invite/union.png) left top no-repeat transparent");
+            },
+            error : function(){
+                alert("服务器异常！请在淘宝页面联系店长！");
+                // 解锁
+                $("#lock").val(0);
+                $("#achieve").css("background", "url(../resources/mar/invite/union.png) left top no-repeat transparent");
+            }
+        };
+
+        // 确认操作
+        $("#inviteReq").ajaxSubmit(options);
+        // 加锁
+        $("#lock").val(1);
+        $("#achieve").css("background", "url(../resources/mar/invite/union2.png) left top no-repeat transparent");
+        
+        return false;
+    });
+    
+    function validate()
+    {
+        // 判断非空
+        if ("" == $("#inviteCode").val())
+        {
+            alert("请填入您的招待ID！");
+            return false;
+        }
+        
+        if ("" == $("#password").val())
+        {
+            alert("请填入神秘代码！");
+            return false;
+        }
+        
+        // 处理招待ID
+        var reg = new RegExp("^[0-9]*$");
+        var temp;
+        var result = "";
+        for (var i=0; i<$("#inviteCode").val().length; i++)
+        {
+            temp = $("#inviteCode").val().charAt(i)
+            if (reg.test(temp))
+            {
+                result += temp;
+            }
+        }
+        $("#inviteCode").val(result);
+        if ($("#inviteCode").val().length != 9)
+        {
+            alert("请填入正确的招待ID！9位数字，中间请勿加空格或逗号！");
+            return false;
+        }
+        
+        return true; 
+    }
+    
+    function dealResult(result)
+    {
+        if ("0" == result)
+        {
+            // 图片切换为已完成
+            
+            alert("您的招待已经完成，请在礼物箱中查收~");
+        }
+        else if ("1" == result)
+        {
+            // 图片切换为神秘代码错误或者重试
+            
+            alert("神秘代码错误或已被使用！");
+        }
+    }
+});
+</script>
 </html>

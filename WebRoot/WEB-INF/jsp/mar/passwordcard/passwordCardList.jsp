@@ -17,7 +17,7 @@
         </thead>
         <tbody>
 			<s:iterator  value="list" var="evt">
-				<tr <s:if test="#evt.status == 1">bgcolor="#ddd"</s:if>>
+				<tr <s:if test="#evt.status == 1">bgcolor="#f00"</s:if><s:if test="#evt.status == 2">bgcolor="#ddd"</s:if>>
 					<td width="20"><input type="checkbox" name="passwordCardId" value="<s:property value='#evt.id'/>" /></td>
 					<td><b id="<s:property value='#evt.id'/>" class="passwordCardUpdate"><s:property value="#evt.id"/></b></td>
 					<td><s:property value="#evt.password"/></td>
@@ -26,6 +26,9 @@
                             未使用
                         </s:if>
                         <s:elseif test="#evt.status== 1">
+                            使用中
+                        </s:elseif>
+                        <s:elseif test="#evt.status== 2">
                             已使用
                         </s:elseif>
                     </td>
