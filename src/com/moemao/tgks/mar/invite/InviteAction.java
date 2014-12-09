@@ -34,6 +34,10 @@ public class InviteAction extends TGKSAction
     
     private KrsmaRequest request = KrsmaRequest.getInstance();
     
+    private String inviteCode;
+    
+    private String password;
+    
     public String invitePage()
     {
         return SUCCESS;
@@ -53,11 +57,12 @@ public class InviteAction extends TGKSAction
     {
         String inviteName = "Sakura";
         String inviteChara = "3";
-        String inviteCode = this.getRequest().getParameter("inviteCode");
-        String password = this.getRequest().getParameter("password");
+        String inviteCode = this.inviteCode;
+        String password = this.password;
         String result;
         String sessonId;
-        int num = 1;
+        // 招待个数
+        int num = 10;
         
         // 验证参数的有效性
         if (CommonUtil.isEmpty(inviteCode) || CommonUtil.isEmpty(password))
@@ -173,5 +178,25 @@ public class InviteAction extends TGKSAction
     public void setKrsmaRequest(KrsmaRequest request)
     {
         this.request = request;
+    }
+
+    public String getInviteCode()
+    {
+        return inviteCode;
+    }
+
+    public void setInviteCode(String inviteCode)
+    {
+        this.inviteCode = inviteCode;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
     }
 }
