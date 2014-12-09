@@ -12,29 +12,42 @@
 	<form id="passwordCardReq" action="../mar/queryPasswordCard.action" method="post">
 		<table>
 			<tr>
-				<td><label>卡密串: </label></td><td><input type="text" name="passwordCardReq.password" /></td>
-				<td><label>招待ID: </label></td><td><input type="text" name="passwordCardReq.inviteCode" /></td>
-				<td>
-				
-				</td>
-				<td>
-				<button id="clearPasswordCard">重置</button>
-				<button id="queryPasswordCard">查询</button>
-				</td>
+                <td>状态：</td>
+                <td>
+                    <select name="passwordCardReq.status">
+                        <option value="">全部</option>
+                        <option value="0">未使用</option>
+                        <option value="1">使用中</option>
+                        <option value="2">已使用</option>
+                    </select>
+                </td>
+				<td><label>卡密串：</label></td><td><input type="text" name="passwordCardReq.password" /></td>
+				<td><label>招待ID：</label></td><td><input type="text" name="passwordCardReq.inviteCode" /></td>
+			</tr>
+			<tr>
+			     <td>操作时间：</td>
+                 <td><input type="text" class="datepicker" name="passwordCardReq.createTimeStart" /></td>
+                 <td>~</td>
+                 <td><input type="text" class="datepicker" name="passwordCardReq.createTimeEnd" /></td>
+                 <td>
+                 </td>
+                 <td>
+                 <button id="clearPasswordCard">重置</button>
+                 <button id="queryPasswordCard">查询</button>
+                 </td>
 			</tr>
 		</table>
 	</form>
 </div>
 
-<button id="addPasswordCard">新增</button>
-<button id="deletePasswordCard">删除</button>
 <button id="createPasswordCard">生成</button>
+<button id="deletePasswordCard">删除</button>
 <button id="exportPasswordCard">导出</button>
 
 <div id="passwordCardDiv"></div>
 
 <div id="passwordCardEdit" title="PasswordCard Edit">
-	<form id="passwordCardForm" action="../mar/editPasswordCard.action" method="post"></form>
+	<form id="passwordCardForm" action="" method="post"></form>
 </div>
 
 <div id="passwordCardConfirm" title="操作确认" hidden="hidden">
@@ -109,16 +122,54 @@ $(document).ready(function(){
 		return false; // 为了不刷新页面,返回false，反正都已经在后台执行完了，没事！
 	});  
 	
-	// 新增按钮
-	$( "#addPasswordCard" ).button({
+	// 导出按钮
+	$( "#exportPasswordCard" ).button({
 		icons: {
 			primary: "ui-icon-plus"
 			}
 		}).click(function() {
 		// 请求提交标志
-		$("#passwordCardManagerSubmit").val("1");
+		// 获取选中的记录ids
+        var ids = "";
+        var array = document.getElementsByName("passwordCardId");
+        for (var i=0; i<array.length; i++)
+        {
+            if (array[i].checked)
+            {
+                if (ids == "")
+                {
+                    ids += array[i].value;
+                }
+                else
+                {
+                    ids += "," + array[i].value;
+                }
+            }
+        }
+        
+        // 操作验证
+        if (ids == "")
+        {
+            alert("请选择至少一条记录");
+            $("#passwordCardManagerSubmit").val("0");
+            return false;
+        }
+        
+        // ajax调用删除action
+        var options = { 
+            url:"../mar/exportPasswordCard.action?ids=" + ids , // 提交给哪个执行
+            type:'POST', 
+            success: function(){
+                // 执行成功刷新form
+                query();
+            },
+            error:function(){ 
+                alert("导出失败"); 
+            }
+        };
+        
 		$( "#passwordCardEdit" ).dialog( "open" );
-		var edit=$.ajax({url:"../mar/editPasswordCardPage.action",async:false});
+		var edit=$.ajax({url:"../mar/exportPasswordCard.action?ids=" + ids, async:false});
 		$("#passwordCardForm").html(edit.responseText);
 		return false;
 	});
@@ -200,32 +251,6 @@ $(document).ready(function(){
 			// ajax调用删除action
 			var options = { 
 				url:"../mar/createPasswordCard.action", // 提交给哪个执行
-				type:'POST', 
-				success: function(){
-					// 执行成功刷新form
-					query();
-				},
-				error:function(){ 
-					alert("操作失败"); 
-				}
-			};
-			
-			$("#passwordCardConfirm").ajaxSubmit(options);
-			$("#passwordCardManagerSubmit").val("0");
-			return false;
-	});
-	 
-	 // 导出
-	$( "#exportPasswordCard" ).button({
-		icons: {
-			primary: "ui-icon-close"
-			}
-		}).click(function() {
-			$("#passwordCardManagerSubmit").val("1");
-						
-			// ajax调用删除action
-			var options = { 
-				url:"../mar/exportPasswordCard.action", // 提交给哪个执行
 				type:'POST', 
 				success: function(){
 					// 执行成功刷新form

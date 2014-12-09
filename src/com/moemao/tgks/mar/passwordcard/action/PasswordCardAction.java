@@ -45,6 +45,8 @@ public class PasswordCardAction extends TGKSAction
      */
     private PasswordCardReq passwordCardReq = new PasswordCardReq();
     
+    private String passwordExport;
+    
     public String passwordCardManager()
     {
     return SUCCESS;
@@ -120,6 +122,24 @@ public class PasswordCardAction extends TGKSAction
         return SUCCESS;
     }
     
+    public String exportPasswordCard()
+    {
+        CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_IN, "PasswordCardAction.exportPasswordCard");
+        passwordExport = "";
+        String ids = this.getRequest().getParameter("ids");
+        list = mar_passwordCardService.queryPasswordCardByIds(CommonUtil.stringToList(ids));
+        for (PasswordCardEvt passwordCardEvt : list)
+        {
+            if (null != passwordCardEvt && passwordCardEvt.getPassword() != null && passwordCardEvt.getPassword() != "")
+            {
+                passwordExport += passwordCardEvt.getPassword() + "\n";
+            }
+        }
+        CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_EXECUTE_NUMS, StringUtil.toBeString(list.size()));
+        CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "PasswordCardAction.exportPasswordCard");
+        return SUCCESS;
+    }
+    
     /**
      * @return 返回 mar_passwordCardService
      */
@@ -182,6 +202,16 @@ public class PasswordCardAction extends TGKSAction
     public void setPasswordCardReq(PasswordCardReq passwordCardReq)
     {
         this.passwordCardReq = passwordCardReq;
+    }
+
+    public String getPasswordExport()
+    {
+        return passwordExport;
+    }
+
+    public void setPasswordExport(String passwordExport)
+    {
+        this.passwordExport = passwordExport;
     }
 
 }

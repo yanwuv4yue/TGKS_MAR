@@ -40,6 +40,11 @@ public class PasswordCardServiceImpl implements PasswordCardService
         return passwordCardEvt;
     }
     
+    public List<PasswordCardEvt> queryPasswordCardByIds(List<String> ids)
+    {
+        return mar_passwordCardDao.mar_queryPasswordCardByIds(ids);
+    }
+    
     public int addPasswordCard(PasswordCardEvt passwordCardEvt)
     {
         passwordCardEvt.setId(MarUtil.createUniqueID());

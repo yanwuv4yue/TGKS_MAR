@@ -6,7 +6,6 @@
         <thead>
             <tr class="ui-widget-header ">
                 <th width="20"><input type="checkbox" id="allPasswordCardId" name="allPasswordCardId"  /></th>
-				<th>ID</th>
 				<th>卡密号码</th>
 				<th>状态</th>
 				<th>招待ID</th>
@@ -19,7 +18,6 @@
 			<s:iterator  value="list" var="evt">
 				<tr <s:if test="#evt.status == 1">bgcolor="#f00"</s:if><s:if test="#evt.status == 2">bgcolor="#ddd"</s:if>>
 					<td width="20"><input type="checkbox" name="passwordCardId" value="<s:property value='#evt.id'/>" /></td>
-					<td><b id="<s:property value='#evt.id'/>" class="passwordCardUpdate"><s:property value="#evt.id"/></b></td>
 					<td><s:property value="#evt.password"/></td>
 					<td>
 					    <s:if test="#evt.status == 0">

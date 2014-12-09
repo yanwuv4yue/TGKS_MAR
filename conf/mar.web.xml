@@ -41,9 +41,13 @@
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     
-    
     <action name="createPasswordCard" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="createPasswordCard">
         <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="exportPasswordCard" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="exportPasswordCard">
+        <result name="success">/WEB-INF/jsp/mar/passwordcard/passwordCardExport.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
   </package>

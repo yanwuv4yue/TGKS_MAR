@@ -1,5 +1,7 @@
 package com.moemao.tgks.mar.passwordcard.entity;
 
+import java.util.Date;
+
 public class PasswordCardReq extends PasswordCardEvt
 {
     
@@ -7,6 +9,10 @@ public class PasswordCardReq extends PasswordCardEvt
      * 排序字段
      */
     private String sortSql;
+    
+    private Date createTimeStart;
+    
+    private Date createTimeEnd;
     
     /**
      * @return 返回 排序字段
@@ -22,6 +28,26 @@ public class PasswordCardReq extends PasswordCardEvt
     public void setSortSql(String sortSql)
     {
         this.sortSql = sortSql;
+    }
+
+    public Date getCreateTimeStart()
+    {
+        return createTimeStart;
+    }
+
+    public void setCreateTimeStart(Date createTimeStart)
+    {
+        this.createTimeStart = createTimeStart;
+    }
+
+    public Date getCreateTimeEnd()
+    {
+        return createTimeEnd;
+    }
+
+    public void setCreateTimeEnd(Date createTimeEnd)
+    {
+        this.createTimeEnd = createTimeEnd;
     }
     
 }

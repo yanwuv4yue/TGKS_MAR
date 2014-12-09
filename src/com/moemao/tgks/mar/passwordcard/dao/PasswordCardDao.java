@@ -15,6 +15,8 @@ public List<PasswordCardEvt> mar_queryPasswordCard(PasswordCardReq passwordCardR
 
 public int mar_addPasswordCard(PasswordCardEvt passwordCardEvt) throws DataAccessException;
 
+public List<PasswordCardEvt> mar_queryPasswordCardByIds(List<String> list) throws DataAccessException;
+
 public int mar_updatePasswordCard(PasswordCardEvt passwordCardEvt) throws DataAccessException;
 
 public int mar_deletePasswordCard(List<String> list) throws DataAccessException;
