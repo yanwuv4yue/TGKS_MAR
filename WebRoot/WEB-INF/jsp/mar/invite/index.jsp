@@ -12,13 +12,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta charset="UTF-8" />
   <title>乖离性百万亚瑟王 自助招待系统 | 乖離性ミリオンアーサー</title>
-  <script type="text/javascript" async="" src="<%=basePath%>resources/js/jquery-1.8.2.js"></script>
-  <script type="text/javascript" async="" src="<%=basePath%>resources/js/jquery.form.js"></script>
-  <script type="text/javascript" async="" src="<%=basePath%>resources/mar/invite/conversion_async.js"></script>
-  <script type="text/javascript" async="" src="<%=basePath%>resources/mar/invite/analytics.js"></script>
-  <script type="text/javascript" async="" src="<%=basePath%>resources/mar/invite/cse.js"></script>
-  <script type="text/javascript" async="" src="<%=basePath%>resources/mar/invite/gtm.js"></script>
-  <script type="text/javascript" async="" src="<%=basePath%>resources/mar/invite/html5media.min.js"></script>
+  <script type="text/javascript"  src="<%=basePath%>resources/js/jquery-1.8.2.js"></script>
+  <script type="text/javascript"  src="<%=basePath%>resources/js/jquery.form.js"></script>
+  <script type="text/javascript"  src="<%=basePath%>resources/mar/invite/cse.js"></script>
+  <script type="text/javascript"  src="<%=basePath%>resources/mar/invite/html5media.min.js"></script>
+  <script type="text/javascript"  src="<%=basePath%>resources/mar/invite/default+ja.I.js"></script>
   <meta content="authenticity_token" name="csrf-param" /> 
   <meta content="0GzJWtkVKEK3qgfeGcNf/3g+P0lsjt1S98NW53Fnjk0=" name="csrf-token" />
   <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
@@ -31,7 +29,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <link type="text/css" href="<%=basePath%>resources/mar/invite/default+ja.css" rel="stylesheet" />
   <link type="text/css" href="<%=basePath%>resources/mar/invite/minimalist.css" rel="stylesheet" />
   <link type="text/css" href="<%=basePath%>resources/mar/adaptive-placeholders/style.css" rel="stylesheet">
-  <script type="text/javascript" src="<%=basePath%>resources/mar/invite/default+ja.I.js"></script>
   <style type="text/css">
     .gsc-control-cse {
     font-family: Arial, sans-serif;
