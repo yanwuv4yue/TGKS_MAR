@@ -41,6 +41,7 @@
 </div>
 
 <button id="createPasswordCard">生成</button>
+<button id="renewPasswordCard">重置</button>
 <button id="deletePasswordCard">删除</button>
 <button id="exportPasswordCard">导出</button>
 
@@ -239,8 +240,74 @@ $(document).ready(function(){
 		});
 		return false;
 	});
+	
+	// 重置按钮
+    $( "#renewPasswordCard" ).button({
+        icons: {
+            primary: "ui-icon-plus"
+            }
+        }).click(function() {
+        $("#passwordCardManagerSubmit").val("1");
+        // 获取选中的记录ids
+        var ids = "";
+        var array = document.getElementsByName("passwordCardId");
+        for (var i=0; i<array.length; i++)
+        {
+            if (array[i].checked)
+            {
+                if (ids == "")
+                {
+                    ids += array[i].value;
+                }
+                else
+                {
+                    ids += "," + array[i].value;
+                }
+            }
+        }
+        
+        // 操作验证
+        if (ids == "")
+        {
+            alert("请选择至少一条记录");
+            $("#passwordCardManagerSubmit").val("0");
+            return false;
+        }
+        
+        // ajax调用删除action
+        var options = { 
+            url:"../mar/renewPasswordCard.action?ids=" + ids , // 提交给哪个执行
+            type:'POST', 
+            success: function(){
+                alert("删除成功");
+                // 执行成功刷新form
+                query();
+            },
+            error:function(){ 
+                alert("删除失败"); 
+            }
+        };
+        
+        // 确认操作
+        $("#passwordCardConfirm").dialog({
+            resizable: false,
+            height:160,
+            modal: true,
+            buttons: {
+                "确认": function() {
+                    $( this ).dialog( "close" );
+                    // 异步请求删除操作
+                    $("#passwordCardConfirm").ajaxSubmit(options);
+                },
+                "取消": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+        return false;
+    });
 	 
-	 // 启用按钮
+	 // 创建按钮
 	$( "#createPasswordCard" ).button({
 		icons: {
 			primary: "ui-icon-check"

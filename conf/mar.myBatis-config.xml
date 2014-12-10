@@ -9,5 +9,13 @@
 		<typeAlias alias="PasswordCardEvt" type="com.moemao.tgks.mar.passwordcard.entity.PasswordCardEvt" />
 		<typeAlias alias="PasswordCardReq" type="com.moemao.tgks.mar.passwordcard.entity.PasswordCardReq" />
 		
+		<!-- mar_﻿krsmacard -->
+		<typeAlias alias="KrsmaCardEvt" type="com.moemao.tgks.mar.krsmacard.entity.KrsmaCardEvt" />
+		<typeAlias alias="KrsmaCardReq" type="com.moemao.tgks.mar.krsmacard.entity.KrsmaCardReq" />
+		
+		<!-- mar_﻿account -->
+		<typeAlias alias="AccountEvt" type="com.moemao.tgks.mar.account.entity.AccountEvt" />
+		<typeAlias alias="AccountReq" type="com.moemao.tgks.mar.account.entity.AccountReq" />
+		
 	</typeAliases>
 </configuration>

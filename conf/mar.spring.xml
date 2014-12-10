@@ -33,5 +33,33 @@
   <bean id="mar_passwordCardAction" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction">
     <property name="mar_passwordCardService" ref="mar_passwordCardService" />
   </bean>
+  
+  <!-- ﻿krsmacard_dao 配置 -->
+  <bean id="mar_krsmaCardDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.moemao.tgks.mar.krsmacard.dao.KrsmaCardDao" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
+  <!-- ﻿krsmacard_service 配置 -->
+  <bean id="mar_krsmaCardService" class="com.moemao.tgks.mar.krsmacard.service.impl.KrsmaCardServiceImpl">
+    <property name="mar_krsmaCardDao" ref="mar_krsmaCardDao" />
+  </bean>
+  <!-- ﻿krsmacard_action 配置 -->
+  <bean id="mar_krsmaCardAction" class="com.moemao.tgks.mar.krsmacard.action.KrsmaCardAction">
+    <property name="mar_krsmaCardService" ref="mar_krsmaCardService" />
+  </bean>
+  
+  <!-- ﻿account_dao 配置 -->
+  <bean id="mar_accountDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.moemao.tgks.mar.account.dao.AccountDao" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
+  <!-- ﻿account_service 配置 -->
+  <bean id="mar_accountService" class="com.moemao.tgks.mar.account.service.impl.AccountServiceImpl">
+    <property name="mar_accountDao" ref="mar_accountDao" />
+  </bean>
+  <!-- ﻿account_action 配置 -->
+  <bean id="mar_accountAction" class="com.moemao.tgks.mar.account.action.AccountAction">
+    <property name="mar_accountService" ref="mar_accountService" />
+  </bean>
 
 </beans>

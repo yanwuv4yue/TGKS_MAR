@@ -92,10 +92,27 @@ public class PasswordCardAction extends TGKSAction
     CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_IN, "PasswordCardAction.deletePasswordCard");
     String ids = this.getRequest().getParameter("ids");
     int result = mar_passwordCardService.deletePasswordCard(CommonUtil.stringToList(ids));
-    CommonUtil.systemLog("mar/deletePasswordCard.action", CommonConstant.SYSTEMLOG_TYPE_3, result == 0 ? CommonConstant.FAILD : CommonConstant.SUCCESS, String.format("删除passwordCardEvt\nID:%S", ids));
     CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_EXECUTE_NUMS, StringUtil.toBeString(result));
     CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "PasswordCardAction.deletePasswordCard");
     return SUCCESS;
+    }
+    
+    public String renewPasswordCard()
+    {
+        String ids = this.getRequest().getParameter("ids");
+        if (!CommonUtil.isEmpty(ids))
+        {
+            list = mar_passwordCardService.queryPasswordCardByIds(CommonUtil.stringToList(ids));
+            
+            for (PasswordCardEvt passwordCardEvt : list)
+            {
+                passwordCardEvt.setStatus(MarConstant.PASSWORDCARD_STATUS_0);
+                passwordCardEvt.setInviteCode("");
+                passwordCardEvt.setUsedTime(null);
+                mar_passwordCardService.updatePasswordCard(passwordCardEvt);
+            }
+        }
+        return SUCCESS;
     }
     
     /**

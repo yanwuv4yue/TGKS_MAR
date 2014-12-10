@@ -40,6 +40,11 @@
         <result name="success">/WEB-INF/jsp/common/success.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
+
+    <action name="renewPasswordCard" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="renewPasswordCard">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
     
     <action name="createPasswordCard" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="createPasswordCard">
         <result name="success">/WEB-INF/jsp/common/success.jsp</result>
@@ -48,6 +53,58 @@
     
     <action name="exportPasswordCard" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="exportPasswordCard">
         <result name="success">/WEB-INF/jsp/mar/passwordcard/passwordCardExport.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <!-- mar_krsmacard -->
+    <action name="krsmaCardManager" class="com.moemao.tgks.mar.krsmacard.action.KrsmaCardAction" method="krsmaCardManager">
+        <result name="success">/WEB-INF/jsp/mar/krsmacard/krsmaCardManager.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="queryKrsmaCard" class="com.moemao.tgks.mar.krsmacard.action.KrsmaCardAction" method="queryKrsmaCard">
+        <result name="success">/WEB-INF/jsp/mar/krsmacard/krsmaCardList.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="editKrsmaCardPage" class="com.moemao.tgks.mar.krsmacard.action.KrsmaCardAction" method="editKrsmaCardPage">
+        <result name="success">/WEB-INF/jsp/mar/krsmacard/krsmaCardEdit.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="editKrsmaCard" class="com.moemao.tgks.mar.krsmacard.action.KrsmaCardAction" method="editKrsmaCard">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="deleteKrsmaCard" class="com.moemao.tgks.mar.krsmacard.action.KrsmaCardAction" method="deleteKrsmaCard">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <!-- mar_account -->
+    <action name="accountManager" class="com.moemao.tgks.mar.account.action.AccountAction" method="accountManager">
+        <result name="success">/WEB-INF/jsp/mar/account/accountManager.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="queryAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="queryAccount">
+        <result name="success">/WEB-INF/jsp/mar/account/accountList.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="editAccountPage" class="com.moemao.tgks.mar.account.action.AccountAction" method="editAccountPage">
+        <result name="success">/WEB-INF/jsp/mar/account/accountEdit.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="editAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="editAccount">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="deleteAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="deleteAccount">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
   </package>
