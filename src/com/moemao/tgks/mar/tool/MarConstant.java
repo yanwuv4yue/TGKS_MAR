@@ -3,15 +3,53 @@ package com.moemao.tgks.mar.tool;
 public class MarConstant
 {
     public static final String MODULE_TAG = "MARZ";
-    
+
+    /**
+     * 未使用
+     */
     public static final String PASSWORDCARD_STATUS_0 = "0";
+    /**
+     * 使用中
+     */
     public static final String PASSWORDCARD_STATUS_1 = "1";
+    /**
+     * 已使用
+     */
     public static final String PASSWORDCARD_STATUS_2 = "2";
     
+    /**
+     * 新建
+     */
     public static final String ACCOUNT_STATUS_0 = "0";
+    /**
+     * 执行中
+     */
     public static final String ACCOUNT_STATUS_1 = "1";
+    /**
+     * 已完成
+     */
     public static final String ACCOUNT_STATUS_2 = "2";
+    /**
+     * 已售出
+     */
     public static final String ACCOUNT_STATUS_3 = "3";
+
+    /**
+     * KRSMA卡片职业 佣兵
+     */
+    public static final String KRSMACARD_TYPE_1 = "1";
+    /**
+     * KRSMA卡片职业 富豪
+     */
+    public static final String KRSMACARD_TYPE_2 = "2";
+    /**
+     * KRSMA卡片职业 盗贼
+     */
+    public static final String KRSMACARD_TYPE_3 = "3";
+    /**
+     * KRSMA卡片职业 歌姬
+     */
+    public static final String KRSMACARD_TYPE_4 = "4";
     
     /**
      * 注册

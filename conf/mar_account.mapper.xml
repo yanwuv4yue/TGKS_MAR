@@ -16,6 +16,7 @@
         <result property="urNumD" column="URNUMD" />
         <result property="cardIds" column="CARDIDS" />
         <result property="crystal" column="CRYSTAL" />
+        <result property="price" column="PRICE" />
         <result property="createTime" column="CREATETIME" />
         <result property="remark" column="REMARK" />
     </resultMap>

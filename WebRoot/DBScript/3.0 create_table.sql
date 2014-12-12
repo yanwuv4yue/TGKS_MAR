@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_account` (
   `urNumD` int(3) NOT NULL default '0' COMMENT 'UR数量 歌姬',
   `cardIds` varchar(500) default NULL COMMENT '卡片ID（只包含UR SR）',
   `crystal` int(10) NOT NULL default '0' COMMENT '水晶数量',
+  `price` int(10) NOT NULL default '0' COMMENT '价格',
   `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT '创建时间',
   `remark` varchar(500) default NULL COMMENT '备注',
   PRIMARY KEY  (`id`)

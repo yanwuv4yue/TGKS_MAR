@@ -33,8 +33,8 @@
     <tr>
         <td>水晶数量：</td>
         <td><input type="text" name="accountEvt.crystal" value="${accountEvt.crystal }" /></td>
-        <td>创建时间：</td>
-        <td><input type="text" name="accountEvt.createTime" value="${accountEvt.createTime }" /></td>
+        <td>价格：</td>
+        <td><input type="text" name="accountEvt.price" value="${accountEvt.price }" /></td>
     </tr>
     <tr>
         <td>卡片ID：</td>

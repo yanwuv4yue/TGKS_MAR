@@ -10,7 +10,7 @@
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     
-    <action name="invite" class="com.moemao.tgks.mar.invite.InviteAction" method="invite">
+    <action name="invite" class="com.moemao.tgks.mar.invite.action.InviteAction" method="invite">
         <result name="success">/WEB-INF/jsp/mar/invite/success.jsp</result>
         <result name="error">/WEB-INF/jsp/mar/invite/error.jsp</result>
     </action>
@@ -105,6 +105,21 @@
 
     <action name="deleteAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="deleteAccount">
         <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="initialAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="initialAccount">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="checkCardAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="checkCardAccount">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="exportAccountUuid" class="com.moemao.tgks.mar.account.action.AccountAction" method="exportAccountUuid">
+        <result name="success">/WEB-INF/jsp/mar/account/accountUuid.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
   </package>

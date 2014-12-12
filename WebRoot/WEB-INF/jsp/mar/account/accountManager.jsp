@@ -12,14 +12,35 @@
 	<form id="accountReq" action="../mar/queryAccount.action" method="post">
 		<table>
 			<tr>
+			    <td>状态: </td>
+			    <td>
+			        <select name="accountReq.status">
+                         <option value="">全部</option>
+                         <option value="0">新建</option>
+                         <option value="1">执行中</option>
+                         <option value="2">已完成</option>
+                         <option value="3">已售出</option>
+			        </select>
+			    </td>
 				<td><label>UUID: </label></td><td><input type="text" name="accountReq.uuid" /></td>
+				<td><label>招待ID: </label></td><td><input type="text" name="accountReq.inviteCode" /></td>
 				<td>
 				
 				</td>
 				<td>
-				<button id="clearAccount">重置</button>
-				<button id="queryAccount">查询</button>
 				</td>
+			</tr>
+			<tr>
+			    <td><label>UR: </label></td><td><input type="text" name="accountReq.title" /></td>
+                <td><label>职业: </label></td><td><input type="text" name="accountReq.cardIds" /></td>
+                <td></td><td></td>
+                <td>
+                
+                </td>
+                <td>
+                <button id="clearAccount">重置</button>
+                <button id="queryAccount">查询</button>
+                </td>
 			</tr>
 		</table>
 	</form>
@@ -27,8 +48,9 @@
 
 <button id="addAccount">新增</button>
 <button id="deleteAccount">删除</button>
-<button id="onAccount">启用</button>
-<button id="offAccount">禁用</button>
+<button id="initialAccount">执行</button>
+<button id="checkCardAccount">卡组</button>
+<button id="exportUuidAccount">导出</button>
 
 <div id="accountDiv"></div>
 
@@ -122,12 +144,57 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	// 导出
+	$( "#exportUuidAccount" ).button({
+        icons: {
+            primary: "ui-icon-export"
+            }
+        }).click(function() {
+        // 请求提交标志
+        $("#accountManagerSubmit").val("1");
+        // 获取选中的记录ids
+        var ids = "";
+        var array = document.getElementsByName("accountId");
+        for (var i=0; i<array.length; i++)
+        {
+            if (array[i].checked)
+            {
+                if (ids == "")
+                {
+                    ids += array[i].value;
+                }
+                else
+                {
+                    ids += "," + array[i].value;
+                }
+            }
+        }
+        
+        // 操作验证
+        if (ids == "")
+        {
+            alert("请选择至少一条记录");
+            $("#accountManagerSubmit").val("0");
+            return false;
+        }
+        
+        $( "#accountEdit" ).dialog( "open" );
+        var edit=$.ajax({url:"../mar/exportAccountUuid.action?ids=" + ids,async:false});
+        $("#accountForm").html(edit.responseText);
+        return false;
+    });
+	
 	 // 删除按钮
 	$( "#deleteAccount" ).button({
 		icons: {
 			primary: "ui-icon-minus"
 			}
 		}).click(function() {
+        
+        if ($("#accountManagerSubmit").val() == "1")
+        {
+            return false;
+        }
 		$("#accountManagerSubmit").val("1");
 		// 获取选中的记录ids
 		var ids = "";
@@ -179,6 +246,7 @@ $(document).ready(function(){
                 	$( this ).dialog( "close" );
                 	// 异步请求删除操作
                 	$("#accountConfirm").ajaxSubmit(options);
+                	$("#accountManagerSubmit").val("0");
                 },
                 "取消": function() {
                     $( this ).dialog( "close" );
@@ -188,12 +256,18 @@ $(document).ready(function(){
 		return false;
 	});
 	 
-	 // 启用按钮
-	$( "#onAccount" ).button({
+	 // 执行按钮
+	$( "#initialAccount" ).button({
 		icons: {
 			primary: "ui-icon-check"
 			}
 		}).click(function() {
+        
+            if ($("#accountManagerSubmit").val() == "1")
+            {
+                return false;
+            }
+            
 			$("#accountManagerSubmit").val("1");
 			// 获取选中的记录ids
 			var ids = "";
@@ -223,11 +297,12 @@ $(document).ready(function(){
 			
 			// ajax调用删除action
 			var options = { 
-				url:"../mar/changeStatusAccount.action?status=1&ids=" + ids , // 提交给哪个执行
+				url:"../mar/initialAccount.action?ids=" + ids , // 提交给哪个执行
 				type:'POST', 
 				success: function(){
 					// 执行成功刷新form
 					query();
+					alert("操作完成"); 
 				},
 				error:function(){ 
 					alert("操作失败"); 
@@ -239,12 +314,18 @@ $(document).ready(function(){
 			return false;
 	});
 	 
-	 // 停用按钮
-	$( "#offAccount" ).button({
+	 // 更新卡组
+	$( "#checkCardAccount" ).button({
 		icons: {
-			primary: "ui-icon-close"
+			primary: "ui-icon-circle"
 			}
 		}).click(function() {
+		
+	        if ($("#accountManagerSubmit").val() == "1")
+	        {
+	            return false;
+	        }
+	        
 			$("#accountManagerSubmit").val("1");
 			// 获取选中的记录ids
 			var ids = "";
@@ -274,7 +355,7 @@ $(document).ready(function(){
 			
 			// ajax调用删除action
 			var options = { 
-				url:"../mar/changeStatusAccount.action?status=0&ids=" + ids , // 提交给哪个执行
+				url:"../mar/checkCardAccount.action?ids=" + ids , // 提交给哪个执行
 				type:'POST', 
 				success: function(){
 					// 执行成功刷新form

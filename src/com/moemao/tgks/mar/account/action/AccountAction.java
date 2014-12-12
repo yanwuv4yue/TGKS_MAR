@@ -43,6 +43,8 @@ public class AccountAction extends TGKSAction
      */
     private AccountReq accountReq = new AccountReq();
     
+    private String uuidExport;
+    
     public String accountManager()
     {
     return SUCCESS;
@@ -92,6 +94,42 @@ public class AccountAction extends TGKSAction
     CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_EXECUTE_NUMS, StringUtil.toBeString(result));
     CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "AccountAction.deleteAccount");
     return SUCCESS;
+    }
+    
+    /**
+     * 
+     * @Title: initialAccount
+     * @Description: 刷初始
+     * @return
+     * @return String 返回类型
+     * @throws
+     */
+    public String initialAccount()
+    {
+        String ids = this.getRequest().getParameter("ids");
+        mar_accountService.initialAccount(CommonUtil.stringToList(ids));
+        return SUCCESS;
+    }
+    
+    public String checkCardAccount()
+    {
+        String ids = this.getRequest().getParameter("ids");
+        mar_accountService.checkCardAccount(CommonUtil.stringToList(ids));
+        return SUCCESS;
+    }
+    
+    public String exportAccountUuid()
+    {
+        String ids = this.getRequest().getParameter("ids");
+        list = mar_accountService.queryAccountByIds(CommonUtil.stringToList(ids));
+        for (AccountEvt evt : list)
+        {
+            if (null != evt && evt.getUuid() != null && evt.getUuid() != "")
+            {
+                uuidExport += evt.getUuid() + "\n";
+            }
+        }
+        return SUCCESS;
     }
     
     /**
@@ -156,6 +194,16 @@ public class AccountAction extends TGKSAction
     public void setAccountReq(AccountReq accountReq)
     {
         this.accountReq = accountReq;
+    }
+
+    public String getUuidExport()
+    {
+        return uuidExport;
+    }
+
+    public void setUuidExport(String uuidExport)
+    {
+        this.uuidExport = uuidExport;
     }
 
 }

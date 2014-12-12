@@ -11,10 +11,16 @@ public List<AccountEvt> queryAccount(AccountReq accountReq);
 
 public AccountEvt queryAccountById(String id);
 
+public List<AccountEvt> queryAccountByIds(List<String> ids);
+
 public int addAccount(AccountEvt accountEvt);
 
 public int updateAccount(AccountEvt accountEvt);
 
 public int deleteAccount(List<String> ids);
+
+public void initialAccount(List<String> ids);
+
+public void checkCardAccount(List<String> ids);
 
 }
