@@ -118,6 +118,11 @@
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     
+    <action name="gachaAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="gachaAccount">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
     <action name="exportAccountUuid" class="com.moemao.tgks.mar.account.action.AccountAction" method="exportAccountUuid">
         <result name="success">/WEB-INF/jsp/mar/account/accountUuid.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>

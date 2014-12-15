@@ -14,171 +14,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <title>乖离性百万亚瑟王 自助招待系统 | 乖離性ミリオンアーサー</title>
   <script type="text/javascript"  src="<%=basePath%>resources/js/jquery-1.8.2.js"></script>
   <script type="text/javascript"  src="<%=basePath%>resources/js/jquery.form.js"></script>
+    <!-- 
   <script type="text/javascript"  src="<%=basePath%>resources/mar/invite/cse.js"></script>
   <script type="text/javascript"  src="<%=basePath%>resources/mar/invite/html5media.min.js"></script>
   <script type="text/javascript"  src="<%=basePath%>resources/mar/invite/default+ja.I.js"></script>
   <meta content="authenticity_token" name="csrf-param" /> 
   <meta content="0GzJWtkVKEK3qgfeGcNf/3g+P0lsjt1S98NW53Fnjk0=" name="csrf-token" />
   <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    -->
   <meta content="乖離性ミリオンアーサーの招待！" name="description" />
   <meta content="乖離性ミリオンアーサー,ミリオンアーサー,招待" name="keywords" />
-  <meta content="summary" property="twitter:card" />
   <link rel="shortcut icon" href="favicon.ico">
   <link href="<%=basePath%>resources/mar/invite/style.css" media="all" rel="stylesheet" />
   <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <!-- 
   <link type="text/css" href="<%=basePath%>resources/mar/invite/default+ja.css" rel="stylesheet" />
   <link type="text/css" href="<%=basePath%>resources/mar/invite/minimalist.css" rel="stylesheet" />
+   -->
   <link type="text/css" href="<%=basePath%>resources/mar/adaptive-placeholders/style.css" rel="stylesheet">
   <style type="text/css">
-    .gsc-control-cse {
-    font-family: Arial, sans-serif;
-    border-color: #FFFFFF;
-    background-color: #FFFFFF;
-    }
-    .gsc-control-cse .gsc-table-result {
-    font-family: Arial, sans-serif;
-    }
-    input.gsc-input {
-    border-color: #BBBBBB;
-    }
-    input.gsc-search-button {
-    border-color: #000000;
-    background-color: #333333;
-    }
-    .gsc-tabHeader.gsc-tabhInactive {
-    border-color: #777777;
-    background-color: #777777;
-    }
-    .gsc-tabHeader.gsc-tabhActive {
-    border-color: #333333;
-    background-color: #333333;
-    }
-    .gsc-tabsArea {
-    border-color: #333333;
-    }
-    .gsc-webResult.gsc-result,
-    .gsc-results .gsc-imageResult {
-    border-color: #FFFFFF;
-    background-color: #FFFFFF;
-    }
-    .gsc-webResult.gsc-result:hover,
-    .gsc-imageResult:hover {
-    border-color: #000000;
-    background-color: #FFFFFF;
-    }
-    .gsc-webResult.gsc-result.gsc-promotion:hover {
-    border-color: #000000;
-    background-color: #FFFFFF;
-    }
-    .gs-webResult.gs-result a.gs-title:link,
-    .gs-webResult.gs-result a.gs-title:link b,
-    .gs-imageResult a.gs-title:link,
-    .gs-imageResult a.gs-title:link b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:visited,
-    .gs-webResult.gs-result a.gs-title:visited b,
-    .gs-imageResult a.gs-title:visited,
-    .gs-imageResult a.gs-title:visited b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:hover,
-    .gs-webResult.gs-result a.gs-title:hover b,
-    .gs-imageResult a.gs-title:hover,
-    .gs-imageResult a.gs-title:hover b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:active,
-    .gs-webResult.gs-result a.gs-title:active b,
-    .gs-imageResult a.gs-title:active,
-    .gs-imageResult a.gs-title:active b {
-    color: #777777;
-    }
-    .gsc-cursor-page {
-    color: #444444;
-    }
-    a.gsc-trailing-more-results:link {
-    color: #444444;
-    }
-    .gs-webResult .gs-snippet,
-    .gs-imageResult .gs-snippet,
-    .gs-fileFormatType {
-    color: #333333;
-    }
-    .gs-webResult div.gs-visibleUrl,
-    .gs-imageResult div.gs-visibleUrl {
-    color: #000000;
-    }
-    .gs-webResult div.gs-visibleUrl-short {
-    color: #000000;
-    }
-    .gs-webResult div.gs-visibleUrl-short {
-    display: none;
-    }
-    .gs-webResult div.gs-visibleUrl-long {
-    display: block;
-    }
-    .gs-promotion div.gs-visibleUrl-short {
-    display: none;
-    }
-    .gs-promotion div.gs-visibleUrl-long {
-    display: block;
-    }
-    .gsc-cursor-box {
-    border-color: #FFFFFF;
-    }
-    .gsc-results .gsc-cursor-box .gsc-cursor-page {
-    border-color: #777777;
-    background-color: #FFFFFF;
-    color: #444444;
-    }
-    .gsc-results .gsc-cursor-box .gsc-cursor-current-page {
-    border-color: #333333;
-    background-color: #333333;
-    color: #444444;
-    }
-    .gsc-webResult.gsc-result.gsc-promotion {
-    border-color: #CCCCCC;
-    background-color: #E6E6E6;
-    }
-    .gsc-completion-title {
-    color: #444444;
-    }
-    .gsc-completion-snippet {
-    color: #333333;
-    }
-    .gs-promotion a.gs-title:link,
-    .gs-promotion a.gs-title:link *,
-    .gs-promotion .gs-snippet a:link {
-    color: #0000CC;
-    }
-    .gs-promotion a.gs-title:visited,
-    .gs-promotion a.gs-title:visited *,
-    .gs-promotion .gs-snippet a:visited {
-    color: #0000CC;
-    }
-    .gs-promotion a.gs-title:hover,
-    .gs-promotion a.gs-title:hover *,
-    .gs-promotion .gs-snippet a:hover {
-    color: #444444;
-    }
-    .gs-promotion a.gs-title:active,
-    .gs-promotion a.gs-title:active *,
-    .gs-promotion .gs-snippet a:active {
-    color: #00CC00;
-    }
-    .gs-promotion .gs-snippet,
-    .gs-promotion .gs-title .gs-promotion-title-right,
-    .gs-promotion .gs-title .gs-promotion-title-right * {
-    color: #333333;
-    }
-    .gs-promotion .gs-visibleUrl,
-    .gs-promotion .gs-visibleUrl-short {
-    color: #00CC00;
-    }
-    .gsc-input input.gsc-input {
-    background: none repeat scroll 0% 0% white !important;
-    }
     #inviteCode
     {
         margin-left: 20px;
@@ -212,16 +66,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </style>
  </head>
  <body>
-  <!--Google Tag Manager-->
-  <noscript>
-   &lt;iframe height=&quot;0&quot; src=&quot;//www.googletagmanager.com/ns.html?id=GTM-KK989P&quot; style=&quot;display:none;visibility:hidden&quot; width=&quot;0&quot;&gt;&lt;/iframe&gt;
-  </noscript>
-  <script type="text/javascript">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KK989P');</script>
-  <!--End Google Tag Manager-->
   <div id="wrapper">
    <div id="sqexHeader-black">
     <!-- 
@@ -229,7 +73,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       -->
    </div>
    <div id="container" style="margin: 50px 0px; opacity: 1;">
-    <div id="bg_line_e">
+    <div id="bg_line_e" style="background-color:black;">
      <div id="bg_line">
       <img alt="Bg gold lt" class="bg_lt" src="<%=basePath%>resources/mar/invite/bg_gold_lt.png" />
       <img alt="Bg gold rt" class="bg_rt" src="<%=basePath%>resources/mar/invite/bg_gold_rt.png" />
@@ -335,7 +179,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <a class="googleplus" title="Google+でシェア"><img src="<%=basePath%>resources/mar/invite/sp_share_gp.png" alt="Google+にシェアする" height="25" /></a>
          </dd>
          <dd>
-          <a href="http://line.naver.jp/R/msg/text/?%E4%B9%96%E9%9B%A2%E6%80%A7%E3%83%9F%E3%83%AA%E3%82%AA%E3%83%B3%E3%82%A2%E3%83%BC%E3%82%B5%E3%83%BC%E3%80%80%E4%BA%8B%E5%89%8D%E7%99%BB%E9%8C%B2%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%9A%E3%83%BC%E3%83%B3%20http://sqex.to/nt4" class="line" target="_blank"><img src="<%=basePath%>resources/mar/invite/share_line.png" alt="LINEで送る" title="LINEで送る" style="vertical-align:top!important; width:25px;" /></a>
+          <a class="line" target="_blank"><img src="<%=basePath%>resources/mar/invite/share_line.png" alt="LINEで送る" title="LINEで送る" style="vertical-align:top!important; width:25px;" /></a>
          </dd>
         </dl>
        </div>
@@ -354,6 +198,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    </div>
   </div>
   <div id="background" style="opacity: 1;">
+  <!-- 
    <video autoplay="autoplay" class="bg_video" id="bg_top_movie" loop="loop" poster="https://cache.pre.kairisei-ma.jp/pre/assets/bg_top-acfccc2232f64f5206ce10bf45933836.jpg" style="width: 1855px; height: 1045.0704225352113px; margin-left: -927.5px; margin-top: -522.5352112676056px;">
     <source src="https://cache.pre.kairisei-ma.jp/pre/assets/top-2489964cb8f93ed2ed5b4a9cf5de644d.webm" type="video/webm"></source>
     <source src="https://cache.pre.kairisei-ma.jp/pre/assets/top-e540b692f4602b98247a8e6b24e0a6d8.mp4" type="video/mp4"></source>
@@ -362,9 +207,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <source src="https://cache.pre.kairisei-ma.jp/pre/assets/gacha_avant_movie-bc742eb541f853c1c69375aa1b1cdc53.webm" type="video/webm"></source>
     <source src="https://cache.pre.kairisei-ma.jp/pre/assets/gacha_avant_movie-00b3643c99837321eef7011f6dc2a26d.mp4" type="video/mp4"></source>
    </video>
+    -->
   </div>
   <div id="animation_layer"></div>
-  <script src="<%=basePath%>resources/mar/invite/application.js"></script>
   <div id="sqexFooterDialog"></div>
   <input type="hidden" id="lock" value="0" />
  </body>

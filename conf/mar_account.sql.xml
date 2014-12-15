@@ -48,6 +48,12 @@
             <if test="createTimeEnd !=null and createTimeEnd !='' ">
                 AND #{createTimeEnd} >= t.CREATETIME
             </if>
+            <if test="price !=null and price !='' ">
+                AND t.PRICE >= (#{price} - 50)
+            </if>
+            <if test="price !=null and price !='' ">
+                AND (#{price} + 50) >= t.PRICE
+            </if>
             <if test="remark !=null and remark !='' ">
                 AND t.REMARK = #{remark}
             </if>

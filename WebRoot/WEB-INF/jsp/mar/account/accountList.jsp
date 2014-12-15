@@ -11,28 +11,34 @@
                 <!-- <th>加密key</th> -->
                 <th>状态</th>
                 <th>UR数量</th>
-                <th>标题</th>
-                <th>水晶数量</th>
+                <th>水晶</th>
                 <th>创建时间</th>
+                <th>标题</th>
+                <th>卡牌</th>
             </tr>
         </thead>
         <tbody>
 			<s:iterator  value="list" var="evt">
-				<tr>
-					<td width="20"><input type="checkbox" name="accountId" value="<s:property value='#evt.id'/>" /></td>
-					<td><b id="<s:property value='#evt.id'/>" class="accountUpdate"><s:property value="#evt.inviteCode"/></b></td>
-                    <td><s:property value='#evt.uuid'/></td>
+				<tr <s:if test="#evt.status == 3">bgcolor="#ddd"</s:if>>
+					<td width="20"><s:if test="#evt.status != 3"><input type="checkbox" name="accountId" value="<s:property value='#evt.id'/>" /></s:if></td>
+					<td width="100px"><b id="<s:property value='#evt.id'/>" class="accountUpdate"><s:property value="#evt.inviteCode"/></b></td>
+                    <td width="300px"><s:property value='#evt.uuid'/></td>
                     <!-- <td><s:property value='#evt.accountKey'/></td> -->
-                    <td>
+                    <td width="40px">
                         <s:if test="#evt.status == 0">新建</s:if>
                         <s:elseif test="#evt.status == 1">执行中</s:elseif>
                         <s:elseif test="#evt.status == 2">已完成</s:elseif>
                         <s:elseif test="#evt.status == 3">已出售</s:elseif>
                     </td>
-                    <td><b><a style="color: red">佣<s:property value='#evt.urNumA'/></a> <a style="color: blue">壕<s:property value='#evt.urNumB'/></a> <a style="color: green">盗<s:property value='#evt.urNumC'/></a> <a style="color: black">姬<s:property value='#evt.urNumD'/></a></b></td>
+                    <td width="50px"><b><a style="color: red">佣<s:property value='#evt.urNumA'/></a> <a style="color: blue">壕<s:property value='#evt.urNumB'/></a> <a style="color: green">盗<s:property value='#evt.urNumC'/></a> <a style="color: black">姬<s:property value='#evt.urNumD'/></a></b></td>
+                    <td width="30px"><s:property value='#evt.crystal'/></td>
+                    <td width="150px"><s:date name="#evt.createTime" format="yyyy-MM-dd HH:mm:ss"/></td>
                     <td><s:property value='#evt.title'/></td>
-                    <td><s:property value='#evt.crystal'/></td>
-                    <td><s:date name="#evt.createTime" format="yyyy-MM-dd HH:mm:ss"/></td>
+                    <td>
+                        <s:iterator  value="#evt.iconList" var="icon">
+                            <img width="35px" src="<s:property value='#icon'/>"/>
+                        </s:iterator>
+                    </td>
 				</tr>
 			</s:iterator>
 		</tbody>

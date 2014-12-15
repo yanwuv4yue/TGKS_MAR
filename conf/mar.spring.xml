@@ -66,6 +66,7 @@
   <!-- ﻿account_action 配置 -->
   <bean id="mar_accountAction" class="com.moemao.tgks.mar.account.action.AccountAction">
     <property name="mar_accountService" ref="mar_accountService" />
+    <property name="mar_krsmaCardService" ref="mar_krsmaCardService" />
   </bean>
 
 </beans>

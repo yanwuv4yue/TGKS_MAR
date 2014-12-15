@@ -70,6 +70,15 @@ public class HttpRequest
                 e2.printStackTrace();
             }
         }
+        try
+        {
+            byte[] bytes = result.getBytes();
+            result = new String(bytes, "UTF-8");
+        }
+        catch (Exception e)
+        {
+            
+        }
         return result;
     }
     
@@ -79,8 +88,9 @@ public class HttpRequest
      * @param url 发送请求的 URL
      * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
      * @return 所代表远程资源的响应结果
+     * @throws Exception 
      */
-    public String sendPost(String url, String param)
+    public String sendPost(String url, String param) throws Exception
     {
         PrintWriter out = null;
         BufferedReader in = null;
@@ -115,6 +125,7 @@ public class HttpRequest
         {
             System.out.println("发送 POST 请求出现异常！" + e);
             e.printStackTrace();
+            throw e;
         }
         // 使用finally块来关闭输出流、输入流
         finally

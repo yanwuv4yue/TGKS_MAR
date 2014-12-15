@@ -19,7 +19,7 @@ public class InviteServiceImpl implements InviteService
     {
         String inviteName = "Kirito";
         String inviteChara = "3";
-        String result;
+        String[] result = new String[2];
         String sessionId;
         // 返回最后一个招待的ID
         String returnCode = "";
@@ -33,10 +33,10 @@ public class InviteServiceImpl implements InviteService
         {
             for (int i = 1; i <= num; i++)
             {
-                result = request.regist();
+                result[0] = request.regist();
                 
                 // 从regist的result中解析出sessonId
-                json= new JSONObject(result);
+                json= new JSONObject(result[0]);
                 sessionId = (String) json.get("sess_key");
                 inviteSessonIdList.add(sessionId.replace("=", ""));
             }
@@ -54,13 +54,14 @@ public class InviteServiceImpl implements InviteService
                 index++;
                 request.userCreate(sid, inviteName, inviteChara);
                 result = request.homeShow(sid);
+                sid = result[0];
                 request.inviteCodeEnter(sid, inviteCode);
                 System.out.println("第" + index + "个招待已经完成！");// 临时打印
                 
                 if (index == num)
                 {
                     // 记录最后一个号的招待ID
-                    returnCode = result.split("inviteid\":\"")[1].substring(0, 9);
+                    returnCode = result[1].split("inviteid\":\"")[1].substring(0, 9);
                 }
             }
         }

@@ -23,4 +23,6 @@ public void initialAccount(List<String> ids);
 
 public void checkCardAccount(List<String> ids);
 
+public void gachaAccount(List<String> ids);
+
 }

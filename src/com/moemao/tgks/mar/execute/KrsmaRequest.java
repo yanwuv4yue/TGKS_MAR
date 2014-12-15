@@ -34,12 +34,12 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String regist()
+    public String regist() throws Exception
     {
         String uuid = UUID.randomUUID().toString();
         String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"1\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
         String result = httpRequest.sendPost(MarConstant.URL_REGIST, paramStr);
-        System.out.println("[ System Info ] regist " + uuid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "regist " + uuid);
         if (bDebug)
         {
             System.out.println(result);
@@ -56,11 +56,11 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String login(String uuid)
+    public String login(String uuid) throws Exception
     {
         String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"1\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
         String result = httpRequest.sendPost(MarConstant.URL_LOGIN, paramStr);
-        System.out.println("[ System Info ] login " + uuid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "login " + uuid);
         if (bDebug)
         {
             System.out.println(result);
@@ -77,16 +77,16 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String connect(String sid)
+    public String[] connect(String sid) throws Exception
     {
         String paramStr = sid + "=";
         String result = httpRequest.sendPost(MarConstant.URL_CONNECT, paramStr);
-        System.out.println("[ System Info ] connect " + sid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "connect " + sid);
         if (bDebug)
         {
             System.out.println(result);
         }
-        return result;
+        return result.split(MarConstant.KRSMA_SPLIT);
     }
     
     /**
@@ -100,19 +100,20 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String userCreate(String sid, String name, String chara)
+    public String[] userCreate(String sid, String name, String chara) throws Exception
     {
         String paramStr = sid + "={\"name\":\"" + name + "\",\"arthur_type\":" + chara + "}";
         String result = httpRequest.sendPost(MarConstant.URL_USERCREATE, paramStr);
-        System.out.println("[ System Info ] userCreate " + sid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "userCreate " + sid);
         if (bDebug)
         {
             System.out.println(result);
         }
-        return result;
+        return result.split(MarConstant.KRSMA_SPLIT);
     }
     
     /**
+     * @throws Exception 
      * 
      * @Title: homeShow
      * @Description: 回主界面的请求
@@ -121,16 +122,16 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String homeShow(String sid)
+    public String[] homeShow(String sid) throws Exception
     {
         String paramStr = sid + "=";
         String result = httpRequest.sendPost(MarConstant.URL_HOMESHOW, paramStr);
-        System.out.println("[ System Info ] homeShow " + sid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "homeShow " + sid);
         if (bDebug)
         {
             System.out.println(result);
         }
-        return result;
+        return result.split(MarConstant.KRSMA_SPLIT);
     }
     
     /**
@@ -143,11 +144,11 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String inviteCodeEnter(String sid, String inviteCode)
+    public String inviteCodeEnter(String sid, String inviteCode) throws Exception
     {
         String paramStr = sid + "={\"inviteid\":\"" + inviteCode + "\"}";
         String result = httpRequest.sendPost(MarConstant.URL_INVITECODEENTER, paramStr);
-        System.out.println("[ System Info ] inviteCodeEnter " + sid + " inviteCode : " + inviteCode);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "inviteCodeEnter " + sid + " inviteCode : " + inviteCode);
         if (bDebug)
         {
             System.out.println(result);
@@ -164,16 +165,16 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String cardShow(String sid)
+    public String[] cardShow(String sid) throws Exception
     {
         String paramStr = sid + "=";
         String result = httpRequest.sendPost(MarConstant.URL_CARDSHOW, paramStr);
-        System.out.println("[ System Info ] cardShow " + sid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "cardShow " + sid);
         if (bDebug)
         {
             System.out.println(result);
         }
-        return result;
+        return result.split(MarConstant.KRSMA_SPLIT);
     }
     
     /**
@@ -187,16 +188,39 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String cardFusion(String sid, String baseId, String addId)
+    public String[] cardFusion(String sid, String baseId, String addId) throws Exception
     {
         String paramStr = sid + "={\"base_uniqid\":" + baseId + ",\"add_uniqids\":[" + addId + "]}";
         String result = httpRequest.sendPost(MarConstant.URL_CARDFUSION, paramStr);
-        System.out.println("[ System Info ] cardFusion " + sid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "cardFusion " + sid);
         if (bDebug)
         {
             System.out.println(result);
         }
-        return result;
+        return result.split(MarConstant.KRSMA_SPLIT);
+    }
+    
+    /**
+     * 
+     * @Title: cardSell
+     * @Description: 卡片出售
+     * @param sid
+     * @param uniqiIds
+     * @return
+     * @throws Exception
+     * @return String[] 返回类型
+     * @throws
+     */
+    public String[] cardSell(String sid, String uniqiIds) throws Exception
+    {
+        String paramStr = sid + "={\"uniqids\":["+uniqiIds+"]}";
+        String result = httpRequest.sendPost(MarConstant.URL_CARDSELL, paramStr);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "cardSell " + sid);
+        if (bDebug)
+        {
+            System.out.println(result);
+        }
+        return result.split(MarConstant.KRSMA_SPLIT);
     }
     
     /**
@@ -208,16 +232,38 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String presentBoxMultiRecv(String sid)
+    public String[] presentBoxMultiRecv(String sid) throws Exception
     {
         String paramStr = sid + "=";
         String result = httpRequest.sendPost(MarConstant.URL_PRESENTBOXMULTIRECV, paramStr);
-        System.out.println("[ System Info ] presentBoxMultiRecv " + sid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "presentBoxMultiRecv " + sid);
         if (bDebug)
         {
             System.out.println(result);
         }
-        return result;
+        return result.split(MarConstant.KRSMA_SPLIT);
+    }
+    
+    /**
+     * 
+     * @Title: gachaShow
+     * @Description: 抽卡准备
+     * @param sid
+     * @return
+     * @throws Exception
+     * @return String[] 返回类型
+     * @throws
+     */
+    public String[] gachaShow(String sid) throws Exception
+    {
+        String paramStr = sid + "=";
+        String result = httpRequest.sendPost(MarConstant.URL_GACHASHOW, paramStr);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "gachaShow " + sid);
+        if (bDebug)
+        {
+            System.out.println(result);
+        }
+        return result.split(MarConstant.KRSMA_SPLIT);
     }
     
     /**
@@ -231,16 +277,16 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String gachaPlay(String sid, String gachaId, String payType)
+    public String[] gachaPlay(String sid, String gachaId, String payType) throws Exception
     {
         String paramStr = sid + "={\"gachaid\":" + gachaId + ",\"pay_type\":" + payType + "}";
         String result = httpRequest.sendPost(MarConstant.URL_GACHAPLAY, paramStr);
-        System.out.println("[ System Info ] gachaPlay " + sid + " gachaId : " + gachaId);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "gachaPlay " + sid + " gachaId : " + gachaId);
         if (bDebug)
         {
             System.out.println(result);
         }
-        return result;
+        return result.split(MarConstant.KRSMA_SPLIT);
     }
     
     /**
@@ -252,16 +298,16 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String teamBattleSoloShow(String sid)
+    public String[] teamBattleSoloShow(String sid) throws Exception
     {
         String paramStr = sid + "=";
         String result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOSHOW, paramStr);
-        System.out.println("[ System Info ] teamBattleSoloShow " + sid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "teamBattleSoloShow " + sid);
         if (bDebug)
         {
             System.out.println(result);
         }
-        return result;
+        return result.split(MarConstant.KRSMA_SPLIT);
     }
     
     /**
@@ -277,16 +323,16 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String teamBattleSoloStart(String sid, String bossId, String userOne, String userTwo, String userFour)
+    public String[] teamBattleSoloStart(String sid, String bossId, String userOne, String userTwo, String userFour) throws Exception
     {
         String paramStr = sid + "={\"bossid\":" + bossId + ",\"deck_arthur_type\":3,\"deck_arthur_type_idx\":0,\"partner_deck_selects\":[{\"userid\":" + userOne + ",\"arthur_type\":1,\"deck_idx\":0},{\"userid\":" + userTwo + ",\"arthur_type\":2,\"deck_idx\":0},{\"userid\":" + userFour + ",\"arthur_type\":4,\"deck_idx\":0}]}";
         String result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOSTART, paramStr);
-        System.out.println("[ System Info ] teamBattleSoloStart " + sid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "teamBattleSoloStart " + sid);
         if (bDebug)
         {
             System.out.println(result);
         }
-        return result;
+        return result.split(MarConstant.KRSMA_SPLIT);
     }
     
     /**
@@ -298,16 +344,16 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String teamBattleSoloEnd(String sid)
+    public String[] teamBattleSoloEnd(String sid, String battleInfo) throws Exception
     {
-        String paramStr = sid + "={\"progress\":3,\"is_clear\":1,\"input_cmd\":[\"6473,12,1,-1449869062\n6473,13,1,1598444520,-890705031,-1631118539,-1849612821,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,12,2,-1774364196\n6473,13,2,1540732331,-1210319740,-1631118539,-1849612821,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,12,3,-1248297927\n6473,13,3,-1948409170,457245596,-1631118539,-1849612821,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,12,4,1823145572\n6473,13,4,73661817,-890705031,-1631118539,457245596,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,14,5,-1609999787,1407176610\n6473,14,6,-1136481224,1602949194\n6473,14,7,-1136481224,1602949194\n6473,14,8,-1136481224,1602949194\n6473,15,-117239005\n6473,10\n6473,0\n6473,3,4\n6473,3,3\n6473,3,2\n6473,3,1\n6473,6\n\",\"6473,12,1,-1449869062\n6473,13,1,1598444520,-890705031,-1631118539,-1849612821,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,12,2,-1774364196\n6473,13,2,1540732331,-1210319740,-1631118539,-1849612821,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,12,3,-1248297927\n6473,13,3,-1948409170,457245596,-1631118539,-1849612821,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,12,4,1823145572\n6473,13,4,73661817,-890705031,-1631118539,457245596,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,14,5,1922126263,-54477811\n6473,14,6,-1609999787,1407176610\n6473,14,7,-1136481224,1602949194\n6473,14,8,-1136481224,1602949194\n6473,15,-117239005\n6473,10\n6473,0\n6473,3,4\n6473,3,3\n6473,3,2\n6473,3,1\n6473,6\n\",\"6473,12,1,-1449869062\n6473,13,1,1598444520,-890705031,-1631118539,-1849612821,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,12,2,-1774364196\n6473,13,2,1540732331,-1210319740,-1631118539,-1849612821,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,12,3,-1248297927\n6473,13,3,-1948409170,457245596,-1631118539,-1849612821,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,12,4,1823145572\n6473,13,4,73661817,-890705031,-1631118539,457245596,1842312998,-274709162,256483103,-708051355,-1156505390,-1491876984\n6473,14,5,-1609999787,1407176610\n6473,14,6,1922126263,-54477811\n6473,14,7,-1609999787,1407176610\n6473,14,8,-1136481224,1602949194\n6473,15,-117239005\n6473,10\n6473,0\n6473,3,4\n6473,3,3\n6473,3,2\n6473,3,1\n6473,6\n6473,1\n5967,10\n5967,0\n5967,3,4\n5967,3,3\n5967,3,2\n5967,3,1\n5967,6\n\"],\"enemy_dead_bit\":[1,3,7]}";
+        String paramStr = sid + "=" + battleInfo;
         String result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOEND, paramStr);
-        System.out.println("[ System Info ] teamBattleSoloEnd " + sid);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "teamBattleSoloEnd " + sid);
         if (bDebug)
         {
             System.out.println(result);
         }
-        return result;
+        return result.split(MarConstant.KRSMA_SPLIT);
     }
     
     public static void main(String[] args)
@@ -318,9 +364,9 @@ public class KrsmaRequest
             String result = KrsmaRequest.getInstance().login(uuid);
             JSONObject json= new JSONObject(result);
             String sid = json.getString("sess_key").replace("=", "");
-            result = KrsmaRequest.getInstance().connect(sid);
+            result = KrsmaRequest.getInstance().connect(sid)[1];
             System.out.println(result);
-            result = KrsmaRequest.getInstance().homeShow(sid);
+            result = KrsmaRequest.getInstance().homeShow(sid)[1];
             System.out.println(result);
         }
         catch (Exception e)

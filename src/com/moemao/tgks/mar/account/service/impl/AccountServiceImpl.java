@@ -64,6 +64,7 @@ public class AccountServiceImpl implements AccountService
         accountEvt.setId(MarUtil.createUniqueID());
         accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_0);
         accountEvt.setCrystal(0);
+        accountEvt.setPrice(0);
         accountEvt.setUrNumA(0);
         accountEvt.setUrNumB(0);
         accountEvt.setUrNumC(0);
@@ -113,16 +114,16 @@ public class AccountServiceImpl implements AccountService
      */
     public void process(AccountEvt accountEvt)
     {
-        String result;
+        String[] result = new String[2];
         String sid;
         JSONObject json= null;
         
         // 刷初始的几个配置变量 后续可以改为数据库维护
-        String name = "Asuna";
-        String chara = "3";
-        String gachaIdTen = "20000300";
-        String gachaIdEleven = "20000210";
-        String payType = "3";
+        String name = MarConstant.INITIAL_NAME;
+        String chara = MarConstant.INITIAL_CHARA;
+        String gachaIdTen = MarConstant.GACHA_ID_TEN;
+        String gachaIdEleven = MarConstant.GACHA_ID_ELEVEN;
+        String payType = MarConstant.GACHA_PAYTYPE;
         
 
         // 刷完10个招待后返回的小号招待ID 给自己填的
@@ -151,7 +152,7 @@ public class AccountServiceImpl implements AccountService
         try
         {
             // login 登录 并获取sessionId
-            result = request.login(accountEvt.getUuid());
+            result[0] = request.login(accountEvt.getUuid());
             json= JSONObject.fromObject(result);
             sid = json.getString("sess_key").replace("=", "");
             
@@ -166,13 +167,14 @@ public class AccountServiceImpl implements AccountService
             
             // homeShow 主页
             result = request.homeShow(sid);
-            result = ("{\"user\"" + result.split("user\"")[1]);
-            result = result.substring(0, result.indexOf(",\"premium_service_grade")) + "}}";
-            if (result.contains("�?"))
+            sid = result[0];
+            result[1] = ("{\"user\"" + result[1].split("user\"")[1]);
+            result[1] = result[1].substring(0, result[1].indexOf(",\"premium_service_grade")) + "}}";
+            if (result[1].contains("�?"))
             {
-                result = result.replace("�?", "\"");
+                result[1] = result[1].replace("�?", "\"");
             }
-            json = JSONObject.fromObject(result);
+            json = JSONObject.fromObject(result[1]);
             crystal = json.getJSONObject("user").getInt("coin_free");
             inviteId = json.getJSONObject("user").getString("inviteid");
             
@@ -187,22 +189,28 @@ public class AccountServiceImpl implements AccountService
             request.inviteCodeEnter(sid, inviteCode);
             
             // presentBoxMultiRecv 领礼物箱 最好领2次
-            request.presentBoxMultiRecv(sid);
-            request.presentBoxMultiRecv(sid);
+            result = request.presentBoxMultiRecv(sid);
+            sid = result[0];
+            result = request.presentBoxMultiRecv(sid);
+            sid = result[0];
             
             // gachaPlayTen 新人的10连首抽
-            request.gachaPlay(sid, gachaIdTen, payType);
-
+            result = request.gachaPlay(sid, gachaIdTen, payType);
+            sid = result[0];
+            
             // gachaPlayEleven 当前优惠活动抽取 15
-            request.gachaPlay(sid, gachaIdEleven, payType);
+            result = request.gachaPlay(sid, gachaIdEleven, payType);
+            sid = result[0];
             
             // gachaPlayEleven 当前优惠活动抽取 25
-            request.gachaPlay(sid, gachaIdEleven, payType);
+            result = request.gachaPlay(sid, gachaIdEleven, payType);
+            sid = result[0];
             
             // cardShow 检索卡组信息
             result = request.cardShow(sid);
-            result = ("{\"cards\"" + result.split("cards\"")[1]);
-            json = JSONObject.fromObject(result);
+            sid = result[0];
+            result[1] = ("{\"cards\"" + result[1].split("cards\"")[1]);
+            json = JSONObject.fromObject(result[1]);
             JSONArray cards = json.getJSONArray("cards");
             @SuppressWarnings("unchecked")
             List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(cards, JSONObject.class);
@@ -267,7 +275,8 @@ public class AccountServiceImpl implements AccountService
                 }
             }
             
-            // TODO 加入战斗信息
+            // 战斗信息
+            this.teamBattleSolo(sid, MarConstant.BATTLESOLOSTART_10000101, MarConstant.BATTLESOLOEND_10000101);
         }
         catch (Exception e)
         {
@@ -306,13 +315,16 @@ public class AccountServiceImpl implements AccountService
         // 遍历查询出的账号 对每个账号执行过checkCard
         for (AccountEvt accountEvt : list)
         {
-            this.checkCard(accountEvt);
+            if (!MarConstant.ACCOUNT_STATUS_3.equals(accountEvt.getStatus()))
+            {
+                this.checkCard(accountEvt);
+            }
         }
     }
     
     public void checkCard(AccountEvt accountEvt)
     {
-        String result;
+        String[] result = new String[2];
         String sid;
         JSONObject json= null;
         List<String> srList = new ArrayList<String>();
@@ -329,33 +341,72 @@ public class AccountServiceImpl implements AccountService
         String inviteCode = "";
         
         // login 登录 并获取sessionId
-        result = request.login(accountEvt.getUuid());
-        json= JSONObject.fromObject(result);
+        try
+        {
+            result[0] = request.login(accountEvt.getUuid());
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+        json= JSONObject.fromObject(result[0]);
         sid = json.getString("sess_key").replace("=", "");
         
         // connect
-        request.connect(sid);
+        try
+        {
+            result = request.connect(sid);
+            sid = result[0];
+        }
+        catch (Exception e)
+        {
+            return;
+        }
         
         // presentBoxMultiRecv 领礼物箱 最好领2次
-        request.presentBoxMultiRecv(sid);
-        request.presentBoxMultiRecv(sid);
+        try
+        {
+            result = request.presentBoxMultiRecv(sid);
+            sid = result[0];
+        }
+        catch (Exception e)
+        {
+            System.out.println("这个号一看就是战斗没过");
+            this.teamBattleSolo(sid, MarConstant.BATTLESOLOSTART_10000101, MarConstant.BATTLESOLOEND_10000101);
+        }
         
         // homeShow 主页
-        result = request.homeShow(sid);
-        result = ("{\"user\"" + result.split("user\"")[1]);
-        result = result.substring(0, result.indexOf(",\"premium_service_grade")) + "}}";
-        if (result.contains("�?"))
+        try
         {
-            result = result.replace("�?", "\"");
+            result = request.homeShow(sid);
+            sid = result[0];
         }
-        json = JSONObject.fromObject(result);
+        catch (Exception e)
+        {
+            return;
+        }
+        result[1] = ("{\"user\"" + result[1].split("user\"")[1]);
+        result[1] = result[1].substring(0, result[1].indexOf(",\"premium_service_grade")) + "}}";
+        if (result[1].contains("�?"))
+        {
+            result[1] = result[1].replace("�?", "\"");
+        }
+        json = JSONObject.fromObject(result[1]);
         crystal = json.getJSONObject("user").getInt("coin_free");
         inviteCode = json.getJSONObject("user").getString("inviteid");
         
         // cardShow 检索卡组信息
-        result = request.cardShow(sid);
-        result = ("{\"cards\"" + result.split("cards\"")[1]);
-        json = JSONObject.fromObject(result);
+        try
+        {
+            result = request.cardShow(sid);
+            sid = result[0];
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+        result[1] = ("{\"cards\"" + result[1].split("cards\"")[1]);
+        json = JSONObject.fromObject(result[1]);
         JSONArray cards = json.getJSONArray("cards");
         @SuppressWarnings("unchecked")
         List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(cards, JSONObject.class);
@@ -363,11 +414,11 @@ public class AccountServiceImpl implements AccountService
         // 收集SR以及UR信息
         for (JSONObject obj : jsonList)
         {
-            if (obj.getString("lv_max").equals("40"))
+            if (obj.getString("lv_max").equals("40") && !srList.contains(obj.getString("cardid")))
             {
                 srList.add(obj.getString("cardid"));
             }
-            else if (obj.getString("lv_max").equals("50"))
+            else if (obj.getString("lv_max").equals("50") && !urList.contains(obj.getString("cardid")))
             {
                 urList.add(obj.getString("cardid"));
             }
@@ -433,6 +484,191 @@ public class AccountServiceImpl implements AccountService
         }
         accountEvt.setCrystal(crystal);
         this.updateAccount(accountEvt);
+    }
+    
+    /**
+     * 抽卡
+     */
+    public void gachaAccount(List<String> ids)
+    {
+        List<AccountEvt> list = mar_accountDao.mar_queryAccountByIds(ids);
+        
+        // 遍历查询出的账号 对每个账号执行过checkCard
+        for (AccountEvt accountEvt : list)
+        {
+            if (!MarConstant.ACCOUNT_STATUS_3.equals(accountEvt.getStatus()))
+            {
+                this.gacha(accountEvt);
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @Title: gacha
+     * @Description: 抽卡具体方法
+     * @param accountEvt
+     * @return void 返回类型
+     * @throws
+     */
+    public void gacha(AccountEvt accountEvt)
+    {
+        String[] result = new String[2];
+        String sid;
+        JSONObject json= null;
+        
+        // login 登录 并获取sessionId
+        try
+        {
+            result[0] = request.login(accountEvt.getUuid());
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+        json= JSONObject.fromObject(result[0]);
+        sid = json.getString("sess_key").replace("=", "");
+        
+        // connect
+        try
+        {
+            result = request.connect(sid);
+            sid = result[0];
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+        
+        try
+        {
+            result = request.gachaShow(sid);
+            sid = result[0];
+            
+            // 如果抽奖存档15石头
+            if (result[1].contains("price\":15"))
+            {
+                // 先出售卡片
+                sid = this.sellCard(sid);
+                sid = this.sellCard(sid);
+                
+                // gachaPlayEleven 当前优惠活动抽取 15
+                result = request.gachaPlay(sid, MarConstant.GACHA_ID_ELEVEN, MarConstant.GACHA_PAYTYPE);
+                sid = result[0];
+                result = request.gachaPlay(sid, MarConstant.GACHA_ID_ELEVEN, MarConstant.GACHA_PAYTYPE);
+                sid = result[0];
+            }
+            else if (result[1].contains("price\":25"))
+            {
+                sid = this.sellCard(sid);
+                
+                result = request.gachaPlay(sid, MarConstant.GACHA_ID_ELEVEN, MarConstant.GACHA_PAYTYPE);
+                sid = result[0];
+            }
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+        
+    }
+    
+    public String sellCard(String sid) throws Exception
+    {
+        List<String> uniqiIds = new ArrayList<String>();
+        // cardShow 检索卡组信息
+        String[] result = request.cardShow(sid);
+        sid = result[0];
+        result[1] = ("{\"cards\"" + result[1].split("cards\"")[1]);
+        JSONObject json = JSONObject.fromObject(result[1]);
+        JSONArray cards = json.getJSONArray("cards");
+        @SuppressWarnings("unchecked")
+        List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(cards, JSONObject.class);
+        
+        // 需要卖掉的卡
+        for (JSONObject obj : jsonList)
+        {
+            if (obj.getInt("lv_max") > 10 && obj.getInt("lv_max") < 30)
+            {
+                uniqiIds.add(obj.getString("uniqid"));
+                if (uniqiIds.size() == 10)
+                {
+                    break;
+                }
+            }
+        }
+        // 如果2星卡卖光了 开始卖3星
+        if (uniqiIds.size() < 10)
+        {
+            for (JSONObject obj : jsonList)
+            {
+                if (obj.getInt("lv_max") > 10 && obj.getInt("lv_max") < 40)
+                {
+                    uniqiIds.add(obj.getString("uniqid"));
+                    if (uniqiIds.size() == 10)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        // 出售卡片
+        result = request.cardSell(sid, CommonUtil.listToString(uniqiIds).replace(" ", ""));
+        sid = result[0];
+        return sid;
+    }
+    
+    public void teamBattleSolo(String sid, String battleSoloStart, String battleSoloEnd)
+    {
+        try
+        {
+            String[] result = request.teamBattleSoloShow(sid);
+            sid = result[0];
+            result[1] = ("{\"normal_groups\"" + result[1].split("normal_groups\"")[1]);
+            JSONObject json = JSONObject.fromObject(result);
+            JSONArray arthers = json.getJSONArray("arthers");
+            @SuppressWarnings("unchecked")
+            List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(arthers, JSONObject.class);
+            JSONArray users;
+            String userA = "";
+            String userB = "";
+            String userD = "";
+            for (JSONObject obj : jsonList)
+            {
+                if (MarConstant.KRSMACARD_TYPE_1.equals(obj.getString("arthur_type")))
+                {
+                    users = obj.getJSONArray("partners");
+                    @SuppressWarnings("unchecked")
+                    List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
+                    userA = userList.get(0).getString("userid");
+                }
+                else if (MarConstant.KRSMACARD_TYPE_2.equals(obj.getString("arthur_type")))
+                {
+                    users = obj.getJSONArray("partners");
+                    @SuppressWarnings("unchecked")
+                    List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
+                    userA = userList.get(0).getString("userid");
+                }
+                else if (MarConstant.KRSMACARD_TYPE_4.equals(obj.getString("arthur_type")))
+                {
+                    users = obj.getJSONArray("partners");
+                    @SuppressWarnings("unchecked")
+                    List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
+                    userA = userList.get(0).getString("userid");
+                }
+            }
+            
+            result = request.teamBattleSoloStart(sid, battleSoloStart, userA, userB, userD);
+            sid = result[0];
+            Thread.sleep(60000);
+            
+            request.teamBattleSoloEnd(sid, battleSoloEnd);
+        }
+        catch (Exception e)
+        {
+            return;
+        }
     }
     
     /**

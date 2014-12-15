@@ -1,5 +1,6 @@
 package com.moemao.tgks.mar.account.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -12,6 +13,9 @@ import com.moemao.tgks.common.tool.StringUtil;
 import com.moemao.tgks.mar.account.entity.AccountEvt;
 import com.moemao.tgks.mar.account.entity.AccountReq;
 import com.moemao.tgks.mar.account.service.AccountService;
+import com.moemao.tgks.mar.krsmacard.entity.KrsmaCardEvt;
+import com.moemao.tgks.mar.krsmacard.entity.KrsmaCardReq;
+import com.moemao.tgks.mar.krsmacard.service.KrsmaCardService;
 
 public class AccountAction extends TGKSAction
 {
@@ -29,6 +33,11 @@ public class AccountAction extends TGKSAction
     private AccountService mar_accountService;
     
     /**
+     * ﻿KrsmaCard业务接口
+     */
+    private KrsmaCardService mar_krsmaCardService;
+    
+    /**
      * 查询结果集
      */
     private List<AccountEvt> list;
@@ -43,7 +52,7 @@ public class AccountAction extends TGKSAction
      */
     private AccountReq accountReq = new AccountReq();
     
-    private String uuidExport;
+    private String uuidExport = "";
     
     public String accountManager()
     {
@@ -52,8 +61,34 @@ public class AccountAction extends TGKSAction
     
     public String queryAccount()
     {
-    list = mar_accountService.queryAccount(accountReq);
-    return SUCCESS;
+        list = mar_accountService.queryAccount(accountReq);
+        
+        // 查询所有UR SR
+        List<KrsmaCardEvt> cardURList = mar_krsmaCardService.queryKrsmaCard(new KrsmaCardReq());
+        
+        List<String> iconIds;
+        List<String> iconList;
+        
+        for (AccountEvt account : list)
+        {
+            iconIds = CommonUtil.stringToList(account.getCardIds());
+            iconList = new ArrayList<String>();
+            for (String id : iconIds)
+            {
+                for (KrsmaCardEvt card : cardURList)
+                {
+                    if (id.equals(card.getCardId()))
+                    {
+                        iconList.add(card.getIconUrl());
+                        break;
+                    }
+                }
+            }
+            
+            account.setIconList(iconList);
+        }
+        
+        return SUCCESS;
     }
     
     public String editAccountPage()
@@ -115,6 +150,13 @@ public class AccountAction extends TGKSAction
     {
         String ids = this.getRequest().getParameter("ids");
         mar_accountService.checkCardAccount(CommonUtil.stringToList(ids));
+        return SUCCESS;
+    }
+    
+    public String gachaAccount()
+    {
+        String ids = this.getRequest().getParameter("ids");
+        mar_accountService.gachaAccount(CommonUtil.stringToList(ids));
         return SUCCESS;
     }
     
@@ -204,6 +246,16 @@ public class AccountAction extends TGKSAction
     public void setUuidExport(String uuidExport)
     {
         this.uuidExport = uuidExport;
+    }
+
+    public KrsmaCardService getMar_krsmaCardService()
+    {
+        return mar_krsmaCardService;
+    }
+
+    public void setMar_krsmaCardService(KrsmaCardService mar_krsmaCardService)
+    {
+        this.mar_krsmaCardService = mar_krsmaCardService;
     }
 
 }

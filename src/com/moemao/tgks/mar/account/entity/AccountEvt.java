@@ -1,6 +1,7 @@
 package com.moemao.tgks.mar.account.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class AccountEvt
 {
@@ -78,6 +79,8 @@ public class AccountEvt
      * 备注
      */
     private String remark;
+    
+    private List<String> iconList;
     
     @Override
     public String toString()
@@ -233,5 +236,15 @@ public class AccountEvt
     public void setRemark(String remark)
     {
         this.remark = remark;
+    }
+
+    public List<String> getIconList()
+    {
+        return iconList;
+    }
+
+    public void setIconList(List<String> iconList)
+    {
+        this.iconList = iconList;
     }
 }

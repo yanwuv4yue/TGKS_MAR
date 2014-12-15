@@ -24,22 +24,33 @@
 			    </td>
 				<td><label>UUID: </label></td><td><input type="text" name="accountReq.uuid" /></td>
 				<td><label>招待ID: </label></td><td><input type="text" name="accountReq.inviteCode" /></td>
-				<td>
-				
-				</td>
-				<td>
-				</td>
+                <td><label>价格: </label></td><td><input type="text" name="accountReq.price" /></td>
 			</tr>
 			<tr>
-			    <td><label>UR: </label></td><td><input type="text" name="accountReq.title" /></td>
-                <td><label>职业: </label></td><td><input type="text" name="accountReq.cardIds" /></td>
-                <td></td><td></td>
+                <td>佣兵</td><td><input type="checkbox" name="accountReq.urNumA" value="2" /></td>
+                <td>富豪</td><td><input type="checkbox" name="accountReq.urNumB" value="2" /></td>
+                <td>盗贼</td><td><input type="checkbox" name="accountReq.urNumC" value="2" /></td>
+                <td>歌姬</td><td><input type="checkbox" name="accountReq.urNumD" value="2" /></td>
+			</tr>
+			<tr>
+			    <td>时间：</td>
+                <td><input type="text" class="datepicker" name="accountReq.createTimeStart" /></td>
+                <td>~</td>
+                <td><input type="text" class="datepicker" name="accountReq.createTimeEnd" /></td>
+                <td><label>UR: </label></td><td><input type="text" name="accountReq.title" /></td>
+                <td><label>水晶: </label></td><td><input type="text" name="accountReq.crystal" /></td>
+			</tr>
+			<tr>
+			    <td></td>
+			    <td></td>
+			    <td></td>
+			    <td></td>
+			    <td></td>
+			    <td></td>
+			    <td></td>
                 <td>
-                
-                </td>
-                <td>
-                <button id="clearAccount">重置</button>
-                <button id="queryAccount">查询</button>
+                    <button id="clearAccount">重置</button>
+                    <button id="queryAccount">查询</button>
                 </td>
 			</tr>
 		</table>
@@ -49,7 +60,8 @@
 <button id="addAccount">新增</button>
 <button id="deleteAccount">删除</button>
 <button id="initialAccount">执行</button>
-<button id="checkCardAccount">卡组</button>
+<button id="checkCardAccount">更新</button>
+<button id="gachaAccount">抽卡</button>
 <button id="exportUuidAccount">导出</button>
 
 <div id="accountDiv"></div>
@@ -88,9 +100,11 @@ $(document).ready(function(){
 				if (!accountFormCheck())
 				{
 					return false;
+                    $("#accountManagerSubmit").val("0");
 				}
 				var form = $("#accountForm");
 				form.submit();
+                $("#accountManagerSubmit").val("0");
 			}, 
 			"关闭": function()
 			{
@@ -126,7 +140,7 @@ $(document).ready(function(){
 		};
 		
 		$("#accountForm").ajaxSubmit(options);
-		
+        $("#accountManagerSubmit").val("0");
 		return false; // 为了不刷新页面,返回false，反正都已经在后台执行完了，没事！
 	});  
 	
@@ -370,6 +384,63 @@ $(document).ready(function(){
 			$("#accountManagerSubmit").val("0");
 			return false;
 	});
+	
+	// 抽卡
+    $( "#gachaAccount" ).button({
+        icons: {
+            primary: "ui-icon-circle"
+            }
+        }).click(function() {
+        
+            if ($("#accountManagerSubmit").val() == "1")
+            {
+                return false;
+            }
+            
+            $("#accountManagerSubmit").val("1");
+            // 获取选中的记录ids
+            var ids = "";
+            var array = document.getElementsByName("accountId");
+            for (var i=0; i<array.length; i++)
+            {
+                if (array[i].checked)
+                {
+                    if (ids == "")
+                    {
+                        ids += array[i].value;
+                    }
+                    else
+                    {
+                        ids += "," + array[i].value;
+                    }
+                }
+            }
+            
+            // 操作验证
+            if (ids == "")
+            {
+                alert("请选择至少一条记录");
+                $("#accountManagerSubmit").val("0");
+                return false;
+            }
+            
+            // ajax调用删除action
+            var options = { 
+                url:"../mar/gachaAccount.action?ids=" + ids , // 提交给哪个执行
+                type:'POST', 
+                success: function(){
+                    // 执行成功刷新form
+                    query();
+                },
+                error:function(){ 
+                    alert("操作失败"); 
+                }
+            };
+            
+            $("#accountConfirm").ajaxSubmit(options);
+            $("#accountManagerSubmit").val("0");
+            return false;
+    });
 	
 	 // 刷新按钮
 	$( "#queryAccount" ).button().click(function() {
