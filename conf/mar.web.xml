@@ -5,7 +5,7 @@
 <struts>
   <package namespace="/mar" name="mar" extends="struts-default">
   
-    <action name="login" class="com.moemao.tgks.mar.login.action.LoginAction" method="login">
+    <action name="invite_login" class="com.moemao.tgks.mar.login.action.LoginAction" method="invite_login">
         <result name="success">/WEB-INF/jsp/mar/invite/index.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
