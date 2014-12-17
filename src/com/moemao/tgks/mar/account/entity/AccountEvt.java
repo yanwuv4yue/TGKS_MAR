@@ -82,6 +82,8 @@ public class AccountEvt
     
     private List<String> iconList;
     
+    private String sessionId;
+    
     @Override
     public String toString()
     {
@@ -246,5 +248,15 @@ public class AccountEvt
     public void setIconList(List<String> iconList)
     {
         this.iconList = iconList;
+    }
+
+    public String getSessionId()
+    {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId)
+    {
+        this.sessionId = sessionId;
     }
 }

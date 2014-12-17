@@ -279,12 +279,12 @@ $(document).ready(function(){
             url:"../mar/renewPasswordCard.action?ids=" + ids , // 提交给哪个执行
             type:'POST', 
             success: function(){
-                alert("删除成功");
+                alert("重置成功");
                 // 执行成功刷新form
                 query();
             },
             error:function(){ 
-                alert("删除失败"); 
+                alert("重置失败"); 
             }
         };
         

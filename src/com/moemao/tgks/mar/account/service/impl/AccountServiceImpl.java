@@ -88,20 +88,9 @@ public class AccountServiceImpl implements AccountService
     public void initialAccount(List<String> ids)
     {
         // 入参已经获得了需要跑初始流程的账号ID 先把账号全部查询出来
-        List<AccountEvt> list = mar_accountDao.mar_queryAccountByIds(ids);
+        List<AccountEvt> accountList = mar_accountDao.mar_queryAccountByIds(ids);
         
-        // 遍历查询出的账号 对每个账号执行过初始的流程
-        for (AccountEvt accountEvt : list)
-        {
-            if (!MarConstant.ACCOUNT_STATUS_3.equals(accountEvt.getStatus()))
-            {
-                // 执行前先更新状态为执行中
-                accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_1);
-                this.updateAccount(accountEvt);
-                
-                this.process(accountEvt);
-            }
-        }
+        this.process(accountList);
     }
     
     /**
@@ -112,11 +101,13 @@ public class AccountServiceImpl implements AccountService
      * @return void 返回类型
      * @throws
      */
-    public void process(AccountEvt accountEvt)
+    public void process(List<AccountEvt> accountList)
     {
         String[] result = new String[2];
         String sid;
         JSONObject json= null;
+        
+        List<String> tempSidList = new ArrayList<String>();
         
         // 刷初始的几个配置变量 后续可以改为数据库维护
         String name = MarConstant.INITIAL_NAME;
@@ -145,159 +136,258 @@ public class AccountServiceImpl implements AccountService
         // 标题
         String title = "";
         // 卡片ids 先UR后SR 存数据库时使用CommonUtil.listToString()
-        List<String> list = new ArrayList<String>();
+        List<String> cardList = new ArrayList<String>();
         // 水晶数量
         int crystal = 0;
         
+        // 1、把所有账号查询出来 执行login connect
+        for (AccountEvt accountEvt : accountList)
+        {
+            try
+            {
+                // login 登录 并获取sessionId
+                result[0] = request.login(accountEvt.getUuid());
+                json= JSONObject.fromObject(result[0]);
+                sid = json.getString("sess_key").replace("=", "");
+                
+                // connect
+                accountEvt.setSessionId(request.connect(sid)[0]);
+            }
+            catch (Exception e)
+            {
+                continue;
+            }
+        }
+        
+        // 2、创建 nx10 的小号
+        for (int i = 0; i < accountList.size() * 9; i++)
+        {
+            try
+            {
+                result[0] = request.regist();
+                
+                // 从regist的result中解析出sessonId
+                json= JSONObject.fromObject(result[0]);
+                sid = json.getString("sess_key").replace("=", "");
+                
+                // connect
+                tempSidList.add(request.connect(sid)[0]);
+            }
+            catch (Exception e)
+            {
+                continue;
+            }
+        }
+        
         try
         {
-            // login 登录 并获取sessionId
-            result[0] = request.login(accountEvt.getUuid());
-            json= JSONObject.fromObject(result);
-            sid = json.getString("sess_key").replace("=", "");
-            
-            // connect
-            request.connect(sid);
-            
             // 当前版本服务器改为必须等待1分钟才可起名字
             Thread.sleep(61000);
-            
-            // userCreate 起名字
-            request.userCreate(sid, name, chara);
-            
-            // homeShow 主页
-            result = request.homeShow(sid);
-            sid = result[0];
-            result[1] = ("{\"user\"" + result[1].split("user\"")[1]);
-            result[1] = result[1].substring(0, result[1].indexOf(",\"premium_service_grade")) + "}}";
-            if (result[1].contains("�?"))
-            {
-                result[1] = result[1].replace("�?", "\"");
-            }
-            json = JSONObject.fromObject(result[1]);
-            crystal = json.getJSONObject("user").getInt("coin_free");
-            inviteId = json.getJSONObject("user").getString("inviteid");
-            
-            // 先保存账号的ID
-            accountEvt.setInviteCode(inviteId);
-            this.updateAccount(accountEvt);
-            
-            // 刷10个招待
-            inviteCode = this.mar_inviteService.invite(inviteId);
-            
-            // inviteCodeEnter 刷一个自己的招待
-            request.inviteCodeEnter(sid, inviteCode);
-            
-            // presentBoxMultiRecv 领礼物箱 最好领2次
-            result = request.presentBoxMultiRecv(sid);
-            sid = result[0];
-            result = request.presentBoxMultiRecv(sid);
-            sid = result[0];
-            
-            // gachaPlayTen 新人的10连首抽
-            result = request.gachaPlay(sid, gachaIdTen, payType);
-            sid = result[0];
-            
-            // gachaPlayEleven 当前优惠活动抽取 15
-            result = request.gachaPlay(sid, gachaIdEleven, payType);
-            sid = result[0];
-            
-            // gachaPlayEleven 当前优惠活动抽取 25
-            result = request.gachaPlay(sid, gachaIdEleven, payType);
-            sid = result[0];
-            
-            // cardShow 检索卡组信息
-            result = request.cardShow(sid);
-            sid = result[0];
-            result[1] = ("{\"cards\"" + result[1].split("cards\"")[1]);
-            json = JSONObject.fromObject(result[1]);
-            JSONArray cards = json.getJSONArray("cards");
-            @SuppressWarnings("unchecked")
-            List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(cards, JSONObject.class);
-            
-            // 收集SR以及UR信息
-            for (JSONObject obj : jsonList)
-            {
-                if (obj.getString("lv_max").equals("40"))
-                {
-                    srList.add(obj.getString("cardid"));
-                }
-                else if (obj.getString("lv_max").equals("50"))
-                {
-                    urList.add(obj.getString("cardid"));
-                }
-            }
-            
-            // 查询数据库卡组信息
-            List<KrsmaCardEvt> krsmaCardList = this.mar_krsmaCardService.queryKrsmaCard(new KrsmaCardReq());
-            // 处理卡组信息 UR
-            for (String id : urList)
-            {
-                for (KrsmaCardEvt ur : krsmaCardList)
-                {
-                    if (id.equals(ur.getCardId()))
-                    {
-                        // 查询到UR 加入ID
-                        list.add(id);
-                        
-                        // 判断该UR是什么职业 相应URNUM+1
-                        if (ur.getType().equals(MarConstant.KRSMACARD_TYPE_1))
-                        {
-                            urNumA++;
-                        }
-                        else if (ur.getType().equals(MarConstant.KRSMACARD_TYPE_2))
-                        {
-                            urNumB++;
-                        }
-                        else if (ur.getType().equals(MarConstant.KRSMACARD_TYPE_3))
-                        {
-                            urNumC++;
-                        }
-                        else if (ur.getType().equals(MarConstant.KRSMACARD_TYPE_4))
-                        {
-                            urNumD++;
-                        }
-                        
-                        // 处理title
-                        title += ur.getName() + " ";
-                    }
-                }
-            }
-            // 处理卡组信息 SR
-            for (String id : srList)
-            {
-                for (KrsmaCardEvt sr : krsmaCardList)
-                {
-                    if (id.equals(sr.getCardId()))
-                    {
-                        list.add(id);
-                    }
-                }
-            }
-            
-            // 战斗信息
-            this.teamBattleSolo(sid, MarConstant.BATTLESOLOSTART_10000101, MarConstant.BATTLESOLOEND_10000101);
         }
         catch (Exception e)
         {
-            accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_0);
-            this.updateAccount(accountEvt);
-            return;
+            
         }
         
-        // 更新account信息
-        accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_2);
-        accountEvt.setTitle(title.trim()); // 处理前后的空格
-        accountEvt.setUrNumA(urNumA);
-        accountEvt.setUrNumB(urNumB);
-        accountEvt.setUrNumC(urNumC);
-        accountEvt.setUrNumD(urNumD);
-        if (null != list && list.size() > 0)
+        // 3、所有账号执行userCreate homeShow
+        for (AccountEvt accountEvt : accountList)
         {
-            accountEvt.setCardIds(CommonUtil.listToString(list));
+            try
+            {
+                // userCreate 起名字
+                result = request.userCreate(accountEvt.getSessionId(), name, chara);
+                sid = result[0];
+                
+                // homeShow 主页
+                result = request.homeShow(sid);
+                sid = result[0];
+                result[1] = ("{\"user\"" + result[1].split("user\"")[1]);
+                result[1] = result[1].substring(0, result[1].indexOf(",\"premium_service_grade")) + "}}";
+                if (result[1].contains("�?"))
+                {
+                    result[1] = result[1].replace("�?", "\"");
+                }
+                json = JSONObject.fromObject(result[1]);
+                crystal = json.getJSONObject("user").getInt("coin_free");
+                inviteId = json.getJSONObject("user").getString("inviteid");
+
+                accountEvt.setCrystal(crystal);
+                // 先保存账号的ID
+                accountEvt.setInviteCode(inviteId);
+                this.updateAccount(accountEvt);
+                
+                // 最后一个inviteId留着循环使用
+                inviteCode = inviteId;
+            }
+            catch (Exception e)
+            {
+                continue;
+            }
         }
-        accountEvt.setCrystal(crystal);
-        this.updateAccount(accountEvt);
+        
+        
+        int index = 0;
+        // 4、for循环给每个list中的session执行homeshow获取inviteid填入招待ID
+        for (AccountEvt accountEvt : accountList)
+        {
+            // 招待小号的userCreate homeShow
+            for (int i=0; i<9; i++)
+            {                
+                try
+                {
+                    result = request.userCreate(tempSidList.get(index), name, chara);
+                    sid = result[0];
+                    index++;
+                    
+                    result = request.homeShow(sid);
+                    sid = result[0];
+                    request.inviteCodeEnter(sid, accountEvt.getInviteCode());
+                }
+                catch (Exception e)
+                {
+                    continue;
+                }                
+            }
+            
+            try
+            {
+                // 自己填别人的inviteId 第一个人填的是末尾的人的ID
+                request.inviteCodeEnter(accountEvt.getSessionId(), inviteCode);
+                inviteCode = accountEvt.getInviteCode();
+            }
+            catch (Exception e)
+            {
+                continue;
+            }
+        }
+        
+
+        // 查询数据库卡组信息
+        List<KrsmaCardEvt> krsmaCardList = this.mar_krsmaCardService.queryKrsmaCard(new KrsmaCardReq());
+        
+        // 5、list中的sessionId拿出来抽卡 打第一关副本
+        for (AccountEvt accountEvt : accountList)
+        {
+            srList = new ArrayList<String>();
+            urList = new ArrayList<String>();
+            cardList = new ArrayList<String>();
+            urNumA = 0;
+            urNumB = 0;
+            urNumC = 0;
+            urNumD = 0;
+            title = "";
+            
+            try
+            {
+                // presentBoxMultiRecv 领礼物箱 最好领2次
+                result = request.presentBoxMultiRecv(accountEvt.getSessionId());
+                sid = result[0];
+                result = request.presentBoxMultiRecv(sid);
+                sid = result[0];
+                
+                // gachaPlayTen 新人的10连首抽
+                result = request.gachaPlay(sid, gachaIdTen, payType);
+                sid = result[0];
+                Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
+                // gachaPlayEleven 当前优惠活动抽取 15
+                result = request.gachaPlay(sid, gachaIdEleven, payType);
+                sid = result[0];
+                Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
+                // gachaPlayEleven 当前优惠活动抽取 25
+                result = request.gachaPlay(sid, gachaIdEleven, payType);
+                sid = result[0];
+                Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
+                
+                // cardShow 检索卡组信息
+                result = request.cardShow(sid);
+                sid = result[0];
+                result[1] = ("{\"cards\"" + result[1].split("cards\"")[1]);
+                json = JSONObject.fromObject(result[1]);
+                JSONArray cards = json.getJSONArray("cards");
+                @SuppressWarnings("unchecked")
+                List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(cards, JSONObject.class);
+                
+                // 收集SR以及UR信息
+                for (JSONObject obj : jsonList)
+                {
+                    if (obj.getString("lv_max").equals("40"))
+                    {
+                        srList.add(obj.getString("cardid"));
+                    }
+                    else if (obj.getString("lv_max").equals("50"))
+                    {
+                        urList.add(obj.getString("cardid"));
+                    }
+                }
+                
+                // 处理卡组信息 UR
+                for (String id : urList)
+                {
+                    for (KrsmaCardEvt ur : krsmaCardList)
+                    {
+                        if (id.equals(ur.getCardId()))
+                        {
+                            // 查询到UR 加入ID
+                            cardList.add(id);
+                            
+                            // 判断该UR是什么职业 相应URNUM+1
+                            if (ur.getType().equals(MarConstant.KRSMACARD_TYPE_1))
+                            {
+                                urNumA++;
+                            }
+                            else if (ur.getType().equals(MarConstant.KRSMACARD_TYPE_2))
+                            {
+                                urNumB++;
+                            }
+                            else if (ur.getType().equals(MarConstant.KRSMACARD_TYPE_3))
+                            {
+                                urNumC++;
+                            }
+                            else if (ur.getType().equals(MarConstant.KRSMACARD_TYPE_4))
+                            {
+                                urNumD++;
+                            }
+                            
+                            // 处理title
+                            title += ur.getName() + " ";
+                        }
+                    }
+                }
+                // 处理卡组信息 SR
+                for (String id : srList)
+                {
+                    for (KrsmaCardEvt sr : krsmaCardList)
+                    {
+                        if (id.equals(sr.getCardId()))
+                        {
+                            cardList.add(id);
+                        }
+                    }
+                }
+                
+                // 战斗信息
+                this.teamBattleSolo(sid, MarConstant.BATTLESOLOSTART_FIRST, MarConstant.BATTLESOLOEND_3);
+                
+                // 更新account信息
+                accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_2);
+                accountEvt.setTitle(title.trim()); // 处理前后的空格
+                accountEvt.setUrNumA(urNumA);
+                accountEvt.setUrNumB(urNumB);
+                accountEvt.setUrNumC(urNumC);
+                accountEvt.setUrNumD(urNumD);
+                if (null != cardList && cardList.size() > 0)
+                {
+                    accountEvt.setCardIds(CommonUtil.listToString(cardList));
+                }
+                this.updateAccount(accountEvt);
+            }
+            catch (Exception e)
+            {
+                accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_0);
+                this.updateAccount(accountEvt);
+                return;
+            }
+        }
     }
     
     /**
@@ -372,7 +462,7 @@ public class AccountServiceImpl implements AccountService
         catch (Exception e)
         {
             System.out.println("这个号一看就是战斗没过");
-            this.teamBattleSolo(sid, MarConstant.BATTLESOLOSTART_10000101, MarConstant.BATTLESOLOEND_10000101);
+            this.teamBattleSolo(sid, MarConstant.BATTLESOLOSTART_FIRST, MarConstant.BATTLESOLOEND_3);
         }
         
         // homeShow 主页
@@ -555,10 +645,15 @@ public class AccountServiceImpl implements AccountService
                 // gachaPlayEleven 当前优惠活动抽取 15
                 result = request.gachaPlay(sid, MarConstant.GACHA_ID_ELEVEN, MarConstant.GACHA_PAYTYPE);
                 sid = result[0];
+                Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
                 result = request.gachaPlay(sid, MarConstant.GACHA_ID_ELEVEN, MarConstant.GACHA_PAYTYPE);
                 sid = result[0];
             }
-            else if (result[1].contains("price\":25"))
+            
+            result = request.gachaShow(sid);
+            sid = result[0];
+            
+            if (result[1].contains("price\":25"))
             {
                 sid = this.sellCard(sid);
                 
@@ -613,9 +708,12 @@ public class AccountServiceImpl implements AccountService
             }
         }
         
-        // 出售卡片
-        result = request.cardSell(sid, CommonUtil.listToString(uniqiIds).replace(" ", ""));
-        sid = result[0];
+        if (jsonList.size() > 80 && uniqiIds != null && uniqiIds.size() != 0)
+        {
+            // 出售卡片
+            result = request.cardSell(sid, CommonUtil.listToString(uniqiIds).replace(" ", ""));
+            sid = result[0];
+        }
         return sid;
     }
     
@@ -626,8 +724,12 @@ public class AccountServiceImpl implements AccountService
             String[] result = request.teamBattleSoloShow(sid);
             sid = result[0];
             result[1] = ("{\"normal_groups\"" + result[1].split("normal_groups\"")[1]);
-            JSONObject json = JSONObject.fromObject(result);
-            JSONArray arthers = json.getJSONArray("arthers");
+            if (result[1].contains("�?,"))
+            {
+                result[1] = result[1].replace("�?,", "\",");
+            }
+            JSONObject json = JSONObject.fromObject(result[1]);
+            JSONArray arthers = json.getJSONArray("arthurs");
             @SuppressWarnings("unchecked")
             List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(arthers, JSONObject.class);
             JSONArray users;
@@ -648,20 +750,20 @@ public class AccountServiceImpl implements AccountService
                     users = obj.getJSONArray("partners");
                     @SuppressWarnings("unchecked")
                     List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
-                    userA = userList.get(0).getString("userid");
+                    userB = userList.get(0).getString("userid");
                 }
                 else if (MarConstant.KRSMACARD_TYPE_4.equals(obj.getString("arthur_type")))
                 {
                     users = obj.getJSONArray("partners");
                     @SuppressWarnings("unchecked")
                     List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
-                    userA = userList.get(0).getString("userid");
+                    userD = userList.get(0).getString("userid");
                 }
             }
             
             result = request.teamBattleSoloStart(sid, battleSoloStart, userA, userB, userD);
             sid = result[0];
-            Thread.sleep(60000);
+            Thread.sleep(MarConstant.SLEEP_TIME_BATTLE);
             
             request.teamBattleSoloEnd(sid, battleSoloEnd);
         }
