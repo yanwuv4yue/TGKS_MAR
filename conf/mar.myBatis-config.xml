@@ -17,5 +17,21 @@
 		<typeAlias alias="AccountEvt" type="com.moemao.tgks.mar.account.entity.AccountEvt" />
 		<typeAlias alias="AccountReq" type="com.moemao.tgks.mar.account.entity.AccountReq" />
 		
+		<!-- mar_﻿marzmap -->
+		<typeAlias alias="MarzMapEvt" type="com.moemao.tgks.mar.marzmap.entity.MarzMapEvt" />
+		<typeAlias alias="MarzMapReq" type="com.moemao.tgks.mar.marzmap.entity.MarzMapReq" />
+		
+		<!-- mar_﻿marzlog -->
+		<typeAlias alias="MarzLogEvt" type="com.moemao.tgks.mar.marzlog.entity.MarzLogEvt" />
+		<typeAlias alias="MarzLogReq" type="com.moemao.tgks.mar.marzlog.entity.MarzLogReq" />
+		
+		<!-- mar_﻿marzaccount -->
+		<typeAlias alias="MarzAccountEvt" type="com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt" />
+		<typeAlias alias="MarzAccountReq" type="com.moemao.tgks.mar.marzaccount.entity.MarzAccountReq" />
+		
+		<!-- mar_﻿marzcard -->
+		<typeAlias alias="MarzCardEvt" type="com.moemao.tgks.mar.marzcard.entity.MarzCardEvt" />
+		<typeAlias alias="MarzCardReq" type="com.moemao.tgks.mar.marzcard.entity.MarzCardReq" />
+		
 	</typeAliases>
 </configuration>

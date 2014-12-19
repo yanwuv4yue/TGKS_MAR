@@ -62,6 +62,7 @@
 <button id="initialAccount">执行</button>
 <button id="checkCardAccount">更新</button>
 <button id="gachaAccount">抽卡</button>
+<button id="allAccount">全过</button>
 <button id="exportUuidAccount">导出</button>
 
 <div id="accountDiv"></div>

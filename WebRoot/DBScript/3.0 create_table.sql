@@ -54,3 +54,81 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_account` (
   `remark` varchar(500) default NULL COMMENT '备注',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='乖离性MA账号信息表';
+
+
+--
+-- 表的结构 `t_tgks_mar_marzaccount`
+--
+DROP TABLE IF EXISTS `t_tgks_mar_marzaccount`;
+CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzaccount` (
+  `id` varchar(30) NOT NULL COMMENT '表唯一主键',
+  `tgksid` varchar(30) NOT NULL COMMENT 'tgks账号ID',
+  `iosuuid` varchar(50) default NULL COMMENT 'IOS UUID',
+  `androiduuid` varchar(50) default NULL COMMENT 'Android UUID',
+  `ioskey` varchar(200) default NULL COMMENT 'IOS KEY',
+  `androidkey` varchar(200) default NULL COMMENT 'Android KEY',
+  `type` varchar(3) NOT NULL COMMENT '类型（0 IOS；1 Android）',
+  `status` varchar(3) NOT NULL COMMENT '状态（0 离线；1 在线）',
+  `sessionid` varchar(30) default NULL COMMENT 'SessionId',
+  `vip` varchar(3) NOT NULL COMMENT 'VIP等级（0 试用；1 普通；2 白金；3 钻石）',
+  `name` varchar(100) default NULL COMMENT '角色名',
+  `userid` varchar(30) default NULL COMMENT 'USER ID',
+  `lv` int(3) NOT NULL default '0' COMMENT '等级',
+  `ap` int(3) NOT NULL default '0' COMMENT 'AP',
+  `apmax` int(3) NOT NULL default '0' COMMENT 'AP上限',
+  `bp` int(3) NOT NULL default '0' COMMENT 'BP',
+  `bpmax` int(3) NOT NULL default '0' COMMENT 'BP上限',
+  `cardnum` int(5) NOT NULL default '0' COMMENT '卡片数量',
+  `cardmax` int(5) NOT NULL default '0' COMMENT '卡片数量上限',
+  `gold` int(10) NOT NULL default '0' COMMENT '金钱',
+  `fp` int(10) NOT NULL default '0' COMMENT '友情点',
+  `coin` int(10) NOT NULL default '0' COMMENT '水晶数量',
+  `bossIds` varchar(500) default NULL COMMENT '挂机地图',
+  `endtime` timestamp NULL default NULL COMMENT '到期时间',
+  `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT '创建时间',
+  `remark` varchar(500) default NULL COMMENT '备注',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='挂机账号信息表';
+
+
+--
+-- 表的结构 `t_tgks_mar_marzcard`
+--
+DROP TABLE IF EXISTS `t_tgks_mar_marzcard`;
+CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzcard` (
+  `id` varchar(30) NOT NULL COMMENT '表唯一主键',
+  `password` varchar(32) NOT NULL COMMENT '卡密号码',
+  `type` varchar(3) NOT NULL COMMENT '类型（0 试用1天；1 周卡；2 月卡；3 季卡）',
+  `status` varchar(3) NOT NULL COMMENT '状态（0 未使用；1 已使用）',
+  `usedtime` timestamp NULL default NULL COMMENT '使用时间',
+  `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='挂机点卡表';
+
+
+--
+-- 表的结构 `t_tgks_mar_marzlog`
+--
+DROP TABLE IF EXISTS `t_tgks_mar_marzlog`;
+CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzlog` (
+  `id` varchar(30) NOT NULL COMMENT '表唯一主键',
+  `accountId` varchar(30) NOT NULL COMMENT '卡账号ID',
+  `type` varchar(3) NOT NULL COMMENT '类型（0 系统；1 战斗；2 探索；3 道具使用；4 合成；5 出售）',
+  `info` varchar(500) default NULL COMMENT '状态（0 未使用；1 已使用）',
+  `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='挂机日志表';
+
+
+--
+-- 表的结构 `t_tgks_mar_marzmap`
+--
+DROP TABLE IF EXISTS `t_tgks_mar_marzmap`;
+CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzmap` (
+  `id` varchar(30) NOT NULL COMMENT '表唯一主键',
+  `bossId` varchar(30) NOT NULL COMMENT '战斗地图的BOSSID',
+  `bossName` varchar(100) default NULL COMMENT 'BOSS名称难度',
+  `bpCost` int(5) NOT NULL default '0' COMMENT 'BP消耗',
+  `vip` varchar(3) NOT NULL COMMENT 'VIP等级（0 试用；1 普通；2 白金；3 钻石）',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='挂机地图表';

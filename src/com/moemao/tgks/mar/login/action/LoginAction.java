@@ -74,7 +74,21 @@ public class LoginAction extends TGKSAction
 		CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_LOGIN_SUCCESS, String.format("账号：%s 密码：%s", userReq.getUsername(), userReq.getPassword()));
 		CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "LoginAction.invite_login");
     	return SUCCESS;
-    }    
+    }
+    
+    public String invite_ie_login()
+    {
+        CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_IN, "LoginAction.invite_ie_login");
+        
+        Map<String, Object> session = ActionContext.getContext().getSession();
+        if (session.get(CommonConstant.USER_INFO) == null)
+        {
+            return ERROR;
+        }
+        
+        CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "LoginAction.invite_ie_login");
+        return SUCCESS;
+    }
 
 	public UserService getUms_userService()
     {

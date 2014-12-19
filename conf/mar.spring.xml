@@ -68,5 +68,61 @@
     <property name="mar_accountService" ref="mar_accountService" />
     <property name="mar_krsmaCardService" ref="mar_krsmaCardService" />
   </bean>
+  
+  <!-- ﻿marzmap_dao 配置 -->
+  <bean id="mar_marzMapDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.moemao.tgks.mar.marzmap.dao.MarzMapDao" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
+  <!-- ﻿marzmap_service 配置 -->
+  <bean id="mar_marzMapService" class="com.moemao.tgks.mar.marzmap.service.impl.MarzMapServiceImpl">
+    <property name="mar_marzMapDao" ref="mar_marzMapDao" />
+  </bean>
+  <!-- ﻿marzmap_action 配置 -->
+  <bean id="mar_marzMapAction" class="com.moemao.tgks.mar.marzmap.action.MarzMapAction">
+    <property name="mar_marzMapService" ref="mar_marzMapService" />
+  </bean>
+  
+  <!-- ﻿marzlog_dao 配置 -->
+  <bean id="mar_marzLogDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.moemao.tgks.mar.marzlog.dao.MarzLogDao" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
+  <!-- ﻿marzlog_service 配置 -->
+  <bean id="mar_marzLogService" class="com.moemao.tgks.mar.marzlog.service.impl.MarzLogServiceImpl">
+    <property name="mar_marzLogDao" ref="mar_marzLogDao" />
+  </bean>
+  <!-- ﻿marzlog_action 配置 -->
+  <bean id="mar_marzLogAction" class="com.moemao.tgks.mar.marzlog.action.MarzLogAction">
+    <property name="mar_marzLogService" ref="mar_marzLogService" />
+  </bean>
+  
+  <!-- ﻿marzaccount_dao 配置 -->
+  <bean id="mar_marzAccountDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.moemao.tgks.mar.marzaccount.dao.MarzAccountDao" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
+  <!-- ﻿marzaccount_service 配置 -->
+  <bean id="mar_marzAccountService" class="com.moemao.tgks.mar.marzaccount.service.impl.MarzAccountServiceImpl">
+    <property name="mar_marzAccountDao" ref="mar_marzAccountDao" />
+  </bean>
+  <!-- ﻿marzaccount_action 配置 -->
+  <bean id="mar_marzAccountAction" class="com.moemao.tgks.mar.marzaccount.action.MarzAccountAction">
+    <property name="mar_marzAccountService" ref="mar_marzAccountService" />
+  </bean>
+  
+  <!-- ﻿marzcard_dao 配置 -->
+  <bean id="mar_marzCardDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.moemao.tgks.mar.marzcard.dao.MarzCardDao" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
+  <!-- ﻿marzcard_service 配置 -->
+  <bean id="mar_marzCardService" class="com.moemao.tgks.mar.marzcard.service.impl.MarzCardServiceImpl">
+    <property name="mar_marzCardDao" ref="mar_marzCardDao" />
+  </bean>
+  <!-- ﻿marzcard_action 配置 -->
+  <bean id="mar_marzCardAction" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction">
+    <property name="mar_marzCardService" ref="mar_marzCardService" />
+  </bean>
 
 </beans>

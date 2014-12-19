@@ -501,6 +501,19 @@ public class AccountServiceImpl implements AccountService
         @SuppressWarnings("unchecked")
         List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(cards, JSONObject.class);
         
+        try
+        {
+            // 如果卡组大于90张，则调用卖卡
+            if (jsonList.size() > 90)
+            {
+                sid = this.sellCard(sid);
+            }
+        }
+        catch (Exception e)
+        {
+            
+        }
+        
         // 收集SR以及UR信息
         for (JSONObject obj : jsonList)
         {

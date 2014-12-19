@@ -215,7 +215,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  </body>
 <script type="text/javascript">
 $(document).ready(function(){
-    // 删除
+
+    // 用来识别是否是IE浏览器 对于IE不稳定的问题还是跳转到ie.jsp页面处理比较好
+	var navigatorName = "Microsoft Internet Explorer";  
+	if( navigator.appName == navigatorName )
+	{   
+		//alert("ie")
+		self.location="invite_ie_login.action";
+	}
+	else
+	{   
+        //alert("not ie")
+	}   
+    
     $( "#inviteGo" ).click(function() {
         // 校验锁
         if ("1" == $("#lock").val())
