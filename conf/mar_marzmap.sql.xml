@@ -5,7 +5,7 @@
 <mapper namespace="com.moemao.tgks.mar.marzmap.dao.MarzMapDao">
 <select id="mar_queryMarzMap" parameterType="MarzMapReq" resultType="MarzMapEvt" resultMap="MarzMapEvtMap">
         <![CDATA[  
-            SELECT t.id, t.bossid, t.bossname, t.bpcost, t.vip FROM t_tgks_mar_marzmap t
+            SELECT t.id, t.bossid, t.bossname, t.bpcost, t.target, t.vip FROM t_tgks_mar_marzmap t
         ]]>
         <where>
                 1=1
@@ -32,8 +32,8 @@
 
 <insert id="mar_addMarzMap" parameterType="MarzMapEvt">
         <![CDATA[  
-            INSERT INTO t_tgks_mar_marzmap (id, bossid, bossname, bpcost, vip) 
-            VALUES (#{id}, #{bossId}, #{bossName}, #{bpCost}, #{vip}) 
+            INSERT INTO t_tgks_mar_marzmap (id, bossid, bossname, bpcost, target, vip) 
+            VALUES (#{id}, #{bossId}, #{bossName}, #{bpCost}, #{target}, #{vip}) 
         ]]>
 </insert>
 
@@ -43,6 +43,7 @@
                        bossid = #{bossId},
                        bossname = #{bossName},
                        bpcost = #{bpCost},
+                       target = #{target},
                        vip = #{vip}
              WHERE ID = #{id}
         ]]>

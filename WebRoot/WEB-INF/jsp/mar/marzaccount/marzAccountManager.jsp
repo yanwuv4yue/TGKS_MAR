@@ -12,13 +12,45 @@
 	<form id="marzAccountReq" action="../mar/queryMarzAccount.action" method="post">
 		<table>
 			<tr>
-				<td><label>名称: </label></td><td><input type="text" name="marzAccountReq.name" /></td>
+                <td><label>TGKSID: </label></td><td><input type="text" name="marzAccountReq.tgksId" /></td>
+                <td><label>类型: </label></td>
+                <td>
+	                <select name="marzAccountReq.type">
+                        <option value="">全部</option>
+		                <option value="0">IOS</option>
+		                <option value="1">Android</option>
+	                </select>
+                </td>
+                <td><label>状态: </label></td>
+                <td>
+                    <select name="marzAccountReq.status">
+                        <option value="">全部</option>
+                        <option value="0">离线</option>
+                        <option value="1">在线</option>
+                    </select>
+                </td>
+                <td><label>VIP: </label></td>
+                <td>
+                    <select name="marzAccountReq.vip">
+                        <option value="">全部</option>
+                        <option value="0">试用</option>
+                        <option value="1">普通</option>
+                        <option value="2">白金</option>
+                        <option value="3">钻石</option>
+                    </select>
+                </td>
+			</tr>
+			<tr>
+                <td>未过期: </td>
+                <td><input type="text" class="datepicker" name="marzAccountReq.endTime" /></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
 				<td>
-				
-				</td>
-				<td>
-				<button id="clearMarzAccount">重置</button>
-				<button id="queryMarzAccount">查询</button>
+					<button id="clearMarzAccount">重置</button>
+					<button id="queryMarzAccount">查询</button>
 				</td>
 			</tr>
 		</table>
@@ -53,8 +85,8 @@ $(document).ready(function(){
 	// 新增/更新窗口
 	$( "#marzAccountEdit" ).dialog({
 		modal: true,
-		height:500,
-		width:750,
+		height:800,
+		width:550,
 		autoOpen: false,
 		show: "fold",
 		hide: "fold",

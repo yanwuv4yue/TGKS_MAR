@@ -20,13 +20,18 @@
                 <option value="2" <s:if test='krsmaCardEvt.type=="2"'>selected="selected"</s:if>>富豪</option>
                 <option value="3" <s:if test='krsmaCardEvt.type=="3"'>selected="selected"</s:if>>盗贼</option>
                 <option value="4" <s:if test='krsmaCardEvt.type=="4"'>selected="selected"</s:if>>歌姬</option>
+                <option value="5" <s:if test='krsmaCardEvt.type=="5"'>selected="selected"</s:if>>妖精</option>
             </select>
         </td>
         <td>稀有度：</td>
         <td>
             <select name="krsmaCardEvt.rarity">
-                <option value="UR" <s:if test='krsmaCardEvt.rarity=="MR"'>selected="selected"</s:if>>UR</option>
+                <option value="MR" <s:if test='krsmaCardEvt.rarity=="MR"'>selected="selected"</s:if>>MR</option>
+                <option value="UR" <s:if test='krsmaCardEvt.rarity=="UR"'>selected="selected"</s:if>>UR</option>
                 <option value="SR" <s:if test='krsmaCardEvt.rarity=="SR"'>selected="selected"</s:if>>SR</option>
+                <option value="R" <s:if test='krsmaCardEvt.rarity=="R"'>selected="selected"</s:if>>R</option>
+                <option value="HN" <s:if test='krsmaCardEvt.rarity=="HN"'>selected="selected"</s:if>>HN</option>
+                <option value="N" <s:if test='krsmaCardEvt.rarity=="N"'>selected="selected"</s:if>>N</option>
             </select>
         </td>
     </tr>

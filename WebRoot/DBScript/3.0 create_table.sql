@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_account` (
 DROP TABLE IF EXISTS `t_tgks_mar_marzaccount`;
 CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzaccount` (
   `id` varchar(30) NOT NULL COMMENT '表唯一主键',
-  `tgksid` varchar(30) NOT NULL COMMENT 'tgks账号ID',
+  `tgksid` varchar(30) default NULL COMMENT 'tgks账号ID',
   `iosuuid` varchar(50) default NULL COMMENT 'IOS UUID',
   `androiduuid` varchar(50) default NULL COMMENT 'Android UUID',
   `ioskey` varchar(200) default NULL COMMENT 'IOS KEY',
@@ -129,6 +129,7 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzmap` (
   `bossId` varchar(30) NOT NULL COMMENT '战斗地图的BOSSID',
   `bossName` varchar(100) default NULL COMMENT 'BOSS名称难度',
   `bpCost` int(5) NOT NULL default '0' COMMENT 'BP消耗',
+  `target` int(3) NOT NULL default '0' COMMENT '攻击目标数量',
   `vip` varchar(3) NOT NULL COMMENT 'VIP等级（0 试用；1 普通；2 白金；3 钻石）',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='挂机地图表';

@@ -8,6 +8,7 @@
         <result property="bossId" column="BOSSID" />
         <result property="bossName" column="BOSSNAME" />
         <result property="bpCost" column="BPCOST" />
+        <result property="target" column="TARGET" />
         <result property="vip" column="VIP" />
     </resultMap>
 </mapper>

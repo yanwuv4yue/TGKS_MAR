@@ -67,52 +67,52 @@ private String userId;
 /**
  * 等级
  */
-private int lv;
+private Integer lv;
 
 /**
  * AP
  */
-private int ap;
+private Integer ap;
 
 /**
  * AP上限
  */
-private int apMax;
+private Integer apMax;
 
 /**
  * BP
  */
-private int bp;
+private Integer bp;
 
 /**
  * BP上限
  */
-private int bpMax;
+private Integer bpMax;
 
 /**
  * 卡片数量
  */
-private int cardNum;
+private Integer cardNum;
 
 /**
  * 卡片数量上限
  */
-private int cardMax;
+private Integer cardMax;
 
 /**
  * 金钱
  */
-private int gold;
+private Integer gold;
 
 /**
  * 友情点
  */
-private int fp;
+private Integer fp;
 
 /**
  * 水晶数量
  */
-private int coin;
+private Integer coin;
 
 /**
  * 挂机地图
@@ -329,7 +329,7 @@ public void setUserId(String userId)
 /**
  * @return 返回 lv
  */
-public int getLv()
+public Integer getLv()
 {
     return lv;
 }
@@ -337,7 +337,7 @@ public int getLv()
 /**
  * @param 对lv进行赋值
  */
-public void setLv(int lv)
+public void setLv(Integer lv)
 {
     this.lv = lv;
 }
@@ -345,7 +345,7 @@ public void setLv(int lv)
 /**
  * @return 返回 ap
  */
-public int getAp()
+public Integer getAp()
 {
     return ap;
 }
@@ -353,7 +353,7 @@ public int getAp()
 /**
  * @param 对ap进行赋值
  */
-public void setAp(int ap)
+public void setAp(Integer ap)
 {
     this.ap = ap;
 }
@@ -361,7 +361,7 @@ public void setAp(int ap)
 /**
  * @return 返回 apMax
  */
-public int getApMax()
+public Integer getApMax()
 {
     return apMax;
 }
@@ -369,7 +369,7 @@ public int getApMax()
 /**
  * @param 对apMax进行赋值
  */
-public void setApMax(int apMax)
+public void setApMax(Integer apMax)
 {
     this.apMax = apMax;
 }
@@ -377,7 +377,7 @@ public void setApMax(int apMax)
 /**
  * @return 返回 bp
  */
-public int getBp()
+public Integer getBp()
 {
     return bp;
 }
@@ -385,7 +385,7 @@ public int getBp()
 /**
  * @param 对bp进行赋值
  */
-public void setBp(int bp)
+public void setBp(Integer bp)
 {
     this.bp = bp;
 }
@@ -393,7 +393,7 @@ public void setBp(int bp)
 /**
  * @return 返回 bpMax
  */
-public int getBpMax()
+public Integer getBpMax()
 {
     return bpMax;
 }
@@ -401,7 +401,7 @@ public int getBpMax()
 /**
  * @param 对bpMax进行赋值
  */
-public void setBpMax(int bpMax)
+public void setBpMax(Integer bpMax)
 {
     this.bpMax = bpMax;
 }
@@ -409,7 +409,7 @@ public void setBpMax(int bpMax)
 /**
  * @return 返回 cardNum
  */
-public int getCardNum()
+public Integer getCardNum()
 {
     return cardNum;
 }
@@ -417,7 +417,7 @@ public int getCardNum()
 /**
  * @param 对cardNum进行赋值
  */
-public void setCardNum(int cardNum)
+public void setCardNum(Integer cardNum)
 {
     this.cardNum = cardNum;
 }
@@ -425,7 +425,7 @@ public void setCardNum(int cardNum)
 /**
  * @return 返回 cardMax
  */
-public int getCardMax()
+public Integer getCardMax()
 {
     return cardMax;
 }
@@ -433,7 +433,7 @@ public int getCardMax()
 /**
  * @param 对cardMax进行赋值
  */
-public void setCardMax(int cardMax)
+public void setCardMax(Integer cardMax)
 {
     this.cardMax = cardMax;
 }
@@ -441,7 +441,7 @@ public void setCardMax(int cardMax)
 /**
  * @return 返回 gold
  */
-public int getGold()
+public Integer getGold()
 {
     return gold;
 }
@@ -449,7 +449,7 @@ public int getGold()
 /**
  * @param 对gold进行赋值
  */
-public void setGold(int gold)
+public void setGold(Integer gold)
 {
     this.gold = gold;
 }
@@ -457,7 +457,7 @@ public void setGold(int gold)
 /**
  * @return 返回 fp
  */
-public int getFp()
+public Integer getFp()
 {
     return fp;
 }
@@ -465,7 +465,7 @@ public int getFp()
 /**
  * @param 对fp进行赋值
  */
-public void setFp(int fp)
+public void setFp(Integer fp)
 {
     this.fp = fp;
 }
@@ -473,7 +473,7 @@ public void setFp(int fp)
 /**
  * @return 返回 coin
  */
-public int getCoin()
+public Integer getCoin()
 {
     return coin;
 }
@@ -481,7 +481,7 @@ public int getCoin()
 /**
  * @param 对coin进行赋值
  */
-public void setCoin(int coin)
+public void setCoin(Integer coin)
 {
     this.coin = coin;
 }

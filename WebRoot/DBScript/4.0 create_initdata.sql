@@ -15,10 +15,10 @@ INSERT INTO `t_tgks_common_menu` (`id`, `preid`, `name`, `status`, `url`, `level
 ('COMM20141206020826000010', 'COMM20141205024116000001', '卡密管理', '1', '../mar/passwordCardManager.action', '2', '3300'),
 ('COMM20141206020826000011', 'COMM20141205024116000001', '卡牌管理', '1', '../mar/krsmaCardManager.action', '2', '3301'),
 ('COMM20141206020826000012', 'COMM20141205024116000001', '初始管理', '1', '../mar/accountManager.action', '2', '3302'),
-('COMM20141206020826000013', 'COMM20141205024116000001', '挂机账号管理', '1', '../mar/marzAccountManager.action', '2', '3302'),
-('COMM20141206020826000014', 'COMM20141205024116000001', '挂机地图管理', '1', '../mar/marzMapManager.action', '2', '3302'),
-('COMM20141206020826000015', 'COMM20141205024116000001', '挂机点卡管理', '1', '../mar/marzCardManager.action', '2', '3302'),
-('COMM20141206020826000016', 'COMM20141205024116000001', '挂机日志管理', '1', '../mar/marzLogManager.action', '2', '3302');
+('COMM20141206020826000013', 'COMM20141205024116000001', '挂机账号管理', '1', '../mar/marzAccountManager.action', '2', '3303'),
+('COMM20141206020826000014', 'COMM20141205024116000001', '挂机地图管理', '1', '../mar/marzMapManager.action', '2', '3304'),
+('COMM20141206020826000015', 'COMM20141205024116000001', '挂机点卡管理', '1', '../mar/marzCardManager.action', '2', '3305'),
+('COMM20141206020826000016', 'COMM20141205024116000001', '挂机日志管理', '1', '../mar/marzLogManager.action', '2', '3306');
 
 --
 -- 转存表中的数据 `t_tgks_mar_krsmacard`

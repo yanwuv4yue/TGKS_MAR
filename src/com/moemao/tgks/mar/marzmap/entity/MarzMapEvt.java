@@ -25,7 +25,12 @@ private String vip;
 /**
  * BP消耗
  */
-private int bpCost;
+private Integer bpCost;
+
+/**
+ * 攻击目标数
+ */
+private Integer target;
 
 @Override
 public String toString()
@@ -84,7 +89,7 @@ public void setBossName(String bossName)
 /**
  * @return 返回 bpCost
  */
-public int getBpCost()
+public Integer getBpCost()
 {
     return bpCost;
 }
@@ -92,9 +97,19 @@ public int getBpCost()
 /**
  * @param 对bpCost进行赋值
  */
-public void setBpCost(int bpCost)
+public void setBpCost(Integer bpCost)
 {
     this.bpCost = bpCost;
+}
+
+public Integer getTarget()
+{
+    return target;
+}
+
+public void setTarget(Integer target)
+{
+    this.target = target;
 }
 
 public String getVip()

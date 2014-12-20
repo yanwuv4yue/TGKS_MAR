@@ -8,7 +8,8 @@
                 <th width="20"><input type="checkbox" id="allMarzMapId" name="allMarzMapId"  /></th>
 				<th>ID</th>
 				<th>名称</th>
-				<th>BP消耗</th>
+                <th>BP消耗</th>
+                <th>攻击目标数</th>
 				<th>VIP等级</th>
             </tr>
         </thead>
@@ -19,6 +20,7 @@
 					<td><b id="<s:property value='#evt.id'/>" class="marzMapUpdate"><s:property value="#evt.bossId"/></b></td>
                     <td><s:property value='#evt.bossName'/></td>
                     <td><s:property value='#evt.bpCost'/></td>
+                    <td><s:property value='#evt.target'/></td>
                     <td>
                         <s:if test="#evt.vip == 0">
                             试用
@@ -32,6 +34,7 @@
                         <s:elseif test="#evt.vip == 3">
                             钻石
                         </s:elseif>
+                    </td>
 				</tr>
 			</s:iterator>
 		</tbody>

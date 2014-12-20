@@ -116,8 +116,6 @@
                        fp = #{fp},
                        coin = #{coin},
                        bossids = #{bossIds},
-                       createtime = #{createTime},
-                       endtime = #{endTime},
                        remark = #{remark}
              WHERE ID = #{id}
         ]]>
