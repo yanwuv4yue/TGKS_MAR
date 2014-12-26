@@ -242,7 +242,7 @@ $(document).ready(function(){
 
     // 用来识别是否是IE浏览器 对于IE不稳定的问题还是跳转到ie.jsp页面处理比较好
 	var navigatorName = "Microsoft Internet Explorer";  
-	if( navigator.appName == navigatorName )
+	if( navigator.appName == navigatorName || browser.versions.trident)
 	{   
 		//alert("ie")
 		self.location="invite_ie_login.action";
