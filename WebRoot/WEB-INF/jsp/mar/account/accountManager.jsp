@@ -62,7 +62,8 @@
 <button id="initialAccount">执行</button>
 <button id="checkCardAccount">更新</button>
 <button id="gachaAccount">抽卡</button>
-<button id="allAccount">全过</button>
+<button id="allCheckCardAccount">全更</button>
+<button id="allGachaAccount">全抽</button>
 <button id="exportUuidAccount">导出</button>
 
 <div id="accountDiv"></div>
@@ -432,9 +433,72 @@ $(document).ready(function(){
                 success: function(){
                     // 执行成功刷新form
                     query();
+                    alert("全部完成");
                 },
                 error:function(){ 
                     alert("操作失败"); 
+                }
+            };
+            
+            $("#accountConfirm").ajaxSubmit(options);
+            $("#accountManagerSubmit").val("0");
+            return false;
+    });
+    
+    $( "#allCheckCardAccount" ).button({
+        icons: {
+            primary: "ui-icon-circle"
+            }
+        }).click(function() {
+        
+            if ($("#accountManagerSubmit").val() == "1")
+            {
+                return false;
+            }
+            
+            $("#accountManagerSubmit").val("1");
+            
+            // ajax调用删除action
+            var options = { 
+                url:"../mar/allCheckCardAccount.action", // 提交给哪个执行
+                type:'POST', 
+                success: function(){
+                    // 执行成功刷新form
+                    query();
+                },
+                error:function(){ 
+                    //alert("操作失败"); 
+                }
+            };
+            
+            $("#accountConfirm").ajaxSubmit(options);
+            $("#accountManagerSubmit").val("0");
+            return false;
+    });
+    
+    $( "#allGachaAccount" ).button({
+        icons: {
+            primary: "ui-icon-circle"
+            }
+        }).click(function() {
+        
+            if ($("#accountManagerSubmit").val() == "1")
+            {
+                return false;
+            }
+            
+            $("#accountManagerSubmit").val("1");
+            
+            // ajax调用删除action
+            var options = { 
+                url:"../mar/allGachaAccount.action", // 提交给哪个执行
+                type:'POST', 
+                success: function(){
+                    // 执行成功刷新form
+                    query();
+                },
+                error:function(){ 
+                    //alert("操作失败"); 
                 }
             };
             

@@ -91,6 +91,47 @@ public class AccountAction extends TGKSAction
         return SUCCESS;
     }
     
+    public String queryAccountTB()
+    {
+        list = mar_accountService.queryAccount(accountReq);
+        
+        // 查询所有UR SR
+        List<KrsmaCardEvt> cardURList = mar_krsmaCardService.queryKrsmaCard(new KrsmaCardReq());
+        
+        List<String> iconIds;
+        List<String> iconList;
+        List<AccountEvt> removeList = new ArrayList<AccountEvt>();
+        
+        for (AccountEvt account : list)
+        {
+            if (account.getUrNumA() < 2 && account.getUrNumB() < 2 && account.getUrNumC() < 2 && account.getUrNumD() < 2 )
+            {
+                removeList.add(account);
+                continue;
+            }
+            
+            iconIds = CommonUtil.stringToList(account.getCardIds());
+            iconList = new ArrayList<String>();
+            for (String id : iconIds)
+            {
+                for (KrsmaCardEvt card : cardURList)
+                {
+                    if (id.equals(card.getCardId()))
+                    {
+                        iconList.add(card.getIconUrl());
+                        break;
+                    }
+                }
+            }
+            
+            account.setIconList(iconList);
+        }
+        
+        this.list.removeAll(removeList);
+        
+        return SUCCESS;
+    }
+    
     public String editAccountPage()
     {
     String id = this.getRequest().getParameter("id");
@@ -157,6 +198,18 @@ public class AccountAction extends TGKSAction
     {
         String ids = this.getRequest().getParameter("ids");
         mar_accountService.gachaAccount(CommonUtil.stringToList(ids));
+        return SUCCESS;
+    }
+    
+    public String allCheckCardAccount()
+    {
+        mar_accountService.allCheckCardAccount();
+        return SUCCESS;
+    }
+    
+    public String allGachaAccount()
+    {
+        mar_accountService.allGachaAccount();
         return SUCCESS;
     }
     

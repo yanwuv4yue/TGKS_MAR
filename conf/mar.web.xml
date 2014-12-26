@@ -19,6 +19,11 @@
         <result name="success">/WEB-INF/jsp/mar/invite/success.jsp</result>
         <result name="error">/WEB-INF/jsp/mar/invite/error.jsp</result>
     </action>
+    
+    <action name="account_login" class="com.moemao.tgks.mar.login.action.LoginAction" method="account_login">
+        <result name="success">/WEB-INF/jsp/mar/account/accountManagerTB.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
 
     <!-- mar_passwordcard -->
     <action name="passwordCardManager" class="com.moemao.tgks.mar.passwordcard.action.PasswordCardAction" method="passwordCardManager">
@@ -128,8 +133,23 @@
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     
+    <action name="allCheckCardAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="allCheckCardAccount">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="allGachaAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="allGachaAccount">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
     <action name="exportAccountUuid" class="com.moemao.tgks.mar.account.action.AccountAction" method="exportAccountUuid">
         <result name="success">/WEB-INF/jsp/mar/account/accountUuid.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="queryAccountTB" class="com.moemao.tgks.mar.account.action.AccountAction" method="queryAccountTB">
+        <result name="success">/WEB-INF/jsp/mar/account/accountListTB.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     

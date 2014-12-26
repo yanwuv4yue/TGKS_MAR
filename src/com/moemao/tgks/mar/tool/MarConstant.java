@@ -14,10 +14,6 @@ public class MarConstant
 
     public static final String GACHA_ID_TEN = "20000300";
     
-    public static final String GACHA_ID_ONE = "20000400";
-    
-    public static final String GACHA_ID_ELEVEN = "20000410";
-    
     public static final String GACHA_PAYTYPE = "3";
     
     public static final int SLEEP_TIME_GACHA = 500;

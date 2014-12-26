@@ -113,7 +113,6 @@ public class AccountServiceImpl implements AccountService
         String name = MarConstant.INITIAL_NAME;
         String chara = MarConstant.INITIAL_CHARA;
         String gachaIdTen = MarConstant.GACHA_ID_TEN;
-        String gachaIdEleven = MarConstant.GACHA_ID_ELEVEN;
         String payType = MarConstant.GACHA_PAYTYPE;
         
 
@@ -289,14 +288,8 @@ public class AccountServiceImpl implements AccountService
                 result = request.gachaPlay(sid, gachaIdTen, payType);
                 sid = result[0];
                 Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
-                // gachaPlayEleven 当前优惠活动抽取 15
-                result = request.gachaPlay(sid, gachaIdEleven, payType);
-                sid = result[0];
-                Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
-                // gachaPlayEleven 当前优惠活动抽取 25
-                result = request.gachaPlay(sid, gachaIdEleven, payType);
-                sid = result[0];
-                Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
+                // 抽取当前活动的11连 2次
+                sid = this.doGacha(sid);
                 
                 // cardShow 检索卡组信息
                 result = request.cardShow(sid);
@@ -408,7 +401,26 @@ public class AccountServiceImpl implements AccountService
             if (!MarConstant.ACCOUNT_STATUS_3.equals(accountEvt.getStatus()))
             {
                 this.checkCard(accountEvt);
+                System.out.println(MarConstant.LOG_SYSTEM_INFO + "已完成第" + (list.indexOf(accountEvt) + 1) + "个任务！共" + list.size() + "个！");
             }
+        }
+    }
+    
+    /**
+     * 全部更新
+     */
+    public void allCheckCardAccount()
+    {
+        AccountReq accountReq = new AccountReq();
+        accountReq.setStatus(MarConstant.ACCOUNT_STATUS_2);
+        
+        List<AccountEvt> list = mar_accountDao.mar_queryAccount(accountReq);
+        
+        // 遍历查询出的账号 对每个账号执行过checkCard
+        for (AccountEvt accountEvt : list)
+        {
+            this.checkCard(accountEvt);
+            System.out.println(MarConstant.LOG_SYSTEM_INFO + "已完成第" + (list.indexOf(accountEvt) + 1) + "个任务！共" + list.size() + "个！");
         }
     }
     
@@ -602,7 +614,26 @@ public class AccountServiceImpl implements AccountService
             if (!MarConstant.ACCOUNT_STATUS_3.equals(accountEvt.getStatus()))
             {
                 this.gacha(accountEvt);
+                System.out.println(MarConstant.LOG_SYSTEM_INFO + "已完成第" + (list.indexOf(accountEvt) + 1) + "个任务！共" + list.size() + "个！");
             }
+        }
+    }
+    
+    /**
+     * 全部抽卡
+     */
+    public void allGachaAccount()
+    {
+        AccountReq accountReq = new AccountReq();
+        accountReq.setStatus(MarConstant.ACCOUNT_STATUS_2);
+        
+        List<AccountEvt> list = mar_accountDao.mar_queryAccount(accountReq);
+        
+        // 遍历查询出的账号 对每个账号执行过checkCard
+        for (AccountEvt accountEvt : list)
+        {
+            this.gacha(accountEvt);
+            System.out.println(MarConstant.LOG_SYSTEM_INFO + "已完成第" + (list.indexOf(accountEvt) + 1) + "个任务！共" + list.size() + "个！");
         }
     }
     
@@ -645,40 +676,69 @@ public class AccountServiceImpl implements AccountService
         
         try
         {
-            result = request.gachaShow(sid);
-            sid = result[0];
-            
-            // 如果抽奖存档15石头
-            if (result[1].contains("price\":15"))
-            {
-                // 先出售卡片
-                sid = this.sellCard(sid);
-                sid = this.sellCard(sid);
-                
-                // gachaPlayEleven 当前优惠活动抽取 15
-                result = request.gachaPlay(sid, MarConstant.GACHA_ID_ELEVEN, MarConstant.GACHA_PAYTYPE);
-                sid = result[0];
-                Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
-                result = request.gachaPlay(sid, MarConstant.GACHA_ID_ELEVEN, MarConstant.GACHA_PAYTYPE);
-                sid = result[0];
-            }
-            
-            result = request.gachaShow(sid);
-            sid = result[0];
-            
-            if (result[1].contains("price\":25"))
-            {
-                sid = this.sellCard(sid);
-                
-                result = request.gachaPlay(sid, MarConstant.GACHA_ID_ELEVEN, MarConstant.GACHA_PAYTYPE);
-                sid = result[0];
-            }
+            this.doGacha(sid);
         }
         catch (Exception e)
         {
             return;
         }
         
+    }
+    
+    public String doGacha(String sid)
+    {
+        String[] result;
+        
+        try
+        {
+            result = request.gachaShow(sid);
+            sid = result[0];
+            
+            result[1] = ("{\"gacha_list\"" + result[1].split("gacha_list\"")[1]);
+            if (result[1].contains("�?,"))
+            {
+                result[1] = result[1].replace("�?,", "\",");
+            }
+            JSONObject json = JSONObject.fromObject(result[1]);
+            JSONArray gacha_list = json.getJSONArray("gacha_list");
+            @SuppressWarnings("unchecked")
+            List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(gacha_list, JSONObject.class);
+            
+            for (JSONObject obj : jsonList)
+            {
+                // 如果抽奖存档15石头
+                if (obj.getInt("price") == 15)
+                {
+                    // 先出售卡片
+                    sid = this.sellCard(sid);
+                    sid = this.sellCard(sid);
+                    
+                    // gachaPlayEleven 当前优惠活动抽取 15
+                    result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                    sid = result[0];
+                    Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
+                    result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                    sid = result[0];
+                    
+                    break;
+                }
+                else if (result[1].contains("price\":25"))
+                {
+                    sid = this.sellCard(sid);
+                    
+                    result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                    sid = result[0];
+                    
+                    break;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            
+        }
+        
+        return sid;
     }
     
     public String sellCard(String sid) throws Exception
