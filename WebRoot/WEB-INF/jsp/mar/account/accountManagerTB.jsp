@@ -14,7 +14,7 @@
     <meta http-equiv="keywords" content="幻影帝国,猫盟公社,乖离性MA初始账号查询">
     <style type="text/css">
 	#accountReq{border:0px solid;}
-	#accountReq td{border:0px solid;}
+	#accountReq td{border:0px solid; text-align: center;}
 	#accountReq input{width:120px;}
 	#accountReq select{width:120px;}
 	</style>    
@@ -24,22 +24,25 @@
 	<form id="accountReq" action="../mar/queryAccount.action" method="post">
 		<table width="100%">
 			<tr>
-                <td align="center">佣兵</td>
-                <td align="center">富豪</td>
-                <td align="center">盗贼</td>
-                <td align="center">歌姬</td>
-                <td align="center">UR</td>
+			    <td>
+				    <input id="urNumA" type="checkbox" name="accountReq.urNumA" value="2"  style="vertical-align:middle" />
+				    <label for="checkbox" style="font-size:12px; line-height:12px">佣兵</label>
+			    </td>
+			    <td>
+			        <input id="urNumB" type="checkbox" name="accountReq.urNumB" value="2" style="vertical-align:middle" />			    
+                    <label for="checkbox" style="font-size:12px; line-height:12px">富豪</label>
+                </td>
+			    <td>
+				    <input id="urNumC" type="checkbox" name="accountReq.urNumC" value="2" style="vertical-align:middle" />
+	                <label for="checkbox" style="font-size:12px; line-height:12px">盗贼</label>
+			    </td>
+			    <td>
+			        <input id="urNumD" type="checkbox" name="accountReq.urNumD" value="2" style="vertical-align:middle" />
+                    <label for="checkbox" style="font-size:12px; line-height:12px">歌姬</label>
+                </td>
+                <td>UR：<input type="text" name="accountReq.title" /></td>
                 <td>
                     <button id="clearAccount">重置</button>
-                </td>
-			</tr>
-			<tr>
-			    <td align="center"><input id="urNumA" type="checkbox" name="accountReq.urNumA" value="2" /></td>
-			    <td align="center"><input id="urNumB" type="checkbox" name="accountReq.urNumB" value="2" /></td>
-			    <td align="center"><input id="urNumC" type="checkbox" name="accountReq.urNumC" value="2" /></td>
-			    <td align="center"><input id="urNumD" type="checkbox" name="accountReq.urNumD" value="2" /></td>
-                <td align="center"><input type="text" name="accountReq.title" /></td>
-                <td>
                     <button id="queryAccount">查询</button>
                 </td>
 			</tr>
