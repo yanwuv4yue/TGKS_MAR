@@ -515,8 +515,8 @@ public class AccountServiceImpl implements AccountService
         
         try
         {
-            // 如果卡组大于90张，则调用卖卡
-            if (jsonList.size() > 90)
+            // 如果卡组大于80张，则调用卖卡
+            if (jsonList.size() > 80)
             {
                 sid = this.sellCard(sid);
             }

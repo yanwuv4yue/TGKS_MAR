@@ -21,8 +21,9 @@
 </head>
 <body>
 <div>
-	<form id="accountReq" action="../mar/queryAccount.action" method="post">
+	<form id="accountReq" action="../mar/queryAccountTB_login.action" method="post">
 		<table width="100%">
+		    <tr></tr>
 			<tr>
 			    <td>
 				    <input id="urNumA" type="checkbox" name="accountReq.urNumA" value="2"  style="vertical-align:middle" />
@@ -42,7 +43,7 @@
                 </td>
                 <td>UR：<input type="text" name="accountReq.title" /></td>
                 <td>
-                    <button id="clearAccount">重置</button>
+                    <!-- <button id="clearAccount">重置</button> -->
                     <button id="queryAccount">查询</button>
                 </td>
 			</tr>
@@ -57,7 +58,7 @@ $(document).ready(function(){
 	// 查询方法
 	function query()
 	{
-		var table=$.ajax({url:"../mar/queryAccountTB.action", data:$("#accountReq").formSerialize(), async:false});
+		var table=$.ajax({url:"../mar/queryAccountTB_login.action", data:$("#accountReq").formSerialize(), async:false});
 		$("#accountDiv").html(table.responseText);
 	}
 	

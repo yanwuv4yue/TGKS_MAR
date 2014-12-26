@@ -148,7 +148,7 @@
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     
-    <action name="queryAccountTB" class="com.moemao.tgks.mar.account.action.AccountAction" method="queryAccountTB">
+    <action name="queryAccountTB_login" class="com.moemao.tgks.mar.account.action.AccountAction" method="queryAccountTB_login">
         <result name="success">/WEB-INF/jsp/mar/account/accountListTB.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>

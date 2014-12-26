@@ -91,7 +91,7 @@ public class AccountAction extends TGKSAction
         return SUCCESS;
     }
     
-    public String queryAccountTB()
+    public String queryAccountTB_login()
     {
         list = mar_accountService.queryAccount(accountReq);
         
