@@ -82,6 +82,37 @@ public class AccountServiceImpl implements AccountService
     return mar_accountDao.mar_deleteAccount(ids);
     }
     
+    public String login(AccountEvt accountEvt)
+    {
+        String[] result = new String[2];
+        String sid = "";
+        
+        // login 登录 并获取sessionId
+        try
+        {
+            result[0] = request.login(accountEvt.getUuid());
+        }
+        catch (Exception e)
+        {
+            return "";
+        }
+        JSONObject json= JSONObject.fromObject(result[0]);
+        sid = json.getString("sess_key").replace("=", "");
+        
+        // connect
+        try
+        {
+            result = request.connect(sid);
+            sid = result[0];
+        }
+        catch (Exception e)
+        {
+            return "";
+        }
+        
+        return sid;
+    }
+    
     /**
      * 执行刷初始的调用方法
      */
@@ -91,6 +122,8 @@ public class AccountServiceImpl implements AccountService
         List<AccountEvt> accountList = mar_accountDao.mar_queryAccountByIds(ids);
         
         this.process(accountList);
+        
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "all process complete!");
     }
     
     /**
@@ -144,13 +177,8 @@ public class AccountServiceImpl implements AccountService
         {
             try
             {
-                // login 登录 并获取sessionId
-                result[0] = request.login(accountEvt.getUuid());
-                json= JSONObject.fromObject(result[0]);
-                sid = json.getString("sess_key").replace("=", "");
-                
-                // connect
-                accountEvt.setSessionId(request.connect(sid)[0]);
+                sid = this.login(accountEvt);
+                accountEvt.setSessionId(sid);
             }
             catch (Exception e)
             {
@@ -181,7 +209,7 @@ public class AccountServiceImpl implements AccountService
         try
         {
             // 当前版本服务器改为必须等待1分钟才可起名字
-            Thread.sleep(61000);
+            Thread.sleep(5000);
         }
         catch (Exception e)
         {
@@ -259,7 +287,6 @@ public class AccountServiceImpl implements AccountService
                 continue;
             }
         }
-        
 
         // 查询数据库卡组信息
         List<KrsmaCardEvt> krsmaCardList = this.mar_krsmaCardService.queryKrsmaCard(new KrsmaCardReq());
@@ -278,36 +305,58 @@ public class AccountServiceImpl implements AccountService
             
             try
             {
+                sid = this.login(accountEvt);
+                
                 // presentBoxMultiRecv 领礼物箱 最好领2次
-                result = request.presentBoxMultiRecv(accountEvt.getSessionId());
-                sid = result[0];
                 result = request.presentBoxMultiRecv(sid);
                 sid = result[0];
+                //result = request.presentBoxMultiRecv(sid);
+                //sid = result[0];
                 
                 // gachaPlayTen 新人的10连首抽
                 result = request.gachaPlay(sid, gachaIdTen, payType);
                 sid = result[0];
                 Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
                 // 抽取当前活动的11连 2次
-                sid = this.doGacha(sid);
+                sid = this.doGacha(sid, 50);
                 
                 // cardShow 检索卡组信息
-                result = request.cardShow(sid);
-                sid = result[0];
+                try
+                {
+                    result = request.cardShow(sid);
+                    sid = result[0];
+                }
+                catch (Exception e)
+                {
+                    continue;
+                }
                 result[1] = ("{\"cards\"" + result[1].split("cards\"")[1]);
                 json = JSONObject.fromObject(result[1]);
                 JSONArray cards = json.getJSONArray("cards");
                 @SuppressWarnings("unchecked")
                 List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(cards, JSONObject.class);
                 
+                try
+                {
+                    // 如果卡组大于80张，则调用卖卡
+                    if (jsonList.size() > 80)
+                    {
+                        sid = this.sellCard(sid);
+                    }
+                }
+                catch (Exception e)
+                {
+                    
+                }
+                
                 // 收集SR以及UR信息
                 for (JSONObject obj : jsonList)
                 {
-                    if (obj.getString("lv_max").equals("40"))
+                    if (obj.getString("lv_max").equals("40") && !srList.contains(obj.getString("cardid")))
                     {
                         srList.add(obj.getString("cardid"));
                     }
-                    else if (obj.getString("lv_max").equals("50"))
+                    else if (obj.getString("lv_max").equals("50") && !urList.contains(obj.getString("cardid")))
                     {
                         urList.add(obj.getString("cardid"));
                     }
@@ -378,7 +427,7 @@ public class AccountServiceImpl implements AccountService
             {
                 accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_0);
                 this.updateAccount(accountEvt);
-                return;
+                continue;
             }
         }
     }
@@ -442,23 +491,9 @@ public class AccountServiceImpl implements AccountService
         int crystal = 0;
         String inviteCode = "";
         
-        // login 登录 并获取sessionId
         try
         {
-            result[0] = request.login(accountEvt.getUuid());
-        }
-        catch (Exception e)
-        {
-            return;
-        }
-        json= JSONObject.fromObject(result[0]);
-        sid = json.getString("sess_key").replace("=", "");
-        
-        // connect
-        try
-        {
-            result = request.connect(sid);
-            sid = result[0];
+            sid = this.login(accountEvt);
         }
         catch (Exception e)
         {
@@ -650,24 +685,11 @@ public class AccountServiceImpl implements AccountService
         String[] result = new String[2];
         String sid;
         JSONObject json= null;
+        int coin = accountEvt.getCrystal();
         
-        // login 登录 并获取sessionId
         try
         {
-            result[0] = request.login(accountEvt.getUuid());
-        }
-        catch (Exception e)
-        {
-            return;
-        }
-        json= JSONObject.fromObject(result[0]);
-        sid = json.getString("sess_key").replace("=", "");
-        
-        // connect
-        try
-        {
-            result = request.connect(sid);
-            sid = result[0];
+            sid = this.login(accountEvt);
         }
         catch (Exception e)
         {
@@ -676,7 +698,7 @@ public class AccountServiceImpl implements AccountService
         
         try
         {
-            this.doGacha(sid);
+            this.doGacha(sid, coin);
         }
         catch (Exception e)
         {
@@ -685,7 +707,7 @@ public class AccountServiceImpl implements AccountService
         
     }
     
-    public String doGacha(String sid)
+    public String doGacha(String sid, int coin)
     {
         String[] result;
         
@@ -706,29 +728,45 @@ public class AccountServiceImpl implements AccountService
             
             for (JSONObject obj : jsonList)
             {
+                if (obj.getInt("price") == 10)
+                {
+                    // gachaPlayTen 当前优惠活动抽取 10
+                    result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                    sid = result[0];
+                    Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
+                    continue;
+                }
+                
                 // 如果抽奖存档15石头
                 if (obj.getInt("price") == 15)
                 {
                     // 先出售卡片
                     sid = this.sellCard(sid);
                     sid = this.sellCard(sid);
-                    
-                    // gachaPlayEleven 当前优惠活动抽取 15
-                    result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
-                    sid = result[0];
-                    Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
-                    result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
-                    sid = result[0];
+                    if (coin >= 15)
+                    {
+                        // gachaPlayEleven 当前优惠活动抽取 15
+                        result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                        sid = result[0];
+                        Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
+                        
+                        if (coin >= 40)
+                        {
+                            result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                            sid = result[0];
+                        }
+                    }
                     
                     break;
                 }
-                else if (result[1].contains("price\":25"))
+                else if (obj.getInt("price") == 25)
                 {
                     sid = this.sellCard(sid);
-                    
-                    result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
-                    sid = result[0];
-                    
+                    if (coin >= 25)
+                    {
+                        result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                        sid = result[0];
+                    }
                     break;
                 }
             }
@@ -781,7 +819,7 @@ public class AccountServiceImpl implements AccountService
             }
         }
         
-        if (jsonList.size() > 80 && uniqiIds != null && uniqiIds.size() != 0)
+        if (jsonList.size() > 80 && uniqiIds != null && uniqiIds.size() > 1)
         {
             // 出售卡片
             result = request.cardSell(sid, CommonUtil.listToString(uniqiIds).replace(" ", ""));

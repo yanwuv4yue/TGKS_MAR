@@ -70,7 +70,7 @@ public class LoginAction extends TGKSAction
     		return ERROR;
     	}
     	
-    	CommonUtil.systemLog("mar/invite_login.action", CommonConstant.SYSTEMLOG_TYPE_0, CommonConstant.SUCCESS, String.format("账号：%s 登录MAR成功", userReq.getUsername()));
+    	//CommonUtil.systemLog("mar/invite_login.action", CommonConstant.SYSTEMLOG_TYPE_0, CommonConstant.SUCCESS, String.format("账号：%s 登录MAR成功", userReq.getUsername()));
 		CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_LOGIN_SUCCESS, String.format("账号：%s 密码：%s", userReq.getUsername(), userReq.getPassword()));
 		CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "LoginAction.invite_login");
     	return SUCCESS;
@@ -80,12 +80,31 @@ public class LoginAction extends TGKSAction
     {
         CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_IN, "LoginAction.invite_ie_login");
         
-        Map<String, Object> session = ActionContext.getContext().getSession();
-        if (session.get(CommonConstant.USER_INFO) == null)
+        userReq = new UserReq();
+        userReq.setUsername("KRSMA");
+        userReq.setPassword("123456");
+        
+        // 账户登录
+        List<UserEvt> userList = ums_userService.queryUser(userReq);
+        
+        if (null != userList && userList.size() > 0)
         {
+            userEvt = userList.get(0);
+            
+            Map<String, Object> session = ActionContext.getContext().getSession();
+            session.put(CommonConstant.USER_INFO, userEvt);
+        }
+        else
+        {
+            message = "密码错误";
+            
+            CommonUtil.systemLog("mar/invite_login.action", CommonConstant.SYSTEMLOG_TYPE_0, CommonConstant.FAILD, String.format("账号：%s 登录MAR失败（密码错误）", userReq.getUsername()));
+            CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_LOGIN_FAILD, String.format("账号：%s 密码：%s", userReq.getUsername(), userReq.getPassword()));
             return ERROR;
         }
         
+        //CommonUtil.systemLog("mar/invite_login.action", CommonConstant.SYSTEMLOG_TYPE_0, CommonConstant.SUCCESS, String.format("账号：%s 登录MAR成功", userReq.getUsername()));
+        CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_LOGIN_SUCCESS, String.format("账号：%s 密码：%s", userReq.getUsername(), userReq.getPassword()));
         CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "LoginAction.invite_ie_login");
         return SUCCESS;
     }
@@ -120,14 +139,14 @@ public class LoginAction extends TGKSAction
         {
             message = "密码错误";
             
-            CommonUtil.systemLog("mar/account_login.action", CommonConstant.SYSTEMLOG_TYPE_0, CommonConstant.FAILD, String.format("账号：%s 登录MAR失败（密码错误）", userReq.getUsername()));
-            CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_LOGIN_FAILD, String.format("账号：%s 密码：%s", userReq.getUsername(), userReq.getPassword()));
+            //CommonUtil.systemLog("mar/account_login.action", CommonConstant.SYSTEMLOG_TYPE_0, CommonConstant.FAILD, String.format("账号：%s 登录MAR失败（密码错误）", userReq.getUsername()));
+            //CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_LOGIN_FAILD, String.format("账号：%s 密码：%s", userReq.getUsername(), userReq.getPassword()));
             return ERROR;
         }
         
-        CommonUtil.systemLog("mar/account_login.action", CommonConstant.SYSTEMLOG_TYPE_0, CommonConstant.SUCCESS, String.format("账号：%s 登录MAR成功", userReq.getUsername()));
-        CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_LOGIN_SUCCESS, String.format("账号：%s 密码：%s", userReq.getUsername(), userReq.getPassword()));
-        CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "LoginAction.account_login");
+        //CommonUtil.systemLog("mar/account_login.action", CommonConstant.SYSTEMLOG_TYPE_0, CommonConstant.SUCCESS, String.format("账号：%s 登录MAR成功", userReq.getUsername()));
+        //CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_LOGIN_SUCCESS, String.format("账号：%s 密码：%s", userReq.getUsername(), userReq.getPassword()));
+        //CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "LoginAction.account_login");
         return SUCCESS;
     }
 

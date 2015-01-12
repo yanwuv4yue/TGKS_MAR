@@ -156,7 +156,7 @@ public class HttpRequest
         {
             
         }
-        Thread.sleep(1000);
+        Thread.sleep(4000);
         return result;
     }
     

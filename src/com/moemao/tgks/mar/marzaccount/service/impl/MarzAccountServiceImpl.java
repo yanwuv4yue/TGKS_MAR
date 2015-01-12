@@ -27,6 +27,14 @@ public class MarzAccountServiceImpl implements MarzAccountService
         return mar_marzAccountDao.mar_queryMarzAccount(marzAccountReq);
     }
     
+    public List<MarzAccountEvt> queryMarzAccountOnline()
+    {
+        MarzAccountReq marzAccountReq = new MarzAccountReq();
+        marzAccountReq.setStatus(MarConstant.MARZ_ACCOUNT_STATUS_1);
+        marzAccountReq.setSortSql(" t.ID");
+        return mar_marzAccountDao.mar_queryMarzAccount(marzAccountReq);
+    }
+    
     public MarzAccountEvt queryMarzAccountById(String id)
     {
         MarzAccountReq marzAccountReq = new MarzAccountReq();

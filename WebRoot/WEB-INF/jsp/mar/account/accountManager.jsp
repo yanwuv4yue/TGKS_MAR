@@ -318,10 +318,9 @@ $(document).ready(function(){
 				success: function(){
 					// 执行成功刷新form
 					query();
-					alert("操作完成"); 
 				},
 				error:function(){ 
-					alert("操作失败"); 
+					$("#accountManagerSubmit").val("0");
 				}
 			};
 			
@@ -378,7 +377,7 @@ $(document).ready(function(){
 					query();
 				},
 				error:function(){ 
-					alert("操作失败"); 
+					//alert("操作失败"); 
 				}
 			};
 			
@@ -433,10 +432,10 @@ $(document).ready(function(){
                 success: function(){
                     // 执行成功刷新form
                     query();
-                    alert("全部完成");
+                    //alert("全部完成");
                 },
                 error:function(){ 
-                    alert("操作失败"); 
+                    //alert("操作失败"); 
                 }
             };
             

@@ -20,6 +20,12 @@ public class MarConstant
     
     public static final int SLEEP_TIME_BATTLE = 30000;
     
+    public static final String ITEM_ID_BP_RECOVER_FULL = "";
+    
+    public static final String ITEM_ID_BP_RECOVER_HALF = "";
+    
+    public static final String ITEM_ID_BP_RECOVER_FULL_SUNDAY = "1100";
+    
     /**
      * 未使用
      */

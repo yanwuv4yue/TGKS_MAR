@@ -46,7 +46,7 @@ public class InviteServiceImpl implements InviteService
                 request.connect(sid);
             }
             
-            Thread.sleep(60000);
+            Thread.sleep(5000);
             
             int index = 0;
             for (String sid : inviteSessonIdList)

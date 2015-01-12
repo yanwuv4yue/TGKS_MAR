@@ -124,5 +124,10 @@
   <bean id="mar_marzCardAction" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction">
     <property name="mar_marzCardService" ref="mar_marzCardService" />
   </bean>
+  
+  <!-- ﻿marzThreadPool 配置 -->
+  <bean id="mar_marzThreadPool" class="com.moemao.tgks.mar.marz.thread.MarzThreadPool">
+    <property name="mar_marzAccountService" ref="mar_marzAccountService" />
+  </bean>
 
 </beans>

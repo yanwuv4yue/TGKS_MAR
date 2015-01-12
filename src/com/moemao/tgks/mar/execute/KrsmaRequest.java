@@ -70,6 +70,27 @@ public class KrsmaRequest
     
     /**
      * 
+     * @Title: loginAndroid
+     * @Description: 登录
+     * @param uuid 账号的uuid
+     * @return
+     * @return String 返回类型
+     * @throws
+     */
+    public String loginAndroid(String uuid) throws Exception
+    {
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"2\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"samsung GT-N7100\",\"token\":\"\"}";
+        String result = httpRequest.sendPost(MarConstant.URL_LOGIN, paramStr);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "loginAndroid " + uuid);
+        if (bDebug)
+        {
+            System.out.println(result);
+        }
+        return result;
+    }
+    
+    /**
+     * 
      * @Title: connect
      * @Description: 进首页之前的connect方法 校验连接
      * @param sid
@@ -148,7 +169,7 @@ public class KrsmaRequest
     {
         String paramStr = sid + "={\"inviteid\":\"" + inviteCode + "\"}";
         String result = httpRequest.sendPost(MarConstant.URL_INVITECODEENTER, paramStr);
-        System.out.println(MarConstant.LOG_SYSTEM_INFO + "inviteCodeEnter " + sid + " inviteCode : " + inviteCode);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "inviteCodeEnter " + sid + " invite : " + inviteCode);
         if (bDebug)
         {
             System.out.println(result);

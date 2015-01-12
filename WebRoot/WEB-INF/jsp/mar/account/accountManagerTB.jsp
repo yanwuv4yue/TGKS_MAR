@@ -20,6 +20,9 @@
 	</style>    
 </head>
 <body>
+<div style="height: 300px; font-size: 30px; background: url(http://www.itmo.com/images/wiki/glx.jpg) no-repeat center top;">
+<a style="padding-left: 100px;" onclick="window.open('http://item.taobao.com/item.htm?id=42441167875')"><b>→点击进入淘宝页面购买←</b></a>
+</div>
 <div>
 	<form id="accountReq" action="../mar/queryAccountTB_login.action" method="post">
 		<table width="100%">
@@ -51,7 +54,7 @@
 	</form>
 </div>
 
-<div id="accountDiv"></div>
+<div id="accountDiv" style="text-align: center;">请先选择上方的职业！勾选一种或多种</div>
 
 <script type="text/javascript">
 $(document).ready(function(){
