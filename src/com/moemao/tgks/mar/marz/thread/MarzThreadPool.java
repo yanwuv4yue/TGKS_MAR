@@ -4,11 +4,16 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+import com.moemao.tgks.common.core.spring.ContextUtil;
 import com.moemao.tgks.mar.marz.task.MarzTask;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
 
-public class MarzThreadPool implements Runnable
+public class MarzThreadPool implements Runnable, ApplicationContextAware
 {
     private MarzThreadPool() {};
     
@@ -26,7 +31,7 @@ public class MarzThreadPool implements Runnable
     
     private ExecutorService executor = null;
     
-    private MarzAccountService mar_marzAccountService;
+    private MarzAccountService marzAccountService;
     
     private boolean bRunning = true;
     
@@ -39,6 +44,8 @@ public class MarzThreadPool implements Runnable
     public void run()
     {
         bRunning = true;
+        
+        marzAccountService = (MarzAccountService) ContextUtil.getBean("mar_marzAccountService");
         
         if (null == executor || executor.isTerminated())
         {
@@ -53,7 +60,9 @@ public class MarzThreadPool implements Runnable
         while (bRunning)
         {
             // 从数据库中查询出需要执行的任务
-            accountList = mar_marzAccountService.queryMarzAccountOnline();
+            accountList = marzAccountService.queryMarzAccountOnline();
+            
+            System.out.println("取出需要执行的任务数：" + accountList.size());
             
             // 循环建立新的任务 放入线程池执行
             for (MarzAccountEvt account : accountList)
@@ -73,6 +82,7 @@ public class MarzThreadPool implements Runnable
         
         // 关闭线程
         executor.shutdown();
+        System.out.println("线程池正在关闭...");
     }
     
     public void shutdown()
@@ -89,15 +99,22 @@ public class MarzThreadPool implements Runnable
     {
         this.bRunning = bRunning;
     }
-
-    public MarzAccountService getMar_marzAccountService()
+    
+    public MarzAccountService getMarzAccountService()
     {
-        return mar_marzAccountService;
+        return marzAccountService;
     }
 
-    public void setMar_marzAccountService(MarzAccountService mar_marzAccountService)
+    public void setMarzAccountService(MarzAccountService marzAccountService)
     {
-        this.mar_marzAccountService = mar_marzAccountService;
+        this.marzAccountService = marzAccountService;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext)
+            throws BeansException
+    {
+        ContextUtil.setApplicationContext(applicationContext);
     }
 
     public static void main(String[] args)

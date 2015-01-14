@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ include file="/WEB-INF/jsp/common/TGKSHeaderList.inc.jsp" %>
 <input type="hidden" name="marzAccountEvt.id" value="${marzAccountEvt.id }" />
-<input type="hidden" name="marzAccountEvt.status" value="${marzAccountEvt.status }" />
 <input type="hidden" name="marzAccountEvt.sessionId" value="${marzAccountEvt.sessionId }" />
 <input type="hidden" name="marzAccountEvt.name" value="${marzAccountEvt.name }" />
 <input type="hidden" name="marzAccountEvt.userId" value="${marzAccountEvt.userId }" />
@@ -42,8 +41,10 @@
     <tr>
         <td>状态</td>
         <td>
-            <s:if test="#marzAccountEvt.status == 0">离线</s:if>
-            <s:elseif test="#marzAccountEvt.status == 1">在线</s:elseif>
+            <select name="marzAccountEvt.status">
+                <option value="0" <s:if test="marzAccountEvt.status == 0">selected="selected"</s:if>>离线</option>
+                <option value="1" <s:if test="marzAccountEvt.status == 1">selected="selected"</s:if>>在线</option>
+            </select>
         </td>
         <td>SessionId</td>
         <td>${marzAccountEvt.sessionId }</td>
@@ -54,10 +55,10 @@
         <td>VIP等级</td>
         <td>
             <select name="marzAccountEvt.vip">
-                <option value="0" <s:if test="#marzAccountEvt.vip == 0">selected="selected"</s:if>>试用</option>
-                <option value="1" <s:if test="#marzAccountEvt.vip == 1">selected="selected"</s:if>>普通</option>
-                <option value="2" <s:if test="#marzAccountEvt.vip == 2">selected="selected"</s:if>>白金</option>
-                <option value="3" <s:if test="#marzAccountEvt.vip == 3">selected="selected"</s:if>>钻石</option>
+                <option value="0" <s:if test="marzAccountEvt.vip == 0">selected="selected"</s:if>>试用</option>
+                <option value="1" <s:if test="marzAccountEvt.vip == 1">selected="selected"</s:if>>普通</option>
+                <option value="2" <s:if test="marzAccountEvt.vip == 2">selected="selected"</s:if>>白金</option>
+                <option value="3" <s:if test="marzAccountEvt.vip == 3">selected="selected"</s:if>>钻石</option>
             </select>
         </td>
     </tr>

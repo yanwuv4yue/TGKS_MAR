@@ -74,41 +74,6 @@ public class MarConstant
     public static final String KRSMACARD_TYPE_4 = "4";
     
     /**
-     * MARZACCOUNT 账号类型 0 IOS
-     */
-    public static final String MARZ_ACCOUNT_TYPE_0 = "0";
-    /**
-     * MARZACCOUNT 账号类型 1 Android
-     */
-    public static final String MARZ_ACCOUNT_TYPE_1 = "1";
-    
-    /**
-     * MARZACCOUNT 登录状态 0 离线
-     */
-    public static final String MARZ_ACCOUNT_STATUS_0 = "0";
-    /**
-     * MARZACCOUNT 登录状态 1 在线
-     */
-    public static final String MARZ_ACCOUNT_STATUS_1 = "1";
-
-    /**
-     * MARZACCOUNT VIP 0 试用
-     */
-    public static final String MARZ_ACCOUNT_VIP_0 = "0";
-    /**
-     * MARZACCOUNT VIP 1 普通
-     */
-    public static final String MARZ_ACCOUNT_VIP_1 = "1";
-    /**
-     * MARZACCOUNT VIP 2 白金
-     */
-    public static final String MARZ_ACCOUNT_VIP_2 = "2";
-    /**
-     * MARZACCOUNT VIP 3 钻石
-     */
-    public static final String MARZ_ACCOUNT_VIP_3 = "3";
-    
-    /**
      * 注册
      */
     public static final String URL_REGIST = "https://app.login.kairisei-ma.jp:443/Auth/login.php";

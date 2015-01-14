@@ -3,6 +3,7 @@ package com.moemao.tgks.mar.marzlog.service.impl;
 import java.util.List;
 
 import com.moemao.tgks.common.tool.CommonUtil;
+import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzlog.dao.MarzLogDao;
 import com.moemao.tgks.mar.marzlog.entity.MarzLogEvt;
 import com.moemao.tgks.mar.marzlog.entity.MarzLogReq;
@@ -40,8 +41,19 @@ return marzLogEvt;
 
 public int addMarzLog(MarzLogEvt marzLogEvt)
 {
-marzLogEvt.setId(MarUtil.createUniqueID());
-return mar_marzLogDao.mar_addMarzLog(marzLogEvt);
+    marzLogEvt.setId(MarUtil.createUniqueID());
+    return mar_marzLogDao.mar_addMarzLog(marzLogEvt);
+}
+
+public int marzLog(MarzAccountEvt account, String type, String info)
+{
+    MarzLogEvt marzLogEvt = new MarzLogEvt();
+    marzLogEvt.setId(MarUtil.createUniqueID());
+    marzLogEvt.setAccountId(account.getId());
+    marzLogEvt.setType(type);
+    marzLogEvt.setInfo(info);
+    
+    return mar_marzLogDao.mar_addMarzLog(marzLogEvt);
 }
 
 public int updateMarzLog(MarzLogEvt marzLogEvt)

@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.moemao.tgks.common.tool.CommonUtil;
+import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.marzaccount.dao.MarzAccountDao;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountReq;
 import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
-import com.moemao.tgks.mar.tool.MarConstant;
 import com.moemao.tgks.mar.tool.MarUtil;
 
 public class MarzAccountServiceImpl implements MarzAccountService
@@ -30,7 +30,7 @@ public class MarzAccountServiceImpl implements MarzAccountService
     public List<MarzAccountEvt> queryMarzAccountOnline()
     {
         MarzAccountReq marzAccountReq = new MarzAccountReq();
-        marzAccountReq.setStatus(MarConstant.MARZ_ACCOUNT_STATUS_1);
+        marzAccountReq.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_1);
         marzAccountReq.setSortSql(" t.ID");
         return mar_marzAccountDao.mar_queryMarzAccount(marzAccountReq);
     }
@@ -52,8 +52,6 @@ public class MarzAccountServiceImpl implements MarzAccountService
     {
         marzAccountEvt.setId(MarUtil.createUniqueID());
         marzAccountEvt.setEndTime(new Date());
-        marzAccountEvt.setStatus(MarConstant.MARZ_ACCOUNT_STATUS_0);
-        marzAccountEvt.setVip(MarConstant.MARZ_ACCOUNT_VIP_0);
         return mar_marzAccountDao.mar_addMarzAccount(marzAccountEvt);
     }
     

@@ -12,6 +12,8 @@ import java.util.UUID;
 
 public class HttpRequest
 {
+    private int SLEEP_TIME = 3300;
+    
     /**
      * 向指定URL发送GET方法的请求
      * 
@@ -90,7 +92,7 @@ public class HttpRequest
      * @return 所代表远程资源的响应结果
      * @throws Exception 
      */
-    public String sendPost(String url, String param) throws Exception
+    public synchronized String sendPost(String url, String param) throws Exception
     {
         PrintWriter out = null;
         BufferedReader in = null;
@@ -156,7 +158,7 @@ public class HttpRequest
         {
             
         }
-        Thread.sleep(4000);
+        Thread.sleep(SLEEP_TIME);
         return result;
     }
     

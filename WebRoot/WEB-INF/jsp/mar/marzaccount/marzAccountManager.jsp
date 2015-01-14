@@ -86,7 +86,7 @@ $(document).ready(function(){
 	$( "#marzAccountEdit" ).dialog({
 		modal: true,
 		height:800,
-		width:550,
+		width:600,
 		autoOpen: false,
 		show: "fold",
 		hide: "fold",

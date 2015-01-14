@@ -11,6 +11,23 @@ public class MarzAction extends TGKSAction
      */ 
     private static final long serialVersionUID = 4468522957708102512L;
     
+    public String marzThreadPoolManager()
+    {
+        // TODO 查询当前线程池状态
+        
+        // TODO 查询前100条marzLog记录
+        
+        return SUCCESS;
+    }
+    
+    /**
+     * 
+     * @Title: marzThreadPoolStart
+     * @Description: 创建MARZ工作线程池并启用
+     * @return
+     * @return String 返回类型
+     * @throws
+     */
     public String marzThreadPoolStart()
     {
         Thread thread = new Thread(MarzThreadPool.getInstance());
@@ -18,6 +35,14 @@ public class MarzAction extends TGKSAction
         return SUCCESS;
     }
     
+    /**
+     * 
+     * @Title: marzThreadPoolShutdown
+     * @Description: 关闭MARZ工作线程池
+     * @return
+     * @return String 返回类型
+     * @throws
+     */
     public String marzThreadPoolShutdown()
     {
         MarzThreadPool.getInstance().setbRunning(false);
