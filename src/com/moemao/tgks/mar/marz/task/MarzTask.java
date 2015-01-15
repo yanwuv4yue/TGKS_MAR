@@ -11,10 +11,10 @@ import org.springframework.context.ApplicationContextAware;
 import com.moemao.tgks.common.core.spring.ContextUtil;
 import com.moemao.tgks.mar.execute.MarzRequest;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
+import com.moemao.tgks.mar.marz.tool.MarzUtil;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
 import com.moemao.tgks.mar.marzlog.service.MarzLogService;
-import com.moemao.tgks.mar.tool.MarConstant;
 
 public class MarzTask implements Runnable, ApplicationContextAware
 {
@@ -30,7 +30,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
     
     private String sid;
     
-    private int resultCode;
+    private int resultCode = MarzConstant.SUCCESS;
     
     public MarzTask(MarzAccountEvt marzAccountEvt)
     {
@@ -48,10 +48,11 @@ public class MarzTask implements Runnable, ApplicationContextAware
         
         resultCode = this.login();
         
-        if (MarzConstant.FAILED == resultCode)
+        if (MarzConstant.SUCCESS > resultCode)
         {
             try
             {
+                System.out.println("发生了错误！当前resultCode：" + resultCode);
                 Thread.sleep(5000);
             }
             catch (InterruptedException e)
@@ -61,9 +62,32 @@ public class MarzTask implements Runnable, ApplicationContextAware
             
             resultCode = this.login();
             
-            if (MarzConstant.FAILED == resultCode)
+            if (MarzConstant.SUCCESS > resultCode)
             {
                 // 2次登陆失败 该账号无法执行 直接返回
+                return;
+            }
+        }
+        
+        resultCode = this.homeShow();
+        
+        if (MarzConstant.SUCCESS > resultCode)
+        {
+            try
+            {
+                System.out.println("发生了错误！当前resultCode：" + resultCode);
+                Thread.sleep(5000);
+            }
+            catch (InterruptedException e)
+            {
+                
+            }
+            
+            resultCode = this.login();
+            resultCode = this.homeShow();
+            
+            if (MarzConstant.SUCCESS > resultCode)
+            {
                 return;
             }
         }
@@ -97,7 +121,11 @@ public class MarzTask implements Runnable, ApplicationContextAware
                 map = request.loginIOS(account.getIosUuid());
             }
             
-            if (MarzConstant.RES_CODE_0 == map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE))
+            resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+            
+            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号登录" + MarzUtil.resultCodeStr(resultCode));
+            
+            if (MarzConstant.RES_CODE_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -112,9 +140,44 @@ public class MarzTask implements Runnable, ApplicationContextAware
             return MarzConstant.FAILED;
         }
         
-        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, String.format("账号%s登录成功", account.getTgksId()));
+        return resultCode;
+    }
+    
+    private int homeShow()
+    {
+        try
+        {
+            map = request.homeShow(sid);
+            
+            resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+            
+            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号更新基本信息" + MarzUtil.resultCodeStr(resultCode));
+            
+            if (MarzConstant.RES_CODE_0 == resultCode)
+            {
+                sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                
+                JSONObject user = map.get(MarzConstant.JSON_TAG_HOMWSHOW);
+                account.setAp(user.getJSONObject("user").getInt("ap"));
+                account.setApMax(user.getJSONObject("user").getInt("ap_max"));
+                account.setBp(user.getJSONObject("user").getInt("bp"));
+                account.setBpMax(user.getJSONObject("user").getInt("bp_max"));
+                account.setCardMax(user.getJSONObject("user").getInt("card_max"));
+                account.setCardNum(user.getJSONObject("user").getInt("card_num"));
+                account.setCoin(user.getJSONObject("user").getInt("coin") + user.getJSONObject("user").getInt("coin_free"));
+                account.setFp(user.getJSONObject("user").getInt("fp"));
+                account.setGold(user.getJSONObject("user").getInt("gold"));
+                account.setLv(user.getJSONObject("user").getInt("lv"));
+                account.setName(user.getJSONObject("user").getString("name"));
+                account.setUserId(user.getJSONObject("user").getString("userid"));
+            }
+        }
+        catch (Exception e)
+        {
+            return MarzConstant.FAILED;
+        }
         
-        return MarzConstant.SUCCESS;
+        return resultCode;
     }
 
     @Override

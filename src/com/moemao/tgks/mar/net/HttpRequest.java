@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class HttpRequest
 {
-    private int SLEEP_TIME = 3300;
+    private int SLEEP_TIME = 3000;
     
     /**
      * 向指定URL发送GET方法的请求
@@ -158,7 +158,14 @@ public class HttpRequest
         {
             
         }
+        
+        if (result.contains("�?"))
+        {
+            result = result.replace("�?", "\"");
+        }
+        
         Thread.sleep(SLEEP_TIME);
+        
         return result;
     }
     

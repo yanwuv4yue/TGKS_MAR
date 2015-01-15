@@ -14,6 +14,22 @@ public class MarzConstant
     
     public static final String JSON_TAG_RESCODE = "res_code";
     
+    public static final String JSON_TAG_HOMWSHOW = "homeShow";
+    
+    public static final String JSON_TAG_CARDSHOW = "cardShow";
+    
+    public static final String JSON_TAG_CARDFUSION = "cardFusion";
+    
+    public static final String JSON_TAG_CARDSELL = "cardSell";
+    
+    public static final String JSON_TAG_PRESENTBOXMULTIRECV = "presentBoxMultiRecv";
+    
+    public static final String JSON_TAG_TEAMBATTLESOLOSHOW = "teamBattleSoloShow";
+    
+    public static final String JSON_TAG_TEAMBATTLESOLOSTART = "teamBattleSoloStart";
+    
+    public static final String JSON_TAG_TEAMBATTLESOLOEND = "teamBattleSoloEnd";
+    
     /**
      * MARZACCOUNT 账号类型 0 IOS
      */
