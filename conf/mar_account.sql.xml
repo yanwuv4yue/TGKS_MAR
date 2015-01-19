@@ -40,7 +40,7 @@
                 AND t.URNUMD > 1
             </if>
             <if test="crystal !=null and crystal !='' ">
-                AND t.CRYSTAL > #{crystal}
+                AND t.CRYSTAL >= #{crystal}
             </if>
             <if test="createTimeStart !=null and createTimeStart !='' ">
                 AND t.CREATETIME >= #{createTimeStart}

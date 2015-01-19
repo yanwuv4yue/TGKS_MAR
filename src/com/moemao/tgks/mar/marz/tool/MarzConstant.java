@@ -10,11 +10,17 @@ public class MarzConstant
     
     public static final int RES_CODE_0 = 0;
     
+    public static final int SLEEPTIME_BATTLE_SOLO = 60000;
+    
     public static final String JSON_TAG_SID = "sid";
     
     public static final String JSON_TAG_RESCODE = "res_code";
     
     public static final String JSON_TAG_HOMWSHOW = "homeShow";
+    
+    public static final String JSON_TAG_EXPLORESTART= "exploreStart";
+    
+    public static final String JSON_TAG_EXPLOREEND= "exploreEnd";
     
     public static final String JSON_TAG_CARDSHOW = "cardShow";
     
@@ -29,6 +35,18 @@ public class MarzConstant
     public static final String JSON_TAG_TEAMBATTLESOLOSTART = "teamBattleSoloStart";
     
     public static final String JSON_TAG_TEAMBATTLESOLOEND = "teamBattleSoloEnd";
+    
+    public static final int VALIDATE_SETTING_EXPLORE = 1;
+    
+    public static final int VALIDATE_SETTING_CARDSELL = 2;
+    
+    public static final int VALIDATE_SETTING_CARDSELL_COMMON = 3;
+    
+    public static final int VALIDATE_SETTING_CARDFUSION = 4;
+    
+    public static final int VALIDATE_SETTING_BATTLE = 5;
+    
+    public static final int VALIDATE_SETTING_BATTLE_NOWASTE = 6;
     
     /**
      * MARZACCOUNT 账号类型 0 IOS

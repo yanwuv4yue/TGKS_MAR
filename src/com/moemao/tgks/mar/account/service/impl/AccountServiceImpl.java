@@ -661,6 +661,7 @@ public class AccountServiceImpl implements AccountService
     {
         AccountReq accountReq = new AccountReq();
         accountReq.setStatus(MarConstant.ACCOUNT_STATUS_2);
+        accountReq.setCrystal(15);
         
         List<AccountEvt> list = mar_accountDao.mar_queryAccount(accountReq);
         
@@ -717,10 +718,11 @@ public class AccountServiceImpl implements AccountService
             sid = result[0];
             
             result[1] = ("{\"gacha_list\"" + result[1].split("gacha_list\"")[1]);
-            if (result[1].contains("�?,"))
-            {
-                result[1] = result[1].replace("�?,", "\",");
-            }
+            
+            // 处理几个容易出现错误的节点
+            result[1] = MarUtil.dealJSON(result[1], "gacha_name", "buymsg");
+            result[1] = MarUtil.dealJSON(result[1], "buymsg", "order_num");
+            
             JSONObject json = JSONObject.fromObject(result[1]);
             JSONArray gacha_list = json.getJSONArray("gacha_list");
             @SuppressWarnings("unchecked")
@@ -740,9 +742,19 @@ public class AccountServiceImpl implements AccountService
                 // 如果抽奖存档15石头
                 if (obj.getInt("price") == 15)
                 {
-                    // 先出售卡片
-                    sid = this.sellCard(sid);
-                    sid = this.sellCard(sid);
+                    try
+                    {
+                        // 先出售卡片
+                        sid = this.sellCard(sid);
+                        sid = this.sellCard(sid);
+                    }
+                    catch (Exception e)
+                    {
+                        this.teamBattleSolo(sid, MarConstant.BATTLESOLOSTART_FIRST, MarConstant.BATTLESOLOEND_3);
+                    }
+                    
+                    
+                    
                     if (coin >= 15)
                     {
                         // gachaPlayEleven 当前优惠活动抽取 15
@@ -835,10 +847,6 @@ public class AccountServiceImpl implements AccountService
             String[] result = request.teamBattleSoloShow(sid);
             sid = result[0];
             result[1] = ("{\"normal_groups\"" + result[1].split("normal_groups\"")[1]);
-            if (result[1].contains("�?,"))
-            {
-                result[1] = result[1].replace("�?,", "\",");
-            }
             JSONObject json = JSONObject.fromObject(result[1]);
             JSONArray arthers = json.getJSONArray("arthurs");
             @SuppressWarnings("unchecked")

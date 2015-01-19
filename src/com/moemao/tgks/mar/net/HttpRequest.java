@@ -159,9 +159,9 @@ public class HttpRequest
             
         }
         
-        if (result.contains("�?"))
+        if (result.contains("�?,"))
         {
-            result = result.replace("�?", "\"");
+            result = result.replace("�?,", "\",");
         }
         
         Thread.sleep(SLEEP_TIME);
