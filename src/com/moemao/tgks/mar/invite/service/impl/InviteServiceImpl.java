@@ -3,14 +3,20 @@ package com.moemao.tgks.mar.invite.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
+import net.sf.json.JSONObject;
 
+import com.moemao.tgks.mar.account.entity.AccountEvt;
+import com.moemao.tgks.mar.account.entity.AccountReq;
+import com.moemao.tgks.mar.account.service.AccountService;
 import com.moemao.tgks.mar.execute.KrsmaRequest;
 import com.moemao.tgks.mar.invite.service.InviteService;
+import com.moemao.tgks.mar.tool.MarConstant;
 
 public class InviteServiceImpl implements InviteService
 {
     private KrsmaRequest request = KrsmaRequest.getInstance();
+
+    private AccountService mar_accountService;
     
     /**
      * 返回最后一个招待的ID 给自动刷初始流程提供5个石头
@@ -36,7 +42,7 @@ public class InviteServiceImpl implements InviteService
                 result[0] = request.regist();
                 
                 // 从regist的result中解析出sessonId
-                json= new JSONObject(result[0]);
+                json= JSONObject.fromObject(result[0]);
                 sessionId = (String) json.get("sess_key");
                 inviteSessonIdList.add(sessionId.replace("=", ""));
             }
@@ -72,7 +78,44 @@ public class InviteServiceImpl implements InviteService
         
         return returnCode;
     }
+    
+    public void invite2(String inviteCode)
+    {
+        String[] result = new String[2];
+        String sid;
+        JSONObject json= null;
+        
+        AccountReq accountReq = new AccountReq();
+        accountReq.setStatus(MarConstant.ACCOUNT_STATUS_4);
+        accountReq.setSortSql(" t.ID Limit 0, 10");
+        
+        // 查询出10个可以用来刷招待的号
+        List<AccountEvt> accountList = this.mar_accountService.queryAccount(accountReq);
 
+        try
+        {
+            for (AccountEvt accountEvt : accountList)
+            {
+                // 1 登录
+                result[0] = request.login2(accountEvt.getUuid(), accountEvt.getHashToken());
+                json= JSONObject.fromObject(result[0]);
+                sid = json.getString("sess_key").replace("=", "");
+                result = request.connect(sid);
+                sid = result[0];
+                
+                // 2 填招待ID
+                request.inviteCodeEnter(sid, inviteCode);
+                
+                // 刷完招待更新一下账号状态
+                accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_5);
+                this.mar_accountService.updateAccount(accountEvt);
+            }
+        }
+        catch (Exception e)
+        {
+            
+        }
+    }
 
     public KrsmaRequest getKrsmaRequest()
     {
@@ -82,5 +125,15 @@ public class InviteServiceImpl implements InviteService
     public void setKrsmaRequest(KrsmaRequest request)
     {
         this.request = request;
+    }
+
+    public AccountService getMar_accountService()
+    {
+        return mar_accountService;
+    }
+
+    public void setMar_accountService(AccountService mar_accountService)
+    {
+        this.mar_accountService = mar_accountService;
     }
 }

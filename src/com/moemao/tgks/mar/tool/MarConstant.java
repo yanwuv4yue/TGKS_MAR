@@ -55,6 +55,18 @@ public class MarConstant
      * 已售出
      */
     public static final String ACCOUNT_STATUS_3 = "3";
+    /**
+     * 招待预备
+     */
+    public static final String ACCOUNT_STATUS_4 = "4";
+    /**
+     * 招待完成
+     */
+    public static final String ACCOUNT_STATUS_5 = "5";
+    /**
+     * 自用测试
+     */
+    public static final String ACCOUNT_STATUS_9 = "9";
 
     /**
      * KRSMA卡片职业 佣兵

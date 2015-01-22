@@ -15,6 +15,8 @@ public class AccountEvt
      */
     private String uuid;
     
+    private String hashToken;
+    
     /**
      * 账号加密accountKey
      */
@@ -110,6 +112,16 @@ public class AccountEvt
         this.uuid = uuid;
     }
     
+    public String getHashToken()
+    {
+        return hashToken;
+    }
+
+    public void setHashToken(String hashToken)
+    {
+        this.hashToken = hashToken;
+    }
+
     public String getAccountKey()
     {
         return accountKey;

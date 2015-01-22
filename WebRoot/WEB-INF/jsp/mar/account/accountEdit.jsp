@@ -5,18 +5,20 @@
 	<tr>
         <td>UUID：</td>
         <td><input type="text" name="accountEvt.uuid" value="${accountEvt.uuid }" /></td>
-        <td>Key：</td>
-        <td><input type="text" name="accountEvt.accountKey" value="${accountEvt.accountKey }" /></td>
+        <td>HashToken：</td>
+        <td><input type="text" name="accountEvt.hashToken" value="${accountEvt.hashToken }" /></td>
 	</tr>
     <tr>
         <td>状态：</td>
         <td><input type="text" name="accountEvt.status" value="${accountEvt.status }" /></td>
-        <td>招待ID：</td>
-        <td><input type="text" name="accountEvt.inviteCode" value="${accountEvt.inviteCode }" /></td>
+        <td>Key：</td>
+        <td><input type="text" name="accountEvt.accountKey" value="${accountEvt.accountKey }" /></td>
     </tr>
     <tr>
         <td>标题：</td>
-        <td colspan="3"><input type="text" name="accountEvt.title" value="${accountEvt.title }" /></td>
+        <td><input type="text" name="accountEvt.title" value="${accountEvt.title }" /></td>
+        <td>招待ID：</td>
+        <td><input type="text" name="accountEvt.inviteCode" value="${accountEvt.inviteCode }" /></td>
     </tr>
     <tr>
         <td>佣兵：</td>

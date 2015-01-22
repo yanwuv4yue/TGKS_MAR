@@ -38,6 +38,11 @@ marzCardEvt = marzCardList.get(0);
 return marzCardEvt;
 }
 
+public List<MarzCardEvt> queryMarzCardByIds(List<String> ids)
+{
+    return mar_marzCardDao.mar_queryMarzCardByIds(ids);
+}
+
 public int addMarzCard(MarzCardEvt marzCardEvt)
 {
 marzCardEvt.setId(MarUtil.createUniqueID());

@@ -90,7 +90,7 @@ public class AccountServiceImpl implements AccountService
         // login 登录 并获取sessionId
         try
         {
-            result[0] = request.login(accountEvt.getUuid());
+            result[0] = request.login2(accountEvt.getUuid(), accountEvt.getHashToken());
         }
         catch (Exception e)
         {
@@ -889,6 +889,71 @@ public class AccountServiceImpl implements AccountService
         catch (Exception e)
         {
             return;
+        }
+    }
+    
+    public void forInviteAccount(List<String> ids)
+    {
+        List<AccountEvt> accountList = mar_accountDao.mar_queryAccountByIds(ids);
+        
+        this.forInvite(accountList);
+        
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "全部招待账号已经准备完成！共 " + accountList.size() + " 个！");
+    }
+    
+    private void forInvite(List<AccountEvt> list)
+    {
+        String[] result = new String[2];
+        String sid;
+        
+        // 刷初始的几个配置变量 后续可以改为数据库维护
+        String name = MarConstant.INITIAL_NAME;
+        String chara = MarConstant.INITIAL_CHARA;
+
+        // 1、把所有账号查询出来 执行login connect
+        for (AccountEvt accountEvt : list)
+        {
+            try
+            {
+                sid = this.login(accountEvt);
+                accountEvt.setSessionId(sid);
+            }
+            catch (Exception e)
+            {
+                continue;
+            }
+        }
+
+        try
+        {
+            // 当前版本服务器改为必须等待1分钟才可起名字
+            Thread.sleep(3000);
+        }
+        catch (Exception e)
+        {
+            
+        }
+    
+        // 3、所有账号执行userCreate homeShow 以及招待
+        for (AccountEvt accountEvt : list)
+        {
+            try
+            {
+                // userCreate 起名字
+                result = request.userCreate(accountEvt.getSessionId(), name, chara);
+                sid = result[0];
+                
+                // homeShow 主页
+                result = request.homeShow(sid);
+                sid = result[0];
+                
+                accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_4);
+                this.updateAccount(accountEvt);
+            }
+            catch (Exception e)
+            {
+                continue;
+            }
         }
     }
     

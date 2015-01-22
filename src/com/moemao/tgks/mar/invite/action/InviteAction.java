@@ -100,7 +100,9 @@ public class InviteAction extends TGKSAction
 
         try
         {
-            this.mar_inviteService.invite(inviteCode);
+            // 注册机制变更，现在要hash_token才能注册了 暂时用account表中的账号进行刷招待
+            // 自动刷招待系统需要提前手动添加账号
+            this.mar_inviteService.invite2(inviteCode);
         }
         catch (Exception e)
         {

@@ -20,6 +20,9 @@
                          <option value="1">执行中</option>
                          <option value="2">已完成</option>
                          <option value="3">已售出</option>
+                         <option value="4">招待预备</option>
+                         <option value="5">招待完成</option>
+                         <option value="9">自用测试</option>
 			        </select>
 			    </td>
 				<td><label>UUID: </label></td><td><input type="text" name="accountReq.uuid" /></td>
@@ -65,6 +68,7 @@
 <button id="allCheckCardAccount">全更</button>
 <button id="allGachaAccount">全抽</button>
 <button id="exportUuidAccount">导出</button>
+<button id="forInviteAccount">招待预备</button>
 
 <div id="accountDiv"></div>
 
@@ -491,6 +495,63 @@ $(document).ready(function(){
             // ajax调用删除action
             var options = { 
                 url:"../mar/allGachaAccount.action", // 提交给哪个执行
+                type:'POST', 
+                success: function(){
+                    // 执行成功刷新form
+                    query();
+                },
+                error:function(){ 
+                    //alert("操作失败"); 
+                }
+            };
+            
+            $("#accountConfirm").ajaxSubmit(options);
+            $("#accountManagerSubmit").val("0");
+            return false;
+    });
+    
+    // 招待准备
+    $( "#forInviteAccount" ).button({
+        icons: {
+            primary: "ui-icon-circle"
+            }
+        }).click(function() {
+        
+            if ($("#accountManagerSubmit").val() == "1")
+            {
+                return false;
+            }
+            
+            $("#accountManagerSubmit").val("1");
+            // 获取选中的记录ids
+            var ids = "";
+            var array = document.getElementsByName("accountId");
+            for (var i=0; i<array.length; i++)
+            {
+                if (array[i].checked)
+                {
+                    if (ids == "")
+                    {
+                        ids += array[i].value;
+                    }
+                    else
+                    {
+                        ids += "," + array[i].value;
+                    }
+                }
+            }
+            
+            // 操作验证
+            if (ids == "")
+            {
+                alert("请选择至少一条记录");
+                $("#accountManagerSubmit").val("0");
+                return false;
+            }
+            
+            // ajax调用删除action
+            var options = { 
+                url:"../mar/forInviteAccount.action?ids=" + ids , // 提交给哪个执行
                 type:'POST', 
                 success: function(){
                     // 执行成功刷新form

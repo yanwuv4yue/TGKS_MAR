@@ -7,6 +7,7 @@
             <tr class="ui-widget-header ">
                 <th width="20"><input type="checkbox" id="allMarzLogId" name="allMarzLogId"  /></th>
                 <th>ID</th>
+                <th>TGKS账号</th>
 				<th>操作时间</th>
                 <th>类型</th>
                 <th>详细信息</th>
@@ -17,6 +18,7 @@
 				<tr>
 					<td width="20"><input type="checkbox" name="marzLogId" value="<s:property value='#evt.id'/>" /></td>
 					<td><b id="<s:property value='#evt.id'/>" class="marzLogUpdate"><s:property value="#evt.id"/></b></td>
+					<td><s:property value='#evt.tgksId'/></td>
 					<td><s:date name="#evt.createTime" format="yyyy-MM-dd HH:mm:ss"/></td>
                     <td>
                         <s:if test="#evt.type == 0">

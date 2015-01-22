@@ -12,7 +12,7 @@
 	<form id="marzLogReq" action="../mar/queryMarzLog.action" method="post">
 		<table>
 			<tr>
-				<td><label>账户ID: </label></td><td><input type="text" name="marzLogReq.accountId" /></td>
+				<td><label>账户ID: </label></td><td><input type="text" name="marzLogReq.tgksId" /></td>
 				<td>
 				
 				</td>

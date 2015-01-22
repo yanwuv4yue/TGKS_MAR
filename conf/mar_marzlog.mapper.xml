@@ -5,7 +5,7 @@
 <mapper namespace="com.moemao.tgks.mar.marzlog.dao.MarzLogDao">
     <resultMap id="MarzLogEvtMap" type="MarzLogEvt">
         <id property="id" column="ID" />
-        <result property="accountId" column="ACCOUNTID" />
+        <result property="tgksId" column="TGKSID" />
         <result property="type" column="TYPE" />
         <result property="info" column="INFO" />
         <result property="createTime" column="CREATETIME" />

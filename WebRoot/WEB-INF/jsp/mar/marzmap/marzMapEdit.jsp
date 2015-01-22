@@ -20,6 +20,7 @@
                 <option value="1" <s:if test="marzMapEvt.vip == 1">selected="selected"</s:if>>普通</option>
                 <option value="2" <s:if test="marzMapEvt.vip == 2">selected="selected"</s:if>>白金</option>
                 <option value="3" <s:if test="marzMapEvt.vip == 3">selected="selected"</s:if>>钻石</option>
+                <option value="4" <s:if test="marzMapEvt.vip == 4">selected="selected"</s:if>>未生效</option>
             </select>
     </tr>
 </table>

@@ -8,11 +8,14 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import com.moemao.tgks.common.core.spring.ContextUtil;
+import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.mar.execute.MarzRequest;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
@@ -25,6 +28,8 @@ import com.moemao.tgks.mar.tool.MarConstant;
 
 public class MarzTask implements Runnable, ApplicationContextAware
 {
+    private static Log logger = LogFactory.getLog(MarzTask.class);
+    
     private MarzRequest request = MarzRequest.getInstance();
     
     private MarzAccountService marzAccountService;
@@ -107,6 +112,10 @@ public class MarzTask implements Runnable, ApplicationContextAware
         // 5、战斗
         resultCode = this.battle();
         
+        // 最后要保存一下sessionId
+        account.setSessionId(sid);
+        this.marzAccountService.updateMarzAccount(account);
+        
         System.out.println("执行任务结束 ID：" + account.getId());
     }
     
@@ -123,15 +132,15 @@ public class MarzTask implements Runnable, ApplicationContextAware
         {
             if (MarzConstant.MARZ_ACCOUNT_TYPE_0.equals(account.getType()))
             {
-                map = request.loginIOS(account.getIosUuid());
+                map = request.loginIOS(account.getIosUuid(), account.getIosKey());
             }
             else if (MarzConstant.MARZ_ACCOUNT_TYPE_1.equals(account.getType()))
             {
-                map = request.loginAndroid(account.getAndroidUuid());
+                map = request.loginAndroid(account.getAndroidUuid(), account.getAndroidKey());
             }
             else
             {
-                map = request.loginIOS(account.getIosUuid());
+                map = request.loginIOS(account.getIosUuid(), account.getIosKey());
             }
             
             resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
@@ -314,6 +323,8 @@ public class MarzTask implements Runnable, ApplicationContextAware
                             
                             account.setCardNum(map.get(MarzConstant.JSON_TAG_CARDSELL).getInt("card_num"));
                             account.setGold(account.getGold() + map.get(MarzConstant.JSON_TAG_CARDSELL).getInt("get_gold"));
+                            
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_5, "已卖出卡片ID " + MarzUtil.listToString(cardSellList));
                         }
                     }
                 }
@@ -329,8 +340,9 @@ public class MarzTask implements Runnable, ApplicationContextAware
                     {
                         cardJSON = JSONObject.fromObject(cards.get(i));
                         
-                        // 自动合成只支持UR跟MR
-                        if (cardJSON.getInt("lv_max") >= 50 && cardJSON.getInt("lv") < cardJSON.getInt("lv_max"))
+                        // 自动合成只支持SR UR跟MR 而且必须手动锁上
+                        if (cardJSON.getInt("lv_max") >= 40 && cardJSON.getInt("lv") < cardJSON.getInt("lv_max")
+                                && 0 != cardJSON.getInt("is_lock"))
                         {
                             baseId = cardJSON.getString("uniqid");
                         }
@@ -362,6 +374,8 @@ public class MarzTask implements Runnable, ApplicationContextAware
                             
                             account.setCardNum(map.get(MarzConstant.JSON_TAG_CARDFUSION).getInt("card_num"));
                             account.setGold(map.get(MarzConstant.JSON_TAG_CARDFUSION).getInt("gold"));
+                            
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_4, "主卡ID " + baseId + " 消耗狗粮 " + MarzUtil.listToString(cardFusionList));
                         }
                     }
                 }
@@ -619,17 +633,18 @@ public class MarzTask implements Runnable, ApplicationContextAware
                             account.setLv(user.getJSONObject("user").getInt("lv"));
                             account.setName(user.getJSONObject("user").getString("name"));
                             account.setUserId(user.getJSONObject("user").getString("userid"));
-                            
-                            // 最后要保存一下sessionId
-                            account.setSessionId(sid);
-                            this.marzAccountService.updateMarzAccount(account);
                         }
                     }
+                }
+                else
+                {
+                    this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, "当前时间没有找到适合战斗的副本，返回并等待BP恢复！");
                 }
             }
         }
         catch (Exception e)
         {
+            CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, String.format("战斗过程中发生异常！"));
             return MarzConstant.FAILED;
         }
         
@@ -662,5 +677,15 @@ public class MarzTask implements Runnable, ApplicationContextAware
             throws BeansException
     {
         ContextUtil.setApplicationContext(applicationContext);
+    }
+
+    public static Log getLogger()
+    {
+        return logger;
+    }
+
+    public static void setLogger(Log logger)
+    {
+        MarzTask.logger = logger;
     }
 }

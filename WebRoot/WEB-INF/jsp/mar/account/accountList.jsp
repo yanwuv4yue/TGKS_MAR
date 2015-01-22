@@ -6,6 +6,7 @@
         <thead>
             <tr class="ui-widget-header ">
                 <th width="20"><input type="checkbox" id="allAccountId" name="allAccountId"  /></th>
+                <th>ID</th>
 				<th>招待ID</th>
                 <th>UUID</th>
                 <!-- <th>加密key</th> -->
@@ -22,7 +23,8 @@
 			<s:iterator  value="list" var="evt">
 				<tr <s:if test="#evt.status == 3">bgcolor="#ddd"</s:if>>
 					<td width="20"><s:if test="#evt.status != 3"><input type="checkbox" name="accountId" value="<s:property value='#evt.id'/>" /></s:if></td>
-					<td width="100px"><b id="<s:property value='#evt.id'/>" class="accountUpdate"><s:property value="#evt.inviteCode"/></b></td>
+                    <td width="100px"><b id="<s:property value='#evt.id'/>" class="accountUpdate"><s:property value="#evt.id"/></b></td>
+                    <td width="100px"><s:property value="#evt.inviteCode"/></td>
                     <td width="300px"><s:property value='#evt.uuid'/></td>
                     <!-- <td><s:property value='#evt.accountKey'/></td> -->
                     <td width="40px">
@@ -30,6 +32,8 @@
                         <s:elseif test="#evt.status == 1">执行中</s:elseif>
                         <s:elseif test="#evt.status == 2">已完成</s:elseif>
                         <s:elseif test="#evt.status == 3">已出售</s:elseif>
+                        <s:elseif test="#evt.status == 4">招待预备</s:elseif>
+                        <s:elseif test="#evt.status == 5">招待完成</s:elseif>
                     </td>
                     <td width="150px"><s:date name="#evt.createTime" format="yyyy-MM-dd HH:mm:ss"/></td>
                     <td width="300px"><s:property value='#evt.title'/></td>

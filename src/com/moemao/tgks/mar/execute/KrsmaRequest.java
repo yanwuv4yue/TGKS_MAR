@@ -2,8 +2,6 @@ package com.moemao.tgks.mar.execute;
 
 import java.util.UUID;
 
-import org.json.JSONObject;
-
 import com.moemao.tgks.mar.net.HttpRequest;
 import com.moemao.tgks.mar.tool.MarConstant;
 
@@ -56,9 +54,21 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String login(String uuid) throws Exception
+    public String loginOld(String uuid) throws Exception
     {
         String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"1\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
+        String result = httpRequest.sendPost(MarConstant.URL_LOGIN, paramStr);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "login " + uuid);
+        if (bDebug)
+        {
+            System.out.println(result);
+        }
+        return result;
+    }
+    
+    public String login2(String uuid, String hashToken) throws Exception
+    {
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
         String result = httpRequest.sendPost(MarConstant.URL_LOGIN, paramStr);
         System.out.println(MarConstant.LOG_SYSTEM_INFO + "login " + uuid);
         if (bDebug)
@@ -375,24 +385,5 @@ public class KrsmaRequest
             System.out.println(result);
         }
         return result.split(MarConstant.KRSMA_SPLIT);
-    }
-    
-    public static void main(String[] args)
-    {
-        try
-        {
-            String uuid = "f3c79ef8-b68f-43a8-8015-9363f510d85c";
-            String result = KrsmaRequest.getInstance().login(uuid);
-            JSONObject json= new JSONObject(result);
-            String sid = json.getString("sess_key").replace("=", "");
-            result = KrsmaRequest.getInstance().connect(sid)[1];
-            System.out.println(result);
-            result = KrsmaRequest.getInstance().homeShow(sid)[1];
-            System.out.println(result);
-        }
-        catch (Exception e)
-        {
-            
-        }
     }
 }

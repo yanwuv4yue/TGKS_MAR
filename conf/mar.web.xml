@@ -148,6 +148,11 @@
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     
+    <action name="forInviteAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="forInviteAccount">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
     <action name="queryAccountTB_login" class="com.moemao.tgks.mar.account.action.AccountAction" method="queryAccountTB_login">
         <result name="success">/WEB-INF/jsp/mar/account/accountListTB.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
@@ -254,6 +259,21 @@
 
     <action name="deleteMarzCard" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction" method="deleteMarzCard">
         <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="renewMarzCard" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction" method="renewMarzCard">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="createMarzCard" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction" method="createMarzCard">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="exportMarzCard" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction" method="exportMarzCard">
+        <result name="success">/WEB-INF/jsp/mar/marzcard/marzCardExport.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     

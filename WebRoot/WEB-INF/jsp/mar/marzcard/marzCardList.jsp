@@ -15,13 +15,12 @@
         </thead>
         <tbody>
 			<s:iterator  value="list" var="evt">
-				<tr>
+				<tr <s:if test="#evt.status == 1">bgcolor="#ddd"</s:if>>
 					<td width="20"><input type="checkbox" name="marzCardId" value="<s:property value='#evt.id'/>" /></td>
-					<td><b id="<s:property value='#evt.id'/>" class="marzCardUpdate"><s:property value="#evt.name"/></b></td>
                     <td><s:property value="#evt.password"/></td>
                     <td>
                         <s:if test="#evt.type == 0">
-                            试用
+                            日卡
                         </s:if>
                         <s:elseif test="#evt.type == 1">
                             周卡

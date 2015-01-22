@@ -227,6 +227,13 @@ public class AccountAction extends TGKSAction
         return SUCCESS;
     }
     
+    public String forInviteAccount()
+    {
+        String ids = this.getRequest().getParameter("ids");
+        mar_accountService.forInviteAccount(CommonUtil.stringToList(ids));
+        return SUCCESS;
+    }
+    
     /**
      * @return 返回 mar_accountService
      */

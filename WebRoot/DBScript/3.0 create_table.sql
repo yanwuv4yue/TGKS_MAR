@@ -39,7 +39,8 @@ DROP TABLE IF EXISTS `t_tgks_mar_account`;
 CREATE TABLE IF NOT EXISTS `t_tgks_mar_account` (
   `id` varchar(30) NOT NULL COMMENT '表唯一主键',
   `uuid` varchar(50) NOT NULL COMMENT 'UUID（登录用）',
-  `accountKey` varchar(200) NOT NULL COMMENT '账号加密key',
+  `hashtoken` varchar(50) default NULL COMMENT 'HASHTOKEN',
+  `accountKey` varchar(200) default NULL COMMENT '账号加密key',
   `status` varchar(3) NOT NULL COMMENT '状态（0 新建；1 执行中；2 已完成；3 已售出）',
   `inviteCode` varchar(9) default NULL COMMENT '招待ID',
   `title` varchar(500) default NULL COMMENT '标题',
@@ -98,7 +99,7 @@ DROP TABLE IF EXISTS `t_tgks_mar_marzcard`;
 CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzcard` (
   `id` varchar(30) NOT NULL COMMENT '表唯一主键',
   `password` varchar(32) NOT NULL COMMENT '卡密号码',
-  `type` varchar(3) NOT NULL COMMENT '类型（0 试用1天；1 周卡；2 月卡；3 季卡）',
+  `type` varchar(3) NOT NULL COMMENT '类型（0 日卡；1 周卡；2 月卡；3 季卡）',
   `status` varchar(3) NOT NULL COMMENT '状态（0 未使用；1 已使用）',
   `usedtime` timestamp NULL default NULL COMMENT '使用时间',
   `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -112,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzcard` (
 DROP TABLE IF EXISTS `t_tgks_mar_marzlog`;
 CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzlog` (
   `id` varchar(30) NOT NULL COMMENT '表唯一主键',
-  `accountId` varchar(30) NOT NULL COMMENT '卡账号ID',
+  `tgksId` varchar(30) NOT NULL COMMENT 'TGKS账号的USERNAME',
   `type` varchar(3) NOT NULL COMMENT '类型（0 系统；1 战斗；2 探索；3 道具使用；4 合成；5 出售）',
   `info` varchar(500) default NULL COMMENT '状态（0 未使用；1 已使用）',
   `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT '创建时间',

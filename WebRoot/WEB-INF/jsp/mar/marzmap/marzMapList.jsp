@@ -15,7 +15,7 @@
         </thead>
         <tbody>
 			<s:iterator  value="list" var="evt">
-				<tr>
+				<tr <s:if test="#evt.vip == 4">bgcolor="#ddd"</s:if>>
 					<td width="20"><input type="checkbox" name="marzMapId" value="<s:property value='#evt.id'/>" /></td>
 					<td><b id="<s:property value='#evt.id'/>" class="marzMapUpdate"><s:property value="#evt.bossId"/></b></td>
                     <td><s:property value='#evt.bossName'/></td>
@@ -34,6 +34,9 @@
                         <s:elseif test="#evt.vip == 3">
                             钻石
                         </s:elseif>
+                        <s:elseif test="#evt.vip == 4">
+                            未生效
+                        </s:elseif>
                     </td>
 				</tr>
 			</s:iterator>
@@ -43,7 +46,7 @@
 <script type="text/javascript">
 	$(function() {
 		$('#marzMapTable').longtable({
-			'perPage' : 10
+			'perPage' : 30
 		});
 
 		// 点击记录首栏进入更新操作

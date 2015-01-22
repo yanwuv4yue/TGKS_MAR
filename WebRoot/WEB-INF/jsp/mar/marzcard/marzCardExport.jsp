@@ -3,7 +3,7 @@
 <table>
     <tr>
         <td>
-          <textarea rows="20" cols="100">${passwordExport}</textarea>
+          <textarea rows="20" cols="100">${marzCardExport}</textarea>
         </td>
     </tr>
 </table>

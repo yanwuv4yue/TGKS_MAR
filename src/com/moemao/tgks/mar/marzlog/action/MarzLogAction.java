@@ -54,6 +54,15 @@ list = mar_marzLogService.queryMarzLog(marzLogReq);
 return SUCCESS;
 }
 
+public String queryMarzLogByTgksId()
+{
+    MarzLogReq marzLogReq = new MarzLogReq();
+    marzLogReq.setTgksId(CommonUtil.getUserInfoBySession().getUsername());
+    marzLogReq.setSortSql(" t.ID DESC LIMIT 0 , 20");
+    list = mar_marzLogService.queryMarzLog(marzLogReq);
+    return SUCCESS;
+}
+
 public String editMarzLogPage()
 {
 String id = this.getRequest().getParameter("id");

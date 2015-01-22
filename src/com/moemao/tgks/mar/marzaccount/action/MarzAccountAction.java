@@ -9,9 +9,14 @@ import com.moemao.tgks.common.core.action.TGKSAction;
 import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.common.tool.StringUtil;
+import com.moemao.tgks.mar.marz.tool.MarzConstant;
+import com.moemao.tgks.mar.marz.tool.MarzUtil;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountReq;
 import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
+import com.moemao.tgks.mar.marzmap.entity.MarzMapEvt;
+import com.moemao.tgks.mar.marzmap.entity.MarzMapReq;
+import com.moemao.tgks.mar.marzmap.service.MarzMapService;
 
 public class MarzAccountAction extends TGKSAction
 {
@@ -27,6 +32,8 @@ public class MarzAccountAction extends TGKSAction
      * ﻿MarzAccount业务接口
      */
     private MarzAccountService mar_marzAccountService;
+    
+    private MarzMapService mar_marzMapService;
     
     /**
      * 查询结果集
@@ -51,6 +58,105 @@ public class MarzAccountAction extends TGKSAction
     public String queryMarzAccount()
     {
         list = mar_marzAccountService.queryMarzAccount(marzAccountReq);
+        return SUCCESS;
+    }
+    
+    public String queryMarzAccountByTgksId()
+    {
+        MarzAccountReq marzAccountReq = new MarzAccountReq();
+        marzAccountReq.setTgksId(CommonUtil.getUserInfoBySession().getUsername());
+        list = mar_marzAccountService.queryMarzAccount(marzAccountReq);
+        
+        if (CommonUtil.isEmpty(list))
+        {
+            return ERROR;
+        }
+        else
+        {
+            marzAccountEvt = list.get(0);
+        }
+        
+        // 处理设置的战斗地图
+        String battleMapName = "";
+        List<MarzMapEvt> mapList = this.mar_marzMapService.queryMarzMap(new MarzMapReq());
+        for (String mapId : MarzUtil.stringToList(marzAccountEvt.getBossIds()))
+        {
+            for (MarzMapEvt map : mapList)
+            {
+                if (mapId.equals(map.getBossId()))
+                {
+                    battleMapName += "[" + map.getBossName() + "] ";
+                }
+            }
+        }
+        marzAccountEvt.setBossIds(battleMapName);
+        
+        return SUCCESS;
+    }
+    
+    /**
+     * 
+     * @Title: marzAccountBinding
+     * @Description: TGKS登录后绑定账号
+     * @return
+     * @return String 返回类型
+     * @throws
+     */
+    public String marzAccountBinding()
+    {
+        String accountId = this.getRequest().getParameter("accountId");
+        MarzAccountEvt account = mar_marzAccountService.queryMarzAccountById(accountId);
+        
+        // 如果不存在该账号 或者该账号已经绑定
+        if (CommonUtil.isEmpty(account) || !CommonUtil.isEmpty(account.getTgksId()))
+        {
+            return ERROR;
+        }
+        
+        account.setTgksId(CommonUtil.getUserInfoBySession().getUsername());
+        mar_marzAccountService.updateMarzAccount(account);
+        
+        return SUCCESS;
+    }
+    
+    public String accountOnline()
+    {
+        MarzAccountReq marzAccountReq = new MarzAccountReq();
+        marzAccountReq.setTgksId(CommonUtil.getUserInfoBySession().getUsername());
+        list = mar_marzAccountService.queryMarzAccount(marzAccountReq);
+        
+        if (CommonUtil.isEmpty(list))
+        {
+            return ERROR;
+        }
+        else
+        {
+            marzAccountEvt = list.get(0);
+            marzAccountEvt.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_1);
+            mar_marzAccountService.updateMarzAccount(marzAccountEvt);
+        }
+        
+        return SUCCESS;
+    }
+    
+    public String accountOffline()
+    {
+        MarzAccountReq marzAccountReq = new MarzAccountReq();
+        marzAccountReq.setTgksId(CommonUtil.getUserInfoBySession().getUsername());
+        list = mar_marzAccountService.queryMarzAccount(marzAccountReq);
+        
+        if (CommonUtil.isEmpty(list))
+        {
+            return ERROR;
+        }
+        else
+        {
+            marzAccountEvt = list.get(0);
+            marzAccountEvt.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
+            marzAccountEvt.setSessionId("");
+            mar_marzAccountService.updateMarzAccount(marzAccountEvt);
+        }
+        
         return SUCCESS;
     }
     
@@ -156,6 +262,16 @@ public class MarzAccountAction extends TGKSAction
     public void setMarzAccountReq(MarzAccountReq marzAccountReq)
     {
         this.marzAccountReq = marzAccountReq;
+    }
+
+    public MarzMapService getMar_marzMapService()
+    {
+        return mar_marzMapService;
+    }
+
+    public void setMar_marzMapService(MarzMapService mar_marzMapService)
+    {
+        this.mar_marzMapService = mar_marzMapService;
     }
 
 }

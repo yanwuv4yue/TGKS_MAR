@@ -50,6 +50,7 @@ public class MarzThreadPool implements Runnable, ApplicationContextAware
         if (null == executor || executor.isTerminated())
         {
             executor = Executors.newFixedThreadPool(defaultThreadNum);
+            //executor = Executors.newScheduledThreadPool(defaultThreadNum);
             System.out.println("线程池创建完毕");
         }
         else

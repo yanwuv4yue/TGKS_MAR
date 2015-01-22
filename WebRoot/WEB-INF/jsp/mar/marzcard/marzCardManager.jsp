@@ -16,10 +16,10 @@
                 <td>
                     <select name="marzCardReq.type">
                         <option value="">全部</option>
-                        <option value="0">试用</option>
+                        <option value="0">日卡</option>
                         <option value="1">周卡</option>
                         <option value="2">月卡</option>
-                        <option value="2">季卡</option>
+                        <option value="3">季卡</option>
                     </select>
                 </td>
                 <td>状态：</td>
@@ -48,10 +48,16 @@
 	</form>
 </div>
 
-<!-- <button id="addMarzCard">新增</button> -->
+<button id="createMarzCard">生成</button>
+<select id="createMarzCardType">
+    <option value="0">日卡</option>
+    <option value="1">周卡</option>
+    <option value="2">月卡</option>
+    <option value="3">季卡</option>
+</select>
+<button id="renewMarzCard">重置</button>
 <button id="deleteMarzCard">删除</button>
-<button id="onMarzCard">启用</button>
-<button id="offMarzCard">禁用</button>
+<button id="exportMarzCard">导出</button>
 
 <div id="marzCardDiv"></div>
 
@@ -145,6 +151,58 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	// 导出按钮
+    $( "#exportMarzCard" ).button({
+        icons: {
+            primary: "ui-icon-plus"
+            }
+        }).click(function() {
+        // 请求提交标志
+        // 获取选中的记录ids
+        var ids = "";
+        var array = document.getElementsByName("marzCardId");
+        for (var i=0; i<array.length; i++)
+        {
+            if (array[i].checked)
+            {
+                if (ids == "")
+                {
+                    ids += array[i].value;
+                }
+                else
+                {
+                    ids += "," + array[i].value;
+                }
+            }
+        }
+        
+        // 操作验证
+        if (ids == "")
+        {
+            alert("请选择至少一条记录");
+            $("#marzCardManagerSubmit").val("0");
+            return false;
+        }
+        
+        // ajax调用删除action
+        var options = { 
+            url:"../mar/exportMarzCard.action?ids=" + ids , // 提交给哪个执行
+            type:'POST', 
+            success: function(){
+                // 执行成功刷新form
+                query();
+            },
+            error:function(){ 
+                alert("导出失败"); 
+            }
+        };
+        
+        $( "#marzCardEdit" ).dialog( "open" );
+        var edit=$.ajax({url:"../mar/exportMarzCard.action?ids=" + ids, async:false});
+        $("#marzCardForm").html(edit.responseText);
+        return false;
+    });
+	
 	 // 删除按钮
 	$( "#deleteMarzCard" ).button({
 		icons: {
@@ -211,107 +269,97 @@ $(document).ready(function(){
 		return false;
 	});
 	 
-	 // 启用按钮
-	$( "#onMarzCard" ).button({
-		icons: {
-			primary: "ui-icon-check"
-			}
-		}).click(function() {
-			$("#marzCardManagerSubmit").val("1");
-			// 获取选中的记录ids
-			var ids = "";
-			var array = document.getElementsByName("marzCardId");
-			for (var i=0; i<array.length; i++)
-		   	{
-		   		if (array[i].checked)
-	  			{
-		   			if (ids == "")
-	   				{
-		   				ids += array[i].value;
-	   				}
-		   			else
-		   			{
-		   				ids += "," + array[i].value;
-		   			}
-	  			}
-		   	}
-			
-			// 操作验证
-			if (ids == "")
-			{
-				alert("请选择至少一条记录");
-				$("#marzCardManagerSubmit").val("0");
-				return false;
-			}
-			
-			// ajax调用删除action
-			var options = { 
-				url:"../mar/changeStatusMarzCard.action?status=1&ids=" + ids , // 提交给哪个执行
-				type:'POST', 
-				success: function(){
-					// 执行成功刷新form
-					query();
-				},
-				error:function(){ 
-					alert("操作失败"); 
-				}
-			};
-			
-			$("#marzCardConfirm").ajaxSubmit(options);
-			$("#marzCardManagerSubmit").val("0");
-			return false;
-	});
-	 
-	 // 停用按钮
-	$( "#offMarzCard" ).button({
-		icons: {
-			primary: "ui-icon-close"
-			}
-		}).click(function() {
-			$("#marzCardManagerSubmit").val("1");
-			// 获取选中的记录ids
-			var ids = "";
-			var array = document.getElementsByName("marzCardId");
-			for (var i=0; i<array.length; i++)
-		   	{
-		   		if (array[i].checked)
-	  			{
-		   			if (ids == "")
-	   				{
-		   				ids += array[i].value;
-	   				}
-		   			else
-		   			{
-		   				ids += "," + array[i].value;
-		   			}
-	  			}
-		   	}
-			
-			// 操作验证
-			if (ids == "")
-			{
-				alert("请选择至少一条记录");
-				$("#marzCardManagerSubmit").val("0");
-				return false;
-			}
-			
-			// ajax调用删除action
-			var options = { 
-				url:"../mar/changeStatusMarzCard.action?status=0&ids=" + ids , // 提交给哪个执行
-				type:'POST', 
-				success: function(){
-					// 执行成功刷新form
-					query();
-				},
-				error:function(){ 
-					alert("操作失败"); 
-				}
-			};
-			
-			$("#marzCardConfirm").ajaxSubmit(options);
-			$("#marzCardManagerSubmit").val("0");
-			return false;
-	});
+	 // 重置按钮
+    $( "#renewMarzCard" ).button({
+        icons: {
+            primary: "ui-icon-plus"
+            }
+        }).click(function() {
+        $("#marzCardManagerSubmit").val("1");
+        // 获取选中的记录ids
+        var ids = "";
+        var array = document.getElementsByName("marzCardId");
+        for (var i=0; i<array.length; i++)
+        {
+            if (array[i].checked)
+            {
+                if (ids == "")
+                {
+                    ids += array[i].value;
+                }
+                else
+                {
+                    ids += "," + array[i].value;
+                }
+            }
+        }
+        
+        // 操作验证
+        if (ids == "")
+        {
+            alert("请选择至少一条记录");
+            $("#marzCardManagerSubmit").val("0");
+            return false;
+        }
+        
+        // ajax调用删除action
+        var options = { 
+            url:"../mar/renewMarzCard.action?ids=" + ids , // 提交给哪个执行
+            type:'POST', 
+            success: function(){
+                alert("重置成功");
+                // 执行成功刷新form
+                query();
+            },
+            error:function(){ 
+                alert("重置失败"); 
+            }
+        };
+        
+        // 确认操作
+        $("#marzCardConfirm").dialog({
+            resizable: false,
+            height:160,
+            modal: true,
+            buttons: {
+                "确认": function() {
+                    $( this ).dialog( "close" );
+                    // 异步请求删除操作
+                    $("#marzCardConfirm").ajaxSubmit(options);
+                },
+                "取消": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+        return false;
+    });
+    
+    // 创建按钮
+    $( "#createMarzCard" ).button({
+        icons: {
+            primary: "ui-icon-check"
+            }
+        }).click(function() {
+            $("#marzCardManagerSubmit").val("1");
+                        
+            // ajax调用删除action
+            var options = { 
+                url:"../mar/createMarzCard.action?type=" + $("#createMarzCardType").val(), // 提交给哪个执行
+                type:'POST', 
+                success: function(){
+                    // 执行成功刷新form
+                    query();
+                },
+                error:function(){ 
+                    alert("操作失败"); 
+                }
+            };
+            
+            $("#marzCardConfirm").ajaxSubmit(options);
+            $("#marzCardManagerSubmit").val("0");
+            return false;
+    });
 	
 	 // 刷新按钮
 	$( "#queryMarzCard" ).button().click(function() {

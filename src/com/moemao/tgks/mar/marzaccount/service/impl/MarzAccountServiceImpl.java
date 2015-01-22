@@ -31,6 +31,7 @@ public class MarzAccountServiceImpl implements MarzAccountService
     {
         MarzAccountReq marzAccountReq = new MarzAccountReq();
         marzAccountReq.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_1);
+        marzAccountReq.setEndTime(new Date());
         marzAccountReq.setSortSql(" t.ID");
         return mar_marzAccountDao.mar_queryMarzAccount(marzAccountReq);
     }

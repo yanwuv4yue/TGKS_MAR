@@ -22,6 +22,7 @@
   </bean>
   <!-- ﻿invite_service 配置 -->
   <bean id="mar_inviteService" class="com.moemao.tgks.mar.invite.service.impl.InviteServiceImpl">
+    <property name="mar_accountService" ref="mar_accountService" />
   </bean>
   
   <!-- ﻿passwordcard_dao 配置 -->
@@ -109,6 +110,7 @@
   <!-- ﻿marzaccount_action 配置 -->
   <bean id="mar_marzAccountAction" class="com.moemao.tgks.mar.marzaccount.action.MarzAccountAction">
     <property name="mar_marzAccountService" ref="mar_marzAccountService" />
+    <property name="mar_marzMapService" ref="mar_marzMapService" />
   </bean>
   
   <!-- ﻿marzcard_dao 配置 -->

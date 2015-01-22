@@ -25,6 +25,8 @@ public void checkCardAccount(List<String> ids);
 
 public void gachaAccount(List<String> ids);
 
+public void forInviteAccount(List<String> ids);
+
 public void allCheckCardAccount();
 
 public void allGachaAccount();

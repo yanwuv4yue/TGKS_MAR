@@ -12,7 +12,7 @@ private String id;
 /**
  * 账号ID
  */
-private String accountId;
+private String tgksId;
 
 /**
  * 类型（0 系统；1 战斗；2 探索；3 道具使用；4 合成；5 出售）
@@ -32,7 +32,7 @@ private Date createTime;
 @Override
 public String toString()
 {
-return String.format("id:%S\naccountId:%S\ntype:%S\ninfo:%S\ncreateTime:%S\n", id, accountId, type, info, createTime);
+return String.format("id:%S\naccountId:%S\ntype:%S\ninfo:%S\ncreateTime:%S\n", id, tgksId, type, info, createTime);
 }
 
 /**
@@ -51,20 +51,14 @@ public void setId(String id)
     this.id = id;
 }
 
-/**
- * @return 返回 accountId
- */
-public String getAccountId()
+public String getTgksId()
 {
-    return accountId;
+    return tgksId;
 }
 
-/**
- * @param 对accountId进行赋值
- */
-public void setAccountId(String accountId)
+public void setTgksId(String tgksId)
 {
-    this.accountId = accountId;
+    this.tgksId = tgksId;
 }
 
 /**

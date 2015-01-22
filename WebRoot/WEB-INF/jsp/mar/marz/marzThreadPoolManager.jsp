@@ -9,7 +9,7 @@
 <div id="marzStatusDiv">
     
 </div>
-<div id="marzLogDiv">
+<div id="marzSystemLogDiv">
 
 </div>
 

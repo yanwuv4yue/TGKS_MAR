@@ -36,6 +36,15 @@
         </if>
 </select>
 
+<select id="mar_queryMarzCardByIds" parameterType="list" resultType="MarzCardEvt" resultMap="MarzCardEvtMap">
+        <![CDATA[  
+            SELECT t.id, t.password, t.type, t.status, t.usedtime, t.createtime FROM t_tgks_mar_marzcard t WHERE id IN
+        ]]>
+        <foreach collection="list" item="ids"  open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+</select>
+
 <insert id="mar_addMarzCard" parameterType="MarzCardEvt">
         <![CDATA[  
             INSERT INTO t_tgks_mar_marzcard (id, password, type, status, usedtime, createtime) 

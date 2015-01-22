@@ -35,11 +35,12 @@ public class MarzRequest
         return json;
     }
     
-    public Map<String, JSONObject> loginIOS(String uuid) throws Exception
+    public Map<String, JSONObject> loginIOS(String uuid, String hashToken) throws Exception
     {
         Map<String, JSONObject> map = new HashMap<String, JSONObject>();
         
-        String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"1\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
+        //String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"1\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
 
         if (bDebug)
         {
@@ -57,11 +58,12 @@ public class MarzRequest
         return map;
     }
     
-    public Map<String, JSONObject> loginAndroid(String uuid) throws Exception
+    public Map<String, JSONObject> loginAndroid(String uuid, String hashToken) throws Exception
     {
         Map<String, JSONObject> map = new HashMap<String, JSONObject>();
         
-        String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"2\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"samsung GT-N7100\",\"token\":\"\"}";
+        //String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"2\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"samsung GT-N7100\",\"token\":\"\"}";
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + ",\"clver\":\"3\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\"}";
 
         if (bDebug)
         {

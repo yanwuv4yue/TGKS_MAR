@@ -1,6 +1,7 @@
 package com.moemao.tgks.mar.marzcard.action;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -9,6 +10,7 @@ import com.moemao.tgks.common.core.action.TGKSAction;
 import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.common.tool.StringUtil;
+import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.marzcard.entity.MarzCardEvt;
 import com.moemao.tgks.mar.marzcard.entity.MarzCardReq;
 import com.moemao.tgks.mar.marzcard.service.MarzCardService;
@@ -42,6 +44,8 @@ private MarzCardEvt marzCardEvt;
  * ﻿MarzCard查询条件封装对象（自动生成代码后需要new对象）
  */
 private MarzCardReq marzCardReq = new MarzCardReq();
+
+private String marzCardExport;
 
 public String marzCardManager()
 {
@@ -92,6 +96,67 @@ CommonUtil.systemLog("mar/deleteMarzCard.action", CommonConstant.SYSTEMLOG_TYPE_
 CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_EXECUTE_NUMS, StringUtil.toBeString(result));
 CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "MarzCardAction.deleteMarzCard");
 return SUCCESS;
+}
+
+public String renewMarzCard()
+{
+    String ids = this.getRequest().getParameter("ids");
+    if (!CommonUtil.isEmpty(ids))
+    {
+        list = mar_marzCardService.queryMarzCardByIds(CommonUtil.stringToList(ids));
+        
+        for (MarzCardEvt marzCardEvt : list)
+        {
+            marzCardEvt.setStatus(MarzConstant.MARZCARD_STATUS_0);
+            marzCardEvt.setUsedTime(null);
+            mar_marzCardService.updateMarzCard(marzCardEvt);
+        }
+    }
+    return SUCCESS;
+}
+
+/**
+ * 
+ * @Title: createMarzCard
+ * @Description: 创建一批卡密
+ * @return
+ * @return String 返回类型
+ * @throws
+ */
+public String createMarzCard()
+{
+    String type = this.getRequest().getParameter("type");
+    int num = 10;
+    
+    for (int i = 0; i < num; i++)
+    {
+        marzCardEvt = new MarzCardEvt();
+        marzCardEvt.setStatus(MarzConstant.MARZCARD_STATUS_0);
+        marzCardEvt.setType(type);
+        marzCardEvt.setPassword(UUID.randomUUID().toString().replace("-", ""));
+        
+        this.mar_marzCardService.addMarzCard(marzCardEvt);
+    }
+    
+    return SUCCESS;
+}
+
+public String exportMarzCard()
+{
+    CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_IN, "MarzCardAction.exportMarzCard");
+    marzCardExport = "";
+    String ids = this.getRequest().getParameter("ids");
+    list = mar_marzCardService.queryMarzCardByIds(CommonUtil.stringToList(ids));
+    for (MarzCardEvt marzCardEvt : list)
+    {
+        if (null != marzCardEvt && marzCardEvt.getPassword() != null && marzCardEvt.getPassword() != "")
+        {
+            marzCardExport += marzCardEvt.getPassword() + "\n";
+        }
+    }
+    CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_EXECUTE_NUMS, StringUtil.toBeString(list.size()));
+    CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "MarzCardAction.exportMarzCard");
+    return SUCCESS;
 }
 
 /**
@@ -156,6 +221,16 @@ public MarzCardReq getMarzCardReq()
 public void setMarzCardReq(MarzCardReq marzCardReq)
 {
     this.marzCardReq = marzCardReq;
+}
+
+public String getMarzCardExport()
+{
+    return marzCardExport;
+}
+
+public void setMarzCardExport(String marzCardExport)
+{
+    this.marzCardExport = marzCardExport;
 }
 
 }
