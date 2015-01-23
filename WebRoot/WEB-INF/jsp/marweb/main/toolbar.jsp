@@ -17,11 +17,16 @@
 </li>
  -->
 <li style="width:80px;">
-    <a href="../marweb/marzCardUsePage.action"><b>点卡充值</b></a>
+    <a id="marzCardUsePageA" href="#"><b>点卡充值</b></a>
 </li>
 
 <script type="text/javascript">
 $(document).ready(function(){
+    $("#marzCardUsePageA").click(function(){
+        var table=$.ajax({url:"../marweb/marzCardUsePage.action", async:false});
+        $("#mainDiv").html(table.responseText);
+    });
+    
     // 页面禁止右键
    $(document).bind("contextmenu",function(e){  
         return false;  

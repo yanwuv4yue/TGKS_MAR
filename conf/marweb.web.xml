@@ -40,5 +40,24 @@
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     
+    <action name="settingPage" class="com.moemao.tgks.mar.marzsetting.action.MarzSettingAction" method="settingPage">
+        <result name="success">/WEB-INF/jsp/marweb/setting/setting.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="saveSetting" class="com.moemao.tgks.mar.marzsetting.action.MarzSettingAction" method="saveSetting">
+        <result name="success">/WEB-INF/jsp/marweb/setting/setting.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="marzCardUsePage" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction" method="marzCardUsePage">
+        <result name="success">/WEB-INF/jsp/marweb/main/marzCardUse.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <action name="marzCardUse" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction" method="marzCardUse">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
   </package>
 </struts>

@@ -125,6 +125,21 @@
   <!-- ﻿marzcard_action 配置 -->
   <bean id="mar_marzCardAction" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction">
     <property name="mar_marzCardService" ref="mar_marzCardService" />
+    <property name="mar_marzAccountService" ref="mar_marzAccountService" />
+  </bean>
+  
+  <!-- ﻿marzsetting_dao 配置 -->
+  <bean id="mar_marzSettingDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.moemao.tgks.mar.marzsetting.dao.MarzSettingDao" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
+  <!-- ﻿marzsetting_service 配置 -->
+  <bean id="mar_marzSettingService" class="com.moemao.tgks.mar.marzsetting.service.impl.MarzSettingServiceImpl">
+    <property name="mar_marzSettingDao" ref="mar_marzSettingDao" />
+  </bean>
+  <!-- ﻿marzsetting_action 配置 -->
+  <bean id="mar_marzSettingAction" class="com.moemao.tgks.mar.marzsetting.action.MarzSettingAction">
+    <property name="mar_marzSettingService" ref="mar_marzSettingService" />
   </bean>
 
 </beans>

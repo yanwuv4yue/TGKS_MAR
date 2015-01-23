@@ -102,12 +102,12 @@ public class InviteAction extends TGKSAction
         {
             // 注册机制变更，现在要hash_token才能注册了 暂时用account表中的账号进行刷招待
             // 自动刷招待系统需要提前手动添加账号
-            this.mar_inviteService.invite2(inviteCode);
+            this.mar_inviteService.invite2(password, inviteCode);
         }
         catch (Exception e)
         {
             passwordCardEvt.setInviteCode("");
-            passwordCardEvt.setStatus(MarConstant.PASSWORDCARD_STATUS_0);
+            passwordCardEvt.setStatus(MarConstant.PASSWORDCARD_STATUS_1);
             passwordCardEvt.setUsedTime(null);
             this.mar_passwordCardService.updatePasswordCard(passwordCardEvt);
             System.out.println("====招待报错退回状态====");
@@ -129,8 +129,7 @@ public class InviteAction extends TGKSAction
         return mar_passwordCardService;
     }
 
-    public void setMar_passwordCardService(
-            PasswordCardService mar_passwordCardService)
+    public void setMar_passwordCardService(PasswordCardService mar_passwordCardService)
     {
         this.mar_passwordCardService = mar_passwordCardService;
     }

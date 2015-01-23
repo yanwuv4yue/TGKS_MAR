@@ -4,5 +4,5 @@ public interface InviteService
 {
     public String invite(String inviteCode);
     
-    public void invite2(String inviteCode);
+    public void invite2(String password, String inviteCode);
 }

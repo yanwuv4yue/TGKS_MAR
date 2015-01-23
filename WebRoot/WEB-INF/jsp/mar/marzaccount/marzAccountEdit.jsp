@@ -21,8 +21,8 @@
 		<td>账号类型</td>
 		<td>
 		    <select name="marzAccountEvt.type">
-				<option value="0" <s:if test="#marzAccountEvt.type == 0">selected="selected"</s:if>>IOS</option>
-				<option value="1" <s:if test="#marzAccountEvt.type == 1">selected="selected"</s:if>>Android</option>
+				<option value="0" <s:if test="marzAccountEvt.type == 0">selected="selected"</s:if>>IOS</option>
+				<option value="1" <s:if test="marzAccountEvt.type == 1">selected="selected"</s:if>>Android</option>
 		     </select>
 	     </td>
 	</tr>

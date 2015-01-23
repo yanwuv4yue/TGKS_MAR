@@ -1,7 +1,13 @@
 package com.moemao.tgks.mar.account.action;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,6 +60,8 @@ public class AccountAction extends TGKSAction
     
     private String uuidExport = "";
     
+    private File upload;
+    
     public String accountManager()
     {
     return SUCCESS;
@@ -71,21 +79,24 @@ public class AccountAction extends TGKSAction
         
         for (AccountEvt account : list)
         {
-            iconIds = CommonUtil.stringToList(account.getCardIds());
-            iconList = new ArrayList<String>();
-            for (String id : iconIds)
+            if (!CommonUtil.isEmpty(account.getCardIds()))
             {
-                for (KrsmaCardEvt card : cardURList)
+                iconIds = CommonUtil.stringToList(account.getCardIds());
+                iconList = new ArrayList<String>();
+                for (String id : iconIds)
                 {
-                    if (id.equals(card.getCardId()))
+                    for (KrsmaCardEvt card : cardURList)
                     {
-                        iconList.add(card.getIconUrl());
-                        break;
+                        if (id.equals(card.getCardId()))
+                        {
+                            iconList.add(card.getIconUrl());
+                            break;
+                        }
                     }
                 }
+                
+                account.setIconList(iconList);
             }
-            
-            account.setIconList(iconList);
         }
         
         return SUCCESS;
@@ -234,6 +245,42 @@ public class AccountAction extends TGKSAction
         return SUCCESS;
     }
     
+    public String uploadAccount()
+    {
+        String lineTXT = null;
+        String encoding = "UTF-8";
+        JSONObject json = null;
+        AccountEvt account;
+        
+        try
+        {
+            InputStreamReader read = new InputStreamReader(new FileInputStream(upload), encoding);
+            BufferedReader bufferedReader = new BufferedReader(read);
+            while ((lineTXT = bufferedReader.readLine()) != null)
+            {
+                if (lineTXT.contains("uuid"))
+                {
+                    json = JSONObject.fromObject(lineTXT);
+                    
+                    account = new AccountEvt();
+                    account.setUuid(json.getString("uuid"));
+                    account.setHashToken(json.getString("hash_token"));
+                    account.setAccountKey("xx");
+                    this.mar_accountService.addAccount(account);
+                }
+            }
+            
+            bufferedReader.close();
+            read.close();
+        }
+        catch (Exception e)
+        {
+            
+        }
+        
+        return SUCCESS;
+    }
+    
     /**
      * @return 返回 mar_accountService
      */
@@ -316,6 +363,16 @@ public class AccountAction extends TGKSAction
     public void setMar_krsmaCardService(KrsmaCardService mar_krsmaCardService)
     {
         this.mar_krsmaCardService = mar_krsmaCardService;
+    }
+
+    public File getUpload()
+    {
+        return upload;
+    }
+
+    public void setUpload(File upload)
+    {
+        this.upload = upload;
     }
 
 }

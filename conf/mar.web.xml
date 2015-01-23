@@ -153,6 +153,11 @@
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     
+    <action name="uploadAccount" class="com.moemao.tgks.mar.account.action.AccountAction" method="uploadAccount">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
     <action name="queryAccountTB_login" class="com.moemao.tgks.mar.account.action.AccountAction" method="queryAccountTB_login">
         <result name="success">/WEB-INF/jsp/mar/account/accountListTB.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
@@ -274,6 +279,32 @@
     
     <action name="exportMarzCard" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction" method="exportMarzCard">
         <result name="success">/WEB-INF/jsp/mar/marzcard/marzCardExport.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
+    <!-- mar_marzsetting -->
+    <action name="marzSettingManager" class="com.moemao.tgks.mar.marzsetting.action.MarzSettingAction" method="marzSettingManager">
+        <result name="success">/WEB-INF/jsp/mar/marzsetting/marzSettingManager.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="queryMarzSetting" class="com.moemao.tgks.mar.marzsetting.action.MarzSettingAction" method="queryMarzSetting">
+        <result name="success">/WEB-INF/jsp/mar/marzsetting/marzSettingList.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="editMarzSettingPage" class="com.moemao.tgks.mar.marzsetting.action.MarzSettingAction" method="editMarzSettingPage">
+        <result name="success">/WEB-INF/jsp/mar/marzsetting/marzSettingEdit.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="editMarzSetting" class="com.moemao.tgks.mar.marzsetting.action.MarzSettingAction" method="editMarzSetting">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="deleteMarzSetting" class="com.moemao.tgks.mar.marzsetting.action.MarzSettingAction" method="deleteMarzSetting">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     

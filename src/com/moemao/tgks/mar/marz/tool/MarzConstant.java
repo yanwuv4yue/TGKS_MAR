@@ -109,4 +109,23 @@ public class MarzConstant
     public static final String MARZ_LOG_TYPE_5 = "5";
     
     public static final String MARZCARD_STATUS_0 = "0";
+    
+    public static final String MARZCARD_STATUS_1 = "1";
+    
+    public static final String MARZCARD_TYPE_0 = "0";
+    
+    public static final String MARZCARD_TYPE_1 = "1";
+    
+    public static final String MARZCARD_TYPE_2 = "2";
+    
+    public static final String MARZCARD_TYPE_3 = "3";
+    
+    public static final String MARZSETTING_Off = "0";
+
+    public static final String MARZSETTING_ON = "1";
+    
+    public static final String MARZSETTING_TYPE_0 = "0";
+
+    public static final String MARZSETTING_TYPE_1 = "1";
+    
 }

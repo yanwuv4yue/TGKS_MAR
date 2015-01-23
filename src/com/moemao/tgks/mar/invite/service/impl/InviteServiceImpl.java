@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.sf.json.JSONObject;
 
+import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.mar.account.entity.AccountEvt;
 import com.moemao.tgks.mar.account.entity.AccountReq;
 import com.moemao.tgks.mar.account.service.AccountService;
@@ -79,18 +80,36 @@ public class InviteServiceImpl implements InviteService
         return returnCode;
     }
     
-    public void invite2(String inviteCode)
+    public synchronized void invite2(String password, String inviteCode)
     {
         String[] result = new String[2];
         String sid;
         JSONObject json= null;
         
+        // 先查询之前是否已经刷过
         AccountReq accountReq = new AccountReq();
-        accountReq.setStatus(MarConstant.ACCOUNT_STATUS_4);
-        accountReq.setSortSql(" t.ID Limit 0, 10");
-        
-        // 查询出10个可以用来刷招待的号
+        accountReq.setInviteCode(inviteCode);
+        accountReq.setTitle(password);
         List<AccountEvt> accountList = this.mar_accountService.queryAccount(accountReq);
+        
+        if (CommonUtil.isEmpty(accountList))
+        {
+            // 如果之前没有刷过
+            accountReq = new AccountReq();
+            accountReq.setStatus(MarConstant.ACCOUNT_STATUS_4);
+            accountReq.setSortSql(" t.ID Limit 0, 10");
+            
+            // 查询出10个可以用来刷招待的号
+            accountList = this.mar_accountService.queryAccount(accountReq);
+            
+            // 先绑定这10个号
+            for (AccountEvt accountEvt : accountList)
+            {
+                accountEvt.setInviteCode(inviteCode);
+                accountEvt.setTitle(password);
+                this.mar_accountService.updateAccount(accountEvt);
+            }
+        }
 
         try
         {

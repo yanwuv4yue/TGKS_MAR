@@ -114,7 +114,7 @@ DROP TABLE IF EXISTS `t_tgks_mar_marzlog`;
 CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzlog` (
   `id` varchar(30) NOT NULL COMMENT '表唯一主键',
   `tgksId` varchar(30) NOT NULL COMMENT 'TGKS账号的USERNAME',
-  `type` varchar(3) NOT NULL COMMENT '类型（0 系统；1 战斗；2 探索；3 道具使用；4 合成；5 出售）',
+  `type` varchar(3) NOT NULL COMMENT '类型（0 系统；1 战斗；2 探索；3 道具使用；4 合成；5 出售；9 充值）',
   `info` varchar(500) default NULL COMMENT '状态（0 未使用；1 已使用）',
   `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY  (`id`)
@@ -134,3 +134,16 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzmap` (
   `vip` varchar(3) NOT NULL COMMENT 'VIP等级（0 试用；1 普通；2 白金；3 钻石）',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='挂机地图表';
+
+--
+-- 表的结构 `t_tgks_mar_marzsetting`
+--
+DROP TABLE IF EXISTS `t_tgks_mar_marzsetting`;
+CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzsetting` (
+  `id` varchar(30) NOT NULL COMMENT '表唯一主键',
+  `tgksId` varchar(30) NOT NULL COMMENT 'TGKS账号的USERNAME',
+  `type` varchar(3) NOT NULL COMMENT '类型（0 开关；1 参数）',
+  `name` varchar(100) NOT NULL COMMENT '参数名',
+  `value` varchar(3000) default NULL COMMENT '参数值',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='挂机参数表';

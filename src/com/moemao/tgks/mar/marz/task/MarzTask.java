@@ -279,6 +279,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                 if (validateSetting(MarzConstant.VALIDATE_SETTING_CARDSELL))
                 {
                     // 查询用户设定的售卡列表
+                    // TODO
                     List<String> userSellList = new ArrayList<String>();
                     
                     // 遍历所有卡片 把需要出售的卡片ID放入cardSellList

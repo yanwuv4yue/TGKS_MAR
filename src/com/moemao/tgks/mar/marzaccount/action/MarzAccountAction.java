@@ -105,6 +105,11 @@ public class MarzAccountAction extends TGKSAction
     public String marzAccountBinding()
     {
         String accountId = this.getRequest().getParameter("accountId");
+        if (CommonUtil.isEmpty(accountId))
+        {
+            return ERROR;
+        }
+        
         MarzAccountEvt account = mar_marzAccountService.queryMarzAccountById(accountId);
         
         // 如果不存在该账号 或者该账号已经绑定

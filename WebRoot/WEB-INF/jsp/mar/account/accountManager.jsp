@@ -49,8 +49,9 @@
 			    <td></td>
 			    <td></td>
 			    <td></td>
-			    <td></td>
-			    <td></td>
+			    <td colspan="2">
+			         
+			    </td>
                 <td>
                     <button id="clearAccount">重置</button>
                     <button id="queryAccount">查询</button>
@@ -60,16 +61,29 @@
 	</form>
 </div>
 
-<button id="addAccount">新增</button>
-<button id="deleteAccount">删除</button>
-<button id="initialAccount">执行</button>
-<button id="checkCardAccount">更新</button>
-<button id="gachaAccount">抽卡</button>
-<button id="allCheckCardAccount">全更</button>
-<button id="allGachaAccount">全抽</button>
-<button id="exportUuidAccount">导出</button>
-<button id="forInviteAccount">招待预备</button>
-
+<form id="accountUploadForm" name="accountUploadForm" action="../mar/uploadAccount.action" method="post" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <td>
+                <button id="addAccount">新增</button>
+				<button id="deleteAccount">删除</button>
+				<button id="initialAccount">执行</button>
+				<button id="checkCardAccount">更新</button>
+				<button id="gachaAccount">抽卡</button>
+				<button id="allCheckCardAccount">全更</button>
+				<button id="allGachaAccount">全抽</button>
+				<button id="exportUuidAccount">导出</button>
+				<button id="forInviteAccount">招待预备</button>
+            </td>
+            <td>
+                <input type="file" id="accountUpload" name="upload" size="30"/>
+            </td>
+            <td >
+                <button id="uploadAccountButton">上传</button>
+            </td>
+        </tr>
+    </table>
+</form>
 <div id="accountDiv"></div>
 
 <div id="accountEdit" title="Account Edit">
@@ -566,7 +580,30 @@ $(document).ready(function(){
             $("#accountManagerSubmit").val("0");
             return false;
     });
-	
+    
+    $( "#uploadAccountButton" ).button().click(function() {
+	   if ($("#accountUpload").val() == null || $("#accountUpload").val() == "")
+        {
+            alert("请选择文件");
+            return;
+        }
+        
+        var options = { 
+            url:"../mar/uploadAccount.action", // 提交给哪个执行
+            type:'POST', 
+            success: function(uploadUrl){
+                // 执行成功刷新form
+                alert("上传成功");
+                query();
+            },
+            error:function(){ 
+                alert("上传失败"); 
+            }
+        };
+        
+        $("#accountUploadForm").ajaxSubmit(options);
+        return false;
+	});
 	 // 刷新按钮
 	$( "#queryAccount" ).button().click(function() {
 			query();

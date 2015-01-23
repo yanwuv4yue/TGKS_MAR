@@ -40,7 +40,7 @@ public class LoginAction extends TGKSAction
     /**
      * 
      * @Title: login
-     * @Description: CGWEB登录 进入选图下单页面
+     * @Description: MARWEB登录 进入选图下单页面
      * @return
      * @return String 返回类型
      * @throws
@@ -85,7 +85,7 @@ public class LoginAction extends TGKSAction
     /**
      * 
      * @Title: register
-     * @Description: CGWEB账号注册 使用common的user表
+     * @Description: MARWEB账号注册 使用common的user表
      * @return
      * @return String 返回类型
      * @throws
@@ -106,7 +106,7 @@ public class LoginAction extends TGKSAction
             return ERROR;
         }
         
-        // CGWEB组别暂时写入
+        // MARWEB组别暂时写入
         userEvt.setGroupId(MarwebConstant.USER_GROUP_MARWEB_MEMBER);
         // 账号默认启用
         userEvt.setStatus(UmsConstant.USER_STATUS_1);

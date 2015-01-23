@@ -1,5 +1,6 @@
 package com.moemao.tgks.mar.marzcard.action;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,6 +12,9 @@ import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.common.tool.StringUtil;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
+import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
+import com.moemao.tgks.mar.marzaccount.entity.MarzAccountReq;
+import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
 import com.moemao.tgks.mar.marzcard.entity.MarzCardEvt;
 import com.moemao.tgks.mar.marzcard.entity.MarzCardReq;
 import com.moemao.tgks.mar.marzcard.service.MarzCardService;
@@ -29,6 +33,8 @@ private static Log logger = LogFactory.getLog(MarzCardAction.class);
  * ﻿MarzCard业务接口
  */
 private MarzCardService mar_marzCardService;
+
+private MarzAccountService mar_marzAccountService;
 
 /**
  * 查询结果集
@@ -159,6 +165,90 @@ public String exportMarzCard()
     return SUCCESS;
 }
 
+public String marzCardUsePage()
+{
+    return SUCCESS;
+}
+
+public String marzCardUse()
+{
+    String password = this.getRequest().getParameter("password");
+    marzCardReq = new MarzCardReq();
+    marzCardReq.setPassword(password);
+    
+    list = this.mar_marzCardService.queryMarzCard(marzCardReq);
+    
+    if (CommonUtil.isEmpty(list) || list.size() == 0)
+    {
+        return ERROR;
+    }
+    
+    marzCardEvt = list.get(0);
+    
+    if (MarzConstant.MARZCARD_STATUS_0.equals(marzCardEvt.getStatus()))
+    {
+        // 先更新点卡状态为已使用
+        marzCardEvt.setStatus(MarzConstant.MARZCARD_STATUS_1);
+        this.mar_marzCardService.updateMarzCard(marzCardEvt);
+        
+        // 开始为账号充值时间
+        MarzAccountReq marzAccountReq = new MarzAccountReq();
+        marzAccountReq.setTgksId(CommonUtil.getUserInfoBySession().getUsername());
+        List<MarzAccountEvt> accountList = this.mar_marzAccountService.queryMarzAccount(marzAccountReq);
+        if (CommonUtil.isEmpty(accountList) || accountList.size() == 0)
+        {
+            // 不存在账号 退回点卡状态
+            marzCardEvt.setStatus(MarzConstant.MARZCARD_STATUS_0);
+            this.mar_marzCardService.updateMarzCard(marzCardEvt);
+        }
+        else
+        {
+            int plusTime = 0;
+            
+            if (MarzConstant.MARZCARD_TYPE_0.equals(marzCardEvt.getType()))
+            {
+                plusTime = 1 * 24 * 60 * 60 * 1000;
+            }
+            else if (MarzConstant.MARZCARD_TYPE_1.equals(marzCardEvt.getType()))
+            {
+
+                plusTime = 7 * 24 * 60 * 60 * 1000;
+            }
+            else if (MarzConstant.MARZCARD_TYPE_2.equals(marzCardEvt.getType()))
+            {
+
+                plusTime = 30 * 24 * 60 * 60 * 1000;
+            }
+            else if (MarzConstant.MARZCARD_TYPE_3.equals(marzCardEvt.getType()))
+            {
+
+                plusTime = 90 * 24 * 60 * 60 * 1000;
+            }
+            
+            MarzAccountEvt account = accountList.get(0);
+            
+            // 账号已过期
+            if (new Date().after(account.getEndTime()))
+            {
+                account.setEndTime(new Date(new Date().getTime() + plusTime));
+            }
+            // 账号未过期
+            else
+            {
+                account.setEndTime(new Date(account.getEndTime().getTime() + plusTime));
+            }
+            
+            this.mar_marzAccountService.updateMarzAccount(account);
+        }
+    }
+    else
+    {
+        return ERROR;
+    }
+    
+    return SUCCESS;
+}
+
 /**
  * @return 返回 mar_marzCardService
  */
@@ -231,6 +321,16 @@ public String getMarzCardExport()
 public void setMarzCardExport(String marzCardExport)
 {
     this.marzCardExport = marzCardExport;
+}
+
+public MarzAccountService getMar_marzAccountService()
+{
+    return mar_marzAccountService;
+}
+
+public void setMar_marzAccountService(MarzAccountService mar_marzAccountService)
+{
+    this.mar_marzAccountService = mar_marzAccountService;
 }
 
 }

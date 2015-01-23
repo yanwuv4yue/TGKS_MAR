@@ -1,7 +1,6 @@
 package com.moemao.tgks.mar.marz.tool;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.moemao.tgks.common.tool.CommonUtil;
@@ -24,7 +23,10 @@ public class MarzUtil
         
         for (String s : list)
         {
-            str.append(s).append(",");
+            if (!CommonUtil.isEmpty(s.trim()))
+            {
+                str.append(s.trim()).append(",");
+            }
         }
         
         return str.substring(0, str.length() - 1).toString();
@@ -37,6 +39,15 @@ public class MarzUtil
             return new ArrayList<String>();
         }
         
-        return Arrays.asList(str.split(","));
+        List<String> list = new ArrayList<String>();
+        for (String s : str.split(","))
+        {
+            if (!CommonUtil.isEmpty(s.trim()))
+            {
+                list.add(s.trim());
+            }
+        }
+        
+        return list;
     }
 }
