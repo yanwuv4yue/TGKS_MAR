@@ -7,6 +7,7 @@
                 <th width="150px">操作时间</th>
                 <th width="60px">类型</th>
                 <th>详细信息</th>
+                <th width="60px"><a id="queryLogButton" class="button" href="#">刷新</a></th>
             </tr>
         </thead>
         <tbody>
@@ -32,8 +33,11 @@
                         <s:elseif test="#evt.type == 5">
                             出售
                         </s:elseif>
+                        <s:elseif test="#evt.type == 9">
+                            充值
+                        </s:elseif>
                     </td>
-                    <td><s:property value='#evt.info'/></td>
+                    <td colspan="2"><s:property value='#evt.info'/></td>
                 </tr>
             </s:iterator>
         </tbody>
@@ -41,6 +45,11 @@
 </div>
 <script type="text/javascript">
 $(function() {
+    $("#queryLogButton").click(function(){
+        var table=$.ajax({url:"../marweb/queryMarzLogByTgksId.action", async:false});
+        $("#logDiv").html(table.responseText);
+    });
+    
     $('#marzLogTable').longtable({
         'perPage' : 10
     });

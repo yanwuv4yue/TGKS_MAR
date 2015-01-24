@@ -181,13 +181,15 @@ public class MarzAccountAction extends TGKSAction
         int result = 0;
         if (CommonUtil.isEmpty(marzAccountEvt.getId()))
         {
-        result = mar_marzAccountService.addMarzAccount(marzAccountEvt);
-        CommonUtil.systemLog("mar/editMarzAccount.action", CommonConstant.SYSTEMLOG_TYPE_1, result == 0 ? CommonConstant.FAILD : CommonConstant.SUCCESS, String.format("新增marzAccountEvt\n%S", marzAccountEvt.toString()));
+            result = mar_marzAccountService.addMarzAccount(marzAccountEvt);
+            CommonUtil.systemLog("mar/editMarzAccount.action", CommonConstant.SYSTEMLOG_TYPE_1, result == 0 ? CommonConstant.FAILD : CommonConstant.SUCCESS, String.format("新增marzAccountEvt\n%S", marzAccountEvt.toString()));
         }
         else
         {
-        result = mar_marzAccountService.updateMarzAccount(marzAccountEvt);
-        CommonUtil.systemLog("mar/editMarzAccount.action", CommonConstant.SYSTEMLOG_TYPE_2, result == 0 ? CommonConstant.FAILD : CommonConstant.SUCCESS, String.format("修改marzAccountEvt\n%S", marzAccountEvt.toString()));
+            MarzAccountEvt account = mar_marzAccountService.queryMarzAccountById(marzAccountEvt.getId());
+            marzAccountEvt.setEndTime(account.getEndTime());
+            result = mar_marzAccountService.updateMarzAccount(marzAccountEvt);
+            CommonUtil.systemLog("mar/editMarzAccount.action", CommonConstant.SYSTEMLOG_TYPE_2, result == 0 ? CommonConstant.FAILD : CommonConstant.SUCCESS, String.format("修改marzAccountEvt\n%S", marzAccountEvt.toString()));
         }
         CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_EXECUTE_NUMS, StringUtil.toBeString(result));
         CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, "MarzAccountAction.updateMarzAccount");

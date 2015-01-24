@@ -39,6 +39,8 @@ private String battle;
 
 private String battleNowaste;
 
+private String bossIds;
+
 @Override
 public String toString()
 {
@@ -183,6 +185,16 @@ public String getBattleNowaste()
 public void setBattleNowaste(String battleNowaste)
 {
     this.battleNowaste = battleNowaste;
+}
+
+public String getBossIds()
+{
+    return bossIds;
+}
+
+public void setBossIds(String bossIds)
+{
+    this.bossIds = bossIds;
 }
 
 }

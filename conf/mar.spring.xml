@@ -126,6 +126,7 @@
   <bean id="mar_marzCardAction" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction">
     <property name="mar_marzCardService" ref="mar_marzCardService" />
     <property name="mar_marzAccountService" ref="mar_marzAccountService" />
+    <property name="mar_marzLogService" ref="mar_marzLogService" />
   </bean>
   
   <!-- ﻿marzsetting_dao 配置 -->
@@ -140,6 +141,8 @@
   <!-- ﻿marzsetting_action 配置 -->
   <bean id="mar_marzSettingAction" class="com.moemao.tgks.mar.marzsetting.action.MarzSettingAction">
     <property name="mar_marzSettingService" ref="mar_marzSettingService" />
+    <property name="mar_marzAccountService" ref="mar_marzAccountService" />
+    <property name="mar_marzMapService" ref="mar_marzMapService" />
   </bean>
 
 </beans>

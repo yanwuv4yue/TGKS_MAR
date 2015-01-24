@@ -4,6 +4,7 @@
     <table>
         <tr>
             <td><label>点卡号码: </label></td><td><input type="text" id="marzCardUsePassword" /></td>
+            <td><a id="message" style="color:red;">请在框中填入点卡密码 点击充值按钮</a></td>
             <td>
                 <a id="marzCardUseButton" class="button" href="#">充值</a>
             </td>
@@ -18,7 +19,7 @@ $(document).ready(function(){
     $( "#marzCardUseButton" ).click(function() {
         if ($("#marzCardUsePassword").val() == "")
         {
-            alert("请填入点卡号码");
+            document.getElementById("message").innerHTML= "请填入点卡号码";
             return false;
         }
         
@@ -27,10 +28,11 @@ $(document).ready(function(){
             type:'POST', 
             success: function(result){
                 dealResult(result);
-                log();
+                var table=$.ajax({url:"../marweb/queryMarzLogByTgksId.action", async:false});
+                $("#logDiv").html(table.responseText);
             },
             error:function(){ 
-                alert("充值失败"); 
+                document.getElementById("message").innerHTML= "充值失败";
             }
         };
         
@@ -47,11 +49,11 @@ $(document).ready(function(){
     {
         if ("success!" == result)
         {
-            alert("充值成功");
+            document.getElementById("message").innerHTML= "充值成功";
         }
         else
         {
-            alert("点卡错误或已使用");
+            document.getElementById("message").innerHTML= "点卡错误或已使用";
             return false;
         }
     }

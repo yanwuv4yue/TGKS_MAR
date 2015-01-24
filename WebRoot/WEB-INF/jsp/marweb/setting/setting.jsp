@@ -54,7 +54,31 @@
                 <td></td>
             </tr>
             <tr>
-                <td colspan="6"></td>
+                <td>战斗副本</td>
+                <td colspan="7">
+                    <table>
+                        <tr>
+		                    <s:iterator value="allMapList" var="evt" status="idx">
+		                      <td>
+		                        <s:if test="#evt.show == 1">
+		                        <input type="checkbox" name="marzSettingEvt.bossIds" value="<s:property value='#evt.bossId'/>" <s:if test="#evt.check == 1">checked="checked"</s:if> />
+		                        </s:if>
+		                      </td>
+		                      <td>
+		                        <s:property value='#evt.bossName'/>
+		                      </td>
+                              <s:if test="#idx.index > 0  && (#idx.index + 1)%5 == 0">
+                        </tr>
+                        <tr>
+                              </s:if>
+		                    </s:iterator>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4"></td>
+                <td colspan="2"><a id="message" style="color:red;">请在页面上配置挂机方案 点击保存按钮</a></td>
                 <td><a id="returnAccountButton" class="button" href="#">返回</a></td>
                 <td><a id="saveSettingButton" class="button" href="#">保存</a></td>
             </tr>
@@ -79,10 +103,10 @@ $(document).ready(function(){
             data:$("#saveSettingForm").formSerialize(),
             type:'POST', 
             success: function(){
-                alert("保存成功");
+                document.getElementById("message").innerHTML= "挂机设置保存成功";
             },
             error:function(){ 
-                alert("保存失败"); 
+                document.getElementById("message").innerHTML= "挂机设置保存失败";
             }
         };
         

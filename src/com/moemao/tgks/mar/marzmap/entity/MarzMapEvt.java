@@ -32,6 +32,10 @@ private Integer bpCost;
  */
 private Integer target;
 
+private String check;
+
+private String show;
+
 @Override
 public String toString()
 {
@@ -120,6 +124,26 @@ public String getVip()
 public void setVip(String vip)
 {
     this.vip = vip;
+}
+
+public String getCheck()
+{
+    return check;
+}
+
+public void setCheck(String check)
+{
+    this.check = check;
+}
+
+public String getShow()
+{
+    return show;
+}
+
+public void setShow(String show)
+{
+    this.show = show;
 }
 
 }

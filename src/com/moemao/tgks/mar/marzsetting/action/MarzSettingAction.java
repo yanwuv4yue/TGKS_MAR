@@ -10,6 +10,12 @@ import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.common.tool.StringUtil;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
+import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
+import com.moemao.tgks.mar.marzaccount.entity.MarzAccountReq;
+import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
+import com.moemao.tgks.mar.marzmap.entity.MarzMapEvt;
+import com.moemao.tgks.mar.marzmap.entity.MarzMapReq;
+import com.moemao.tgks.mar.marzmap.service.MarzMapService;
 import com.moemao.tgks.mar.marzsetting.entity.MarzSettingEvt;
 import com.moemao.tgks.mar.marzsetting.entity.MarzSettingReq;
 import com.moemao.tgks.mar.marzsetting.service.MarzSettingService;
@@ -28,11 +34,19 @@ public class MarzSettingAction extends TGKSAction
      * ﻿MarzSetting业务接口
      */
     private MarzSettingService mar_marzSettingService;
+
+    private MarzAccountService mar_marzAccountService;
+    
+    private MarzMapService mar_marzMapService;
     
     /**
      * 查询结果集
      */
     private List<MarzSettingEvt> list;
+    
+    List<MarzMapEvt> allMapList;
+    
+    MarzAccountEvt account;
     
     /**
      * ﻿MarzSettingEvt对象
@@ -136,6 +150,33 @@ public class MarzSettingAction extends TGKSAction
             }
         }
         
+        // 查询当前的战斗地图
+        allMapList = this.mar_marzMapService.queryMarzMap(new MarzMapReq());
+        
+        MarzAccountReq marzAccountReq = new MarzAccountReq();
+        marzAccountReq.setTgksId(tgksId);
+        account = this.mar_marzAccountService.queryMarzAccount(marzAccountReq).get(0);
+        
+        for (MarzMapEvt map : allMapList)
+        {
+            if (!CommonUtil.isEmpty(account.getBossIds()))
+            {
+                if (account.getBossIds().contains(map.getBossId()))
+                {
+                    map.setCheck("1");
+                }
+            }
+            
+            if (Integer.parseInt(account.getVip()) < Integer.parseInt(map.getVip()))
+            {
+                map.setShow("0");
+            }
+            else
+            {
+                map.setShow("1");
+            }
+        }
+        
         return SUCCESS;
     }
     
@@ -145,6 +186,20 @@ public class MarzSettingAction extends TGKSAction
         
         // 先删除原来的设定
         this.mar_marzSettingService.deleteMarzSettingByTgksId(tgksId);
+        
+        // 保存战斗地图ID
+        MarzAccountReq marzAccountReq = new MarzAccountReq();
+        marzAccountReq.setTgksId(tgksId);
+        account = this.mar_marzAccountService.queryMarzAccount(marzAccountReq).get(0);
+        if (null == marzSettingEvt.getBossIds())
+        {
+            account.setBossIds("");
+        }
+        else
+        {
+            account.setBossIds(marzSettingEvt.getBossIds().replace(" ", ""));
+        }
+        this.mar_marzAccountService.updateMarzAccount(account);
         
         // 开始保存新设定
         // 跑图
@@ -260,6 +315,46 @@ public class MarzSettingAction extends TGKSAction
     public void setMarzSettingReq(MarzSettingReq marzSettingReq)
     {
         this.marzSettingReq = marzSettingReq;
+    }
+
+    public MarzAccountService getMar_marzAccountService()
+    {
+        return mar_marzAccountService;
+    }
+
+    public void setMar_marzAccountService(MarzAccountService mar_marzAccountService)
+    {
+        this.mar_marzAccountService = mar_marzAccountService;
+    }
+
+    public MarzMapService getMar_marzMapService()
+    {
+        return mar_marzMapService;
+    }
+
+    public void setMar_marzMapService(MarzMapService mar_marzMapService)
+    {
+        this.mar_marzMapService = mar_marzMapService;
+    }
+
+    public List<MarzMapEvt> getAllMapList()
+    {
+        return allMapList;
+    }
+
+    public void setAllMapList(List<MarzMapEvt> allMapList)
+    {
+        this.allMapList = allMapList;
+    }
+
+    public MarzAccountEvt getAccount()
+    {
+        return account;
+    }
+
+    public void setAccount(MarzAccountEvt account)
+    {
+        this.account = account;
     }
 
 }

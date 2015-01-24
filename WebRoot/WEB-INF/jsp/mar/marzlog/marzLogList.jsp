@@ -39,6 +39,9 @@
                         <s:elseif test="#evt.type == 5">
                             出售
                         </s:elseif>
+                        <s:elseif test="#evt.type == 9">
+                            充值
+                        </s:elseif>
                     </td>
                     <td><s:property value='#evt.info'/></td>
 				</tr>

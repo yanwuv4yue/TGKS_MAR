@@ -58,7 +58,7 @@ public String queryMarzLogByTgksId()
 {
     MarzLogReq marzLogReq = new MarzLogReq();
     marzLogReq.setTgksId(CommonUtil.getUserInfoBySession().getUsername());
-    marzLogReq.setSortSql(" t.ID DESC LIMIT 0 , 20");
+    marzLogReq.setSortSql(" t.ID DESC LIMIT 0 , 50");
     list = mar_marzLogService.queryMarzLog(marzLogReq);
     return SUCCESS;
 }

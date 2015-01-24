@@ -107,6 +107,10 @@ public class MarzConstant
      * MARZLOG TYPE 5 出售
      */
     public static final String MARZ_LOG_TYPE_5 = "5";
+    /**
+     * MARZLOG TYPE 9 点卡充值
+     */
+    public static final String MARZ_LOG_TYPE_9 = "9";
     
     public static final String MARZCARD_STATUS_0 = "0";
     

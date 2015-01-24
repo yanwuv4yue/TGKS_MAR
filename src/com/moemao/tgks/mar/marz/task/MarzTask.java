@@ -24,6 +24,9 @@ import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
 import com.moemao.tgks.mar.marzlog.service.MarzLogService;
 import com.moemao.tgks.mar.marzmap.entity.MarzMapEvt;
+import com.moemao.tgks.mar.marzsetting.entity.MarzSettingEvt;
+import com.moemao.tgks.mar.marzsetting.entity.MarzSettingReq;
+import com.moemao.tgks.mar.marzsetting.service.MarzSettingService;
 import com.moemao.tgks.mar.tool.MarConstant;
 
 public class MarzTask implements Runnable, ApplicationContextAware
@@ -35,6 +38,10 @@ public class MarzTask implements Runnable, ApplicationContextAware
     private MarzAccountService marzAccountService;
     
     private MarzLogService marzLogService;
+    
+    private MarzSettingService marzSettingService;
+    
+    private MarzSettingEvt marzSettingEvt;
     
     private MarzAccountEvt account;
     
@@ -54,9 +61,12 @@ public class MarzTask implements Runnable, ApplicationContextAware
     {
         marzAccountService = (MarzAccountService) ContextUtil.getBean("mar_marzAccountService");
         marzLogService = (MarzLogService) ContextUtil.getBean("mar_marzLogService");
+        marzSettingService = (MarzSettingService) ContextUtil.getBean("mar_marzSettingService");
         
         // 默认线程调用的执行方法
         System.out.println("执行任务开始 ID：" + account.getId());
+        
+        this.initSetting();
         
         // 尽量保证流程上的简洁 run流程只负责调用以及返回失败时的处理 并不做各个条件判断的限制
         
@@ -117,6 +127,48 @@ public class MarzTask implements Runnable, ApplicationContextAware
         this.marzAccountService.updateMarzAccount(account);
         
         System.out.println("执行任务结束 ID：" + account.getId());
+    }
+    
+    private void initSetting()
+    {
+        String tgksId = account.getTgksId();
+        marzSettingEvt = new MarzSettingEvt();
+        marzSettingEvt.setTgksId(tgksId);
+        MarzSettingReq marzSettingReq = new MarzSettingReq();
+        marzSettingReq.setTgksId(tgksId);
+        
+        List<MarzSettingEvt> marzSettinglist = this.marzSettingService.queryMarzSetting(marzSettingReq);
+        
+        if (!CommonUtil.isEmpty(marzSettinglist))
+        {
+            for (MarzSettingEvt setting : marzSettinglist)
+            {
+                if (MarzConstant.VALIDATE_SETTING_EXPLORE == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setExplore(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_CARDSELL == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCardSell(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_CARDSELL_COMMON == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCardSellCommon(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_CARDFUSION == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCardFusion(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_BATTLE == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setBattle(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setBattleNowaste(setting.getValue());
+                }
+            }
+        }
     }
     
     /**
@@ -262,7 +314,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
             
             resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
             
-            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "卡片信息更新" + MarzUtil.resultCodeStr(resultCode));
+            //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "卡片信息更新" + MarzUtil.resultCodeStr(resultCode));
             
             if (MarzConstant.RES_CODE_0 == resultCode)
             {
@@ -392,7 +444,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
     
     private int battle()
     {
-        if (!validateSetting(MarzConstant.VALIDATE_SETTING_BATTLE) && account.getAp() <= 10)
+        if (!validateSetting(MarzConstant.VALIDATE_SETTING_BATTLE) && account.getAp() <= 5)
         {
             return MarzConstant.SUCCESS;
         }
@@ -553,7 +605,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                             }
                             else if (MarConstant.BATTLE_START_FRIDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
                             {
-                                //mapEvt = m;
+                                mapEvt = m;
                             }
                             else if (MarConstant.BATTLE_START_SATURDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
                             {
@@ -657,19 +709,19 @@ public class MarzTask implements Runnable, ApplicationContextAware
         switch (settingTag)
         {
             case MarzConstant.VALIDATE_SETTING_EXPLORE: // 自动跑图开关
-                return true;
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getExplore());
             case MarzConstant.VALIDATE_SETTING_CARDSELL: // 自动卖卡开关
-                return true;
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getCardSell());
             case MarzConstant.VALIDATE_SETTING_CARDSELL_COMMON: // 自动卖卡开关-卖普通卡
-                return true;
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getCardSellCommon());
             case MarzConstant.VALIDATE_SETTING_CARDFUSION: // 自动合成开关
-                return true;
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getCardFusion());
             case MarzConstant.VALIDATE_SETTING_BATTLE: // 自动战斗开关
-                return true;
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattle());
             case MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE: // 自动战斗开关-不浪费BP
-                return true;
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattleNowaste());
             default:
-                return true;
+                return false;
         }
     }
 

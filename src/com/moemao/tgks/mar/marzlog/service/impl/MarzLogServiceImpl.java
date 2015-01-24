@@ -3,7 +3,6 @@ package com.moemao.tgks.mar.marzlog.service.impl;
 import java.util.List;
 
 import com.moemao.tgks.common.tool.CommonUtil;
-import com.moemao.tgks.common.ums.user.entity.UserEvt;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzlog.dao.MarzLogDao;
 import com.moemao.tgks.mar.marzlog.entity.MarzLogEvt;
@@ -49,13 +48,11 @@ public int addMarzLog(MarzLogEvt marzLogEvt)
 public int marzLog(MarzAccountEvt account, String type, String info)
 {
     // marzLog改成按tgksId查找
-    UserEvt user = CommonUtil.getUserInfoBySession();
-    
     MarzLogEvt marzLogEvt = new MarzLogEvt();
     marzLogEvt.setId(MarUtil.createUniqueID());
-    marzLogEvt.setTgksId(user.getUsername());
+    marzLogEvt.setTgksId(account.getTgksId());
     marzLogEvt.setType(type);
-    marzLogEvt.setInfo(info);
+    marzLogEvt.setInfo(info.replace("�?", ""));
     
     return mar_marzLogDao.mar_addMarzLog(marzLogEvt);
 }
