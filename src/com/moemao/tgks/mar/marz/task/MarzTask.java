@@ -64,7 +64,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
         marzSettingService = (MarzSettingService) ContextUtil.getBean("mar_marzSettingService");
         
         // 默认线程调用的执行方法
-        System.out.println("执行任务开始 ID：" + account.getId());
+        System.out.println("执行任务开始 ID：" + account.getTgksId());
         
         this.initSetting();
         
@@ -126,7 +126,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
         account.setSessionId(sid);
         this.marzAccountService.updateMarzAccount(account);
         
-        System.out.println("执行任务结束 ID：" + account.getId());
+        System.out.println("执行任务结束 ID：" + account.getTgksId());
     }
     
     private void initSetting()
@@ -226,7 +226,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
             
             resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
             
-            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号基本信息更新" + MarzUtil.resultCodeStr(resultCode));
+            //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号基本信息更新" + MarzUtil.resultCodeStr(resultCode));
             
             if (MarzConstant.RES_CODE_0 == resultCode)
             {
@@ -334,6 +334,23 @@ public class MarzTask implements Runnable, ApplicationContextAware
                     // TODO
                     List<String> userSellList = new ArrayList<String>();
                     
+                    if (validateSetting(MarzConstant.VALIDATE_SETTING_CARDSELL_COMMON))
+                    {
+                        // 金币卡
+                        userSellList.add("20000026");
+                        userSellList.add("20000027");
+                        userSellList.add("20000028");
+                        userSellList.add("20000029");
+                        // 蓝狗粮
+                        userSellList.add("20000001");
+                        // 2星进化素材
+                        userSellList.add("20000009");
+                        userSellList.add("20000008");
+                        userSellList.add("20000007");
+                        userSellList.add("20000006");
+                        userSellList.add("20000005");
+                    }
+            
                     // 遍历所有卡片 把需要出售的卡片ID放入cardSellList
                     for (int i = 0; i < cards.size(); i++)
                     {
@@ -368,7 +385,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                         
                         resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
                         
-                        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_5, "卡片出售" + MarzUtil.resultCodeStr(resultCode));
+                        //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_5, "卡片出售" + MarzUtil.resultCodeStr(resultCode));
                         
                         if (MarzConstant.RES_CODE_0 == resultCode)
                         {
@@ -419,7 +436,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                         
                         resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
                         
-                        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_4, "卡片合成" + MarzUtil.resultCodeStr(resultCode));
+                        //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_4, "卡片合成" + MarzUtil.resultCodeStr(resultCode));
                         
                         if (MarzConstant.RES_CODE_0 == resultCode)
                         {
@@ -456,7 +473,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
             
             resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
             
-            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, "战斗信息查询" + MarzUtil.resultCodeStr(resultCode));
+            //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, "战斗信息查询" + MarzUtil.resultCodeStr(resultCode));
             
             if (MarzConstant.RES_CODE_0 == resultCode)
             {
@@ -575,7 +592,13 @@ public class MarzTask implements Runnable, ApplicationContextAware
                         if (id.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
                         {
                             mapEvt = m;
+                            break;
                         }
+                    }
+                    
+                    if (!CommonUtil.isEmpty(mapEvt.getBossId()))
+                    {
+                        break;
                     }
                 }
                 

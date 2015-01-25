@@ -25,6 +25,8 @@ $(document).ready(function(){
     $("#marzCardUsePageA").click(function(){
         var table=$.ajax({url:"../marweb/marzCardUsePage.action", async:false});
         $("#mainDiv").html(table.responseText);
+        var table2=$.ajax({url:"../marweb/queryMarzLogByTgksIdOnlyMarzCard.action", async:false});
+        $("#logDiv").html(table2.responseText);
     });
     
     // 页面禁止右键

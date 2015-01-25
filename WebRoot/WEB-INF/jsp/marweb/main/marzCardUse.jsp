@@ -43,6 +43,8 @@ $(document).ready(function(){
     $("#returnAccountButton").click(function(){
         var table=$.ajax({url:"../marweb/queryMarzAccountByTgksId.action", async:false});
         $("#mainDiv").html(table.responseText);
+        var table2=$.ajax({url:"../marweb/queryMarzLogByTgksId.action", async:false});
+        $("#logDiv").html(table2.responseText);
     });
     
     function dealResult(result)

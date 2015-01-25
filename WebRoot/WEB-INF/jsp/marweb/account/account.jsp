@@ -19,7 +19,7 @@
 	            </s:elseif>
 	        </td>
 	        <td>
-	            <a id="settingButton" class="button" href="#">挂机设置</a>
+	            <a id="refrushButton" class="button" href="#">刷新</a>
 	        </td>
 	    </tr>
 	    <tr>
@@ -56,7 +56,13 @@
 	        <td><s:date name="marzAccountEvt.createTime" format="yyyy-MM-dd HH:mm:ss"/></td>
 	        <td>到期时间</td>
 	        <td><s:date name="marzAccountEvt.endTime" format="yyyy-MM-dd HH:mm:ss"/></td>
-	        <td colspan="2"></td>
+            <td>
+                <s:set name="nowTime" value="new java.util.Date()"></s:set>
+                <s:if test="marzAccountEvt.endTime.getTime() < #nowTime.getTime()">
+                    <a style="color:red;">已经到期</a>
+                </s:if>
+            </td>
+	        <td><a id="settingButton" class="button" href="#">挂机设置</a></td>
 	    </tr>
 	    <tr>
 	        <td>战斗地图</td>
@@ -104,6 +110,11 @@ $(document).ready(function(){
     
     $("#settingButton").click(function(){
         var table=$.ajax({url:"../marweb/settingPage.action", async:false});
+        $("#mainDiv").html(table.responseText);
+    });
+    
+    $("#refrushButton").click(function(){
+        var table=$.ajax({url:"../marweb/queryMarzAccountByTgksId.action", async:false});
         $("#mainDiv").html(table.responseText);
     });
 });

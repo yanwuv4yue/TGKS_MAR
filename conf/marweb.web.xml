@@ -20,6 +20,11 @@
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     
+    <action name="queryMarzLogByTgksIdOnlyMarzCard" class="com.moemao.tgks.mar.marzlog.action.MarzLogAction" method="queryMarzLogByTgksIdOnlyMarzCard">
+        <result name="success">/WEB-INF/jsp/marweb/log/log.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
     <action name="queryMarzAccountByTgksId" class="com.moemao.tgks.mar.marzaccount.action.MarzAccountAction" method="queryMarzAccountByTgksId">
         <result name="success">/WEB-INF/jsp/marweb/account/account.jsp</result>
         <result name="error">/WEB-INF/jsp/marweb/main/binding.jsp</result>

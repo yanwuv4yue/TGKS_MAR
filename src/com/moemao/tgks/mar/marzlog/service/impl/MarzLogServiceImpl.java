@@ -52,7 +52,7 @@ public int marzLog(MarzAccountEvt account, String type, String info)
     marzLogEvt.setId(MarUtil.createUniqueID());
     marzLogEvt.setTgksId(account.getTgksId());
     marzLogEvt.setType(type);
-    marzLogEvt.setInfo(info.replace("�?", ""));
+    marzLogEvt.setInfo(info.replace("?", "").replace("�", ""));
     
     return mar_marzLogDao.mar_addMarzLog(marzLogEvt);
 }

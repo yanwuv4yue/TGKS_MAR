@@ -18,7 +18,8 @@ INSERT INTO `t_tgks_common_menu` (`id`, `preid`, `name`, `status`, `url`, `level
 ('COMM20141206020826000013', 'COMM20141205024116000001', '挂机账号管理', '1', '../mar/marzAccountManager.action', '2', '3303'),
 ('COMM20141206020826000014', 'COMM20141205024116000001', '挂机地图管理', '1', '../mar/marzMapManager.action', '2', '3304'),
 ('COMM20141206020826000015', 'COMM20141205024116000001', '挂机点卡管理', '1', '../mar/marzCardManager.action', '2', '3305'),
-('COMM20141206020826000016', 'COMM20141205024116000001', '挂机日志管理', '1', '../mar/marzLogManager.action', '2', '3306');
+('COMM20141206020826000016', 'COMM20141205024116000001', '挂机日志管理', '1', '../mar/marzLogManager.action', '2', '3306'),
+('COMM20141206020826000017', 'COMM20141205024116000001', '挂机池管理', '1', '../mar/marzThreadPoolManager.action', '2', '3307');
 
 --
 -- 转存表中的数据 `t_tgks_mar_krsmacard`
@@ -60,4 +61,23 @@ INSERT INTO `t_tgks_mar_krsmacard` (`id`, `cardId`, `name`, `nickName`, `type`, 
 ('MARZ20141216010204000053', '10000066', '第二型メレアガンス', '', '3', 'SR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/015/303/thumb_upload.png'),
 ('MARZ20141216010737000055', '10000058', '第二型エレック', '', '3', 'SR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/015/237/thumb_upload.png'),
 ('MARZ20141216011541000057', '10000087', '支援型金髪のイゾルデ', '', '3', 'SR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/015/257/thumb_upload.png'),
-('MARZ20141216012620000059', '10001014', '第二型トール', '光剑', '2', 'SR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/015/147/thumb_upload.png');
+('MARZ20141216012620000059', '10001014', '第二型トール', '光剑', '2', 'SR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/015/147/thumb_upload.png'),
+('MARZ20141217213602000001', '10104005', '聖夜型リネット', '', '4', 'SR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/022/931/thumb_upload.jpg'),
+('MARZ20141217214505000003', '10104007', '聖夜型ゴットフリート', '', '3', 'SR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/022/928/thumb_upload.jpg'),
+('MARZ20141218004518000003', '10104001', '聖夜型オルウェン', '', '2', 'SR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/022/927/thumb_upload.jpg'),
+('MARZ20141218014246000020', '10104003', '聖夜型コンスタンティン', '王位 君士坦丁', '4', 'UR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/022/929/thumb_upload.jpg'),
+('MARZ20141221015422000004', '20000001', 'チアリー', '蓝狗粮', '5', 'R', '', ''),
+('MARZ20141221015625000007', '20000002', 'スーパーチアリー', '红狗粮', '5', 'SR', '', ''),
+('MARZ20141221015727000009', '20000003', 'アルティメットチアリー', '粉狗粮', '5', 'UR', '', ''),
+('MARZ20141221015842000011', '20000004', 'ミリオンチアリー', '闪狗粮', '5', 'MR', '', ''),
+('MARZ20150117200121000003', '10107007', '第二型カルディス', '', '4', 'SR', '', 'http://img04.taobaocdn.com/imgextra/i4/180967979/TB2xreZbFXXXXXfXXXXXXXXXXXX_!!180967979.jpg'),
+('MARZ20150117194815000001', '10107005', '特異型ロビンファッド', '', '2', 'SR', '', 'http://img01.taobaocdn.com/imgextra/i1/180967979/TB2IE1WbFXXXXXVXXXXXXXXXXXX_!!180967979.jpg'),
+('MARZ20150101171930000014', '10105008', '新春型ベイリン', '', '1', 'UR', 'http://img03.taobaocdn.com/imgextra/i3/180967979/TB2ugxlbFXXXXXfXXXXXXXXXXXX_!!180967979.jpg', 'http://img04.taobaocdn.com/imgextra/i4/180967979/TB2DwNhbFXXXXcBXXXXXXXXXXXX_!!180967979.jpg'),
+('MARZ20150101163338000008', '10105006', '新春型シーザー', '', '3', 'SR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/025/734/thumb_upload.jpg'),
+('MARZ20150101163223000006', '10105004', '新春型ガヘリス', '', '4', 'SR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/025/733/thumb_upload.jpg'),
+('MARZ20150101160934000003', '10105011', '新春型ウアサハ', '', '3', 'UR', 'http://img03.taobaocdn.com/imgextra/i3/180967979/TB22NVcbFXXXXa5XpXXXXXXXXXX_!!180967979.jpg', 'http://img02.taobaocdn.com/imgextra/i2/180967979/TB256RbbFXXXXbmXpXXXXXXXXXX_!!180967979.jpg'),
+('MARZ20141231180217000007', '10105001', '新春型エニード', '', '2', 'UR', 'http://img04.taobaocdn.com/imgextra/i4/180967979/TB2JrhfbFXXXXX2XpXXXXXXXXXX_!!180967979.jpg', 'http://img03.taobaocdn.com/imgextra/i3/180967979/TB2mc8kbFXXXXatXXXXXXXXXXXX_!!180967979.jpg'),
+('MARZ20141223164432000001', '10104009', '聖夜型トール', '佣兵光剑', '1', 'UR', '', 'http://cdn.wiki.famitsu.com/files/attachment/000/022/930/thumb_upload.jpg'),
+('MARZ20150117215535000009', '10107003', '特異型シーザー', '', '4', 'UR', 'http://img01.taobaocdn.com/imgextra/i1/180967979/TB2CvKTbFXXXXbjXpXXXXXXXXXX_!!180967979.jpg', 'http://img04.taobaocdn.com/imgextra/i4/180967979/TB2IoCYbFXXXXaMXXXXXXXXXXXX_!!180967979.jpg'),
+('MARZ20150117222800000011', '10107001', '第二型ガレス', '', '3', 'UR', 'http://img03.taobaocdn.com/imgextra/i3/180967979/TB2q1iWbFXXXXahXXXXXXXXXXXX_!!180967979.jpg', 'http://img01.taobaocdn.com/imgextra/i1/180967979/TB2EJCZbFXXXXazXXXXXXXXXXXX_!!180967979.jpg'),
+('MARZ20150117234230000013', '10107009', '第一型モードレッド', '', '1', 'UR', 'http://img04.taobaocdn.com/imgextra/i4/180967979/TB2Ua1TbFXXXXbdXpXXXXXXXXXX_!!180967979.jpg', 'http://img02.taobaocdn.com/imgextra/i2/180967979/TB2WKySbFXXXXbRXpXXXXXXXXXX_!!180967979.jpg');

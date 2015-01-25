@@ -9,6 +9,7 @@ import com.moemao.tgks.common.core.action.TGKSAction;
 import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.common.tool.StringUtil;
+import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.marzlog.entity.MarzLogEvt;
 import com.moemao.tgks.mar.marzlog.entity.MarzLogReq;
 import com.moemao.tgks.mar.marzlog.service.MarzLogService;
@@ -59,6 +60,16 @@ public String queryMarzLogByTgksId()
     MarzLogReq marzLogReq = new MarzLogReq();
     marzLogReq.setTgksId(CommonUtil.getUserInfoBySession().getUsername());
     marzLogReq.setSortSql(" t.ID DESC LIMIT 0 , 50");
+    list = mar_marzLogService.queryMarzLog(marzLogReq);
+    return SUCCESS;
+}
+
+public String queryMarzLogByTgksIdOnlyMarzCard()
+{
+    MarzLogReq marzLogReq = new MarzLogReq();
+    marzLogReq.setTgksId(CommonUtil.getUserInfoBySession().getUsername());
+    marzLogReq.setSortSql(" t.ID DESC");
+    marzLogReq.setType(MarzConstant.MARZ_LOG_TYPE_9);
     list = mar_marzLogService.queryMarzLog(marzLogReq);
     return SUCCESS;
 }

@@ -63,7 +63,7 @@ public class MarzRequest
         Map<String, JSONObject> map = new HashMap<String, JSONObject>();
         
         //String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"2\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"samsung GT-N7100\",\"token\":\"\"}";
-        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + ",\"clver\":\"3\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\"}";
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\"}";
 
         if (bDebug)
         {
@@ -146,6 +146,9 @@ public class MarzRequest
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_EXPLOREEND, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "exploreEnd " + sid);
+        
+        // 有问候语信息 必须设置过滤
+        result = this.requestFilter(result);
         
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject exploreEnd = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
@@ -249,6 +252,9 @@ public class MarzRequest
         String[] result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOSHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "teamBattleSoloShow " + sid);
         
+        // 有好友信息 必须设置过滤
+        result = this.requestFilter(result);
+        
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject teamBattleSoloShow = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
         
@@ -297,6 +303,9 @@ public class MarzRequest
         String[] result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOEND, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "teamBattleSoloEnd " + sid);
         
+        // 有问候语信息 必须设置过滤
+        result = this.requestFilter(result);
+        
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject teamBattleSoloEnd = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
         
@@ -305,6 +314,19 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_TEAMBATTLESOLOEND, teamBattleSoloEnd);
         
         return map;
+    }
+    
+    private String[] requestFilter(String[] result)
+    {
+        if (result.length > 2)
+        {
+            for (int i = 2; i < result.length; i++)
+            {
+                result[1] += result[i];
+            }
+        }
+        
+        return result;
     }
     
     public static void main(String[] args)
