@@ -308,9 +308,10 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String[] gachaPlay(String sid, String gachaId, String payType) throws Exception
+    public String[] gachaPlay(String sid, String gachaId, String payType, String gachaHash) throws Exception
     {
-        String paramStr = sid + "={\"gachaid\":" + gachaId + ",\"pay_type\":" + payType + "}";
+        //String paramStr = sid + "={\"gachaid\":" + gachaId + ",\"pay_type\":" + payType + "}";
+        String paramStr = sid + "={\"gachaid\":" + gachaId + ",\"pay_type\":" + payType + ",\"gacha_hash\":\"" + gachaHash + "\"}";
         String result = httpRequest.sendPost(MarConstant.URL_GACHAPLAY, paramStr);
         System.out.println(MarConstant.LOG_SYSTEM_INFO + "gachaPlay " + sid + " gachaId : " + gachaId);
         if (bDebug)

@@ -5,7 +5,7 @@
 <mapper namespace="com.moemao.tgks.mar.account.dao.AccountDao">
 <select id="mar_queryAccount" parameterType="AccountReq" resultType="AccountEvt" resultMap="AccountEvtMap">
         <![CDATA[  
-            SELECT t.id, t.uuid, t.hashToken, t.accountkey, t.status, t.invitecode, t.title, t.urnuma, t.urnumb, t.urnumc, t.urnumd, t.cardids, t.crystal, t.price, t.createtime, t.remark FROM t_tgks_mar_account t
+            SELECT t.id, t.uuid, t.hashToken, t.gachaHash, t.accountkey, t.status, t.invitecode, t.title, t.urnuma, t.urnumb, t.urnumc, t.urnumd, t.cardids, t.crystal, t.price, t.createtime, t.remark FROM t_tgks_mar_account t
         ]]>
         <where>
                 1=1
@@ -65,7 +65,7 @@
 
 <select id="mar_queryAccountByIds" parameterType="list" resultType="AccountEvt" resultMap="AccountEvtMap">
         <![CDATA[  
-            SELECT t.id, t.uuid, t.hashToken, t.accountkey, t.status, t.invitecode, t.title, t.urnuma, t.urnumb, t.urnumc, t.urnumd, t.cardids, t.crystal, t.price, t.createtime, t.remark FROM t_tgks_mar_account t WHERE id IN
+            SELECT t.id, t.uuid, t.hashToken, t.gachaHash, t.accountkey, t.status, t.invitecode, t.title, t.urnuma, t.urnumb, t.urnumc, t.urnumd, t.cardids, t.crystal, t.price, t.createtime, t.remark FROM t_tgks_mar_account t WHERE id IN
         ]]>
         <foreach collection="list" item="ids"  open="(" separator="," close=")">
             #{ids}
@@ -74,8 +74,8 @@
 
 <insert id="mar_addAccount" parameterType="AccountEvt">
         <![CDATA[  
-            INSERT INTO t_tgks_mar_account (id, uuid, hashToken, accountkey, status, invitecode, title, urnuma, urnumb, urnumc, urnumd, cardids, crystal, price, createtime, remark) 
-            VALUES (#{id}, #{uuid}, #{hashToken}, #{accountKey}, #{status}, #{inviteCode}, #{title}, #{urNumA}, #{urNumB}, #{urNumC}, #{urNumD}, #{cardIds}, #{crystal}, #{price}, #{createTime}, #{remark}) 
+            INSERT INTO t_tgks_mar_account (id, uuid, hashToken, gachaHash, accountkey, status, invitecode, title, urnuma, urnumb, urnumc, urnumd, cardids, crystal, price, createtime, remark) 
+            VALUES (#{id}, #{uuid}, #{hashToken}, #{gachaHash}, #{accountKey}, #{status}, #{inviteCode}, #{title}, #{urNumA}, #{urNumB}, #{urNumC}, #{urNumD}, #{cardIds}, #{crystal}, #{price}, #{createTime}, #{remark}) 
         ]]>
 </insert>
 
@@ -84,6 +84,7 @@
             UPDATE t_tgks_mar_account SET 
                        uuid = #{uuid},
                        hashToken = #{hashToken},
+                       gachaHash = #{gachaHash},
                        accountkey = #{accountKey},
                        status = #{status},
                        invitecode = #{inviteCode},

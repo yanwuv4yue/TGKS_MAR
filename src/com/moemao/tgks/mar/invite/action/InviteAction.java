@@ -85,6 +85,8 @@ public class InviteAction extends TGKSAction
         {
             // 该卡密使用到一半 inviteCode从之前的记录中获取
             //inviteCode = passwordCardEvt.getInviteCode();
+            // 现版本不能给再多一次的请求机会 否则会占用相当多的时间
+            return ERROR;
         }
         else if (MarConstant.PASSWORDCARD_STATUS_0.equals(passwordCardEvt.getStatus()))
         {

@@ -71,7 +71,7 @@
 				<button id="checkCardAccount">更新</button>
 				<button id="gachaAccount">抽卡</button>
 				<button id="allCheckCardAccount">全更</button>
-				<button id="allGachaAccount">全抽</button>
+				<!-- <button id="allGachaAccount">全抽</button> -->
 				<button id="exportUuidAccount">导出</button>
 				<button id="forInviteAccount">招待预备</button>
             </td>
@@ -95,9 +95,6 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-	var table=$.ajax({url:"../mar/queryAccount.action",async:false});
-	$("#accountDiv").html(table.responseText);
-	
 	function query()
 	{
 		var table=$.ajax({url:"../mar/queryAccount.action", data:$("#accountReq").formSerialize(), async:false});

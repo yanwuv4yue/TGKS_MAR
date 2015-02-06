@@ -81,6 +81,18 @@ public class MarzRequest
         return map;
     }
     
+    public String inviteCodeEnter(String sid, String inviteCode) throws Exception
+    {
+        String paramStr = sid + "={\"inviteid\":\"" + inviteCode + "\"}";
+        String result = httpRequest.sendPost(MarConstant.URL_INVITECODEENTER, paramStr);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "inviteCodeEnter " + sid + " invite : " + inviteCode);
+        if (bDebug)
+        {
+            System.out.println(result);
+        }
+        return result;
+    }
+    
     public Map<String, JSONObject> connect(String sid) throws Exception
     {
         Map<String, JSONObject> map = new HashMap<String, JSONObject>();
@@ -331,8 +343,11 @@ public class MarzRequest
     
     public static void main(String[] args)
     {
+        /*
         String str = "{xxx}{xxxxxxx}";
         System.out.println(str.substring(0, str.indexOf("}{") + 1));
         System.out.println(str.substring(str.indexOf("}{") + 1, str.length()));
+        */
+        
     }
 }

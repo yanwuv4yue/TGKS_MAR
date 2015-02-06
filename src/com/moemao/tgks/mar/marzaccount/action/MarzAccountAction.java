@@ -9,6 +9,7 @@ import com.moemao.tgks.common.core.action.TGKSAction;
 import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.common.tool.StringUtil;
+import com.moemao.tgks.mar.marz.thread.MarzThreadPoolDiffusion;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.marz.tool.MarzUtil;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
@@ -17,6 +18,7 @@ import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
 import com.moemao.tgks.mar.marzmap.entity.MarzMapEvt;
 import com.moemao.tgks.mar.marzmap.entity.MarzMapReq;
 import com.moemao.tgks.mar.marzmap.service.MarzMapService;
+import com.moemao.tgks.mar.tool.MarConstant;
 
 public class MarzAccountAction extends TGKSAction
 {
@@ -138,8 +140,12 @@ public class MarzAccountAction extends TGKSAction
         {
             marzAccountEvt = list.get(0);
             marzAccountEvt.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_1);
+            marzAccountEvt.setSessionId("");
             mar_marzAccountService.updateMarzAccount(marzAccountEvt);
         }
+        
+        // 启动线程
+        MarzThreadPoolDiffusion.getInstance().createThread(marzAccountEvt);
         
         return SUCCESS;
     }
@@ -156,8 +162,20 @@ public class MarzAccountAction extends TGKSAction
         }
         else
         {
+            // 关闭线程
+            MarzThreadPoolDiffusion.getInstance().interruptThread(MarConstant.MODULE_TAG + marzAccountEvt.getTgksId());
+            
             marzAccountEvt = list.get(0);
             marzAccountEvt.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
+            marzAccountEvt.setAp(0);
+            marzAccountEvt.setApMax(0);
+            marzAccountEvt.setBp(0);
+            marzAccountEvt.setBpMax(0);
+            marzAccountEvt.setCardNum(0);
+            marzAccountEvt.setCardMax(0);
+            marzAccountEvt.setCoin(0);
+            marzAccountEvt.setFp(0);
+            marzAccountEvt.setGold(0);
             marzAccountEvt.setSessionId("");
             mar_marzAccountService.updateMarzAccount(marzAccountEvt);
         }

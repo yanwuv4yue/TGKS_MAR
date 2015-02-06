@@ -1,7 +1,7 @@
 package com.moemao.tgks.mar.marz.action;
 
 import com.moemao.tgks.common.core.action.TGKSAction;
-import com.moemao.tgks.mar.marz.thread.MarzThreadPool;
+import com.moemao.tgks.mar.marz.thread.MarzThreadPoolDiffusion;
 
 public class MarzAction extends TGKSAction
 {
@@ -14,6 +14,7 @@ public class MarzAction extends TGKSAction
     public String marzThreadPoolManager()
     {
         // TODO 查询当前线程池状态
+        MarzThreadPoolDiffusion.getInstance().showAllThread();
         
         // TODO 查询前100条marzLog记录
         
@@ -30,7 +31,8 @@ public class MarzAction extends TGKSAction
      */
     public String marzThreadPoolStart()
     {
-        Thread thread = new Thread(MarzThreadPool.getInstance());
+        //Thread thread = new Thread(MarzThreadPool.getInstance());
+        Thread thread = new Thread(MarzThreadPoolDiffusion.getInstance());
         thread.start();
         return SUCCESS;
     }
@@ -45,7 +47,8 @@ public class MarzAction extends TGKSAction
      */
     public String marzThreadPoolShutdown()
     {
-        MarzThreadPool.getInstance().setbRunning(false);
+        //MarzThreadPool.getInstance().setbRunning(false);
+        MarzThreadPoolDiffusion.getInstance().shutdown();
         return SUCCESS;
     }
 }

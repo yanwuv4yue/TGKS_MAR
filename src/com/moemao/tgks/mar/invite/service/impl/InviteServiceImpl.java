@@ -1,7 +1,8 @@
 package com.moemao.tgks.mar.invite.service.impl;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
 
@@ -9,19 +10,20 @@ import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.mar.account.entity.AccountEvt;
 import com.moemao.tgks.mar.account.entity.AccountReq;
 import com.moemao.tgks.mar.account.service.AccountService;
-import com.moemao.tgks.mar.execute.KrsmaRequest;
+import com.moemao.tgks.mar.execute.MarzRequest;
 import com.moemao.tgks.mar.invite.service.InviteService;
+import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.tool.MarConstant;
 
 public class InviteServiceImpl implements InviteService
 {
-    private KrsmaRequest request = KrsmaRequest.getInstance();
+    private MarzRequest request = MarzRequest.getInstance();
 
     private AccountService mar_accountService;
     
     /**
      * 返回最后一个招待的ID 给自动刷初始流程提供5个石头
-     */
+     
     public String invite(String inviteCode)
     {
         String inviteName = "Kirito";
@@ -79,12 +81,10 @@ public class InviteServiceImpl implements InviteService
         
         return returnCode;
     }
-    
+    */
     public synchronized void invite2(String password, String inviteCode)
     {
-        String[] result = new String[2];
         String sid;
-        JSONObject json= null;
         
         // 先查询之前是否已经刷过
         AccountReq accountReq = new AccountReq();
@@ -113,14 +113,14 @@ public class InviteServiceImpl implements InviteService
 
         try
         {
+            Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+            
             for (AccountEvt accountEvt : accountList)
             {
                 // 1 登录
-                result[0] = request.login2(accountEvt.getUuid(), accountEvt.getHashToken());
-                json= JSONObject.fromObject(result[0]);
-                sid = json.getString("sess_key").replace("=", "");
-                result = request.connect(sid);
-                sid = result[0];
+                map = request.loginIOS(accountEvt.getUuid(), accountEvt.getHashToken());
+                sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                map = request.connect(sid);
                 
                 // 2 填招待ID
                 request.inviteCodeEnter(sid, inviteCode);
@@ -136,12 +136,12 @@ public class InviteServiceImpl implements InviteService
         }
     }
 
-    public KrsmaRequest getKrsmaRequest()
+    public MarzRequest getRequest()
     {
         return request;
     }
 
-    public void setKrsmaRequest(KrsmaRequest request)
+    public void setRequest(MarzRequest request)
     {
         this.request = request;
     }

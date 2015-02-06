@@ -7,6 +7,7 @@
         <id property="id" column="ID" />
         <result property="uuid" column="UUID" />
         <result property="hashToken" column="HASHTOKEN" />
+        <result property="gachaHash" column="GACHAHASH" />
         <result property="accountKey" column="ACCOUNTKEY" />
         <result property="status" column="STATUS" />
         <result property="inviteCode" column="INVITECODE" />

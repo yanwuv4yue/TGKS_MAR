@@ -232,7 +232,7 @@ public class AccountAction extends TGKSAction
         {
             if (null != evt && evt.getUuid() != null && evt.getUuid() != "")
             {
-                uuidExport += evt.getUuid() + "\n";
+                uuidExport += evt.getAccountKey() + "\n";
             }
         }
         return SUCCESS;
@@ -261,6 +261,19 @@ public class AccountAction extends TGKSAction
                 if (lineTXT.contains("uuid"))
                 {
                     json = JSONObject.fromObject(lineTXT);
+                    
+                    accountReq = new AccountReq();
+                    accountReq.setUuid(json.getString("uuid"));
+                    list = this.mar_accountService.queryAccount(accountReq);
+                    
+                    // 如果UUID已经存在，那更新这个账号的hash
+                    if (!CommonUtil.isEmpty(list))
+                    {
+                        account = list.get(0);
+                        account.setHashToken(json.getString("hash_token"));
+                        this.mar_accountService.updateAccount(account);
+                        continue;
+                    }
                     
                     account = new AccountEvt();
                     account.setUuid(json.getString("uuid"));

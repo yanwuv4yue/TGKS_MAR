@@ -71,7 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					$("#lock").val(0);
 				},
 				error : function() {
-					alert("服务器异常！请在淘宝页面联系店长！");
+					alert("请10分钟后进游戏查看礼物箱，再有问题请找店长！");
 					// 解锁
 					$("#lock").val(0);
 					
@@ -83,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$("#inviteReq").ajaxSubmit(options);
 			// 加锁
 			$("#lock").val(1);
-            document.getElementById("message").innerHTML= "已经开始刷招待，请等待3分钟，页面会有提示";
+            document.getElementById("message").innerHTML= "已经开始刷招待，请等待10分钟后进游戏查看礼物箱";
 			return false;
 		});
 
@@ -127,7 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			} else if ("1" == result) {
 				// 图片切换为神秘代码错误或者重试
 
-				alert("神秘代码错误或已被使用！");
+				alert("神秘代码错误或已被使用！如果之前已经操作过，请10分钟后进游戏查看礼物箱，再有问题请找店长！");
 				document.getElementById("message").innerHTML= "填入招待ID以及代码，点击开始即可";
 			}
 		}

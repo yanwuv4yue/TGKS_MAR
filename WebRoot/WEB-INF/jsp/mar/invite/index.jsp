@@ -276,7 +276,7 @@ $(document).ready(function(){
                 $("#achieve").css("background", "url(../resources/mar/invite/union.png) left top no-repeat transparent");
             },
             error : function(){
-                alert("服务器异常！请在淘宝页面联系店长！");
+                alert("请10分钟后进游戏查看礼物箱，再有问题请找店长！");
                 // 解锁
                 $("#lock").val(0);
                 $("#achieve").css("background", "url(../resources/mar/invite/union.png) left top no-repeat transparent");
@@ -341,7 +341,7 @@ $(document).ready(function(){
         {
             // 图片切换为神秘代码错误或者重试
             
-            alert("神秘代码错误或已被使用！");
+            alert("神秘代码错误或已被使用！如果之前已经操作过，请10分钟后进游戏查看礼物箱，再有问题请找店长！");
         }
     }
 });

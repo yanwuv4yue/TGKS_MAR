@@ -39,9 +39,6 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-	var table=$.ajax({url:"../mar/queryMarzLog.action",async:false});
-	$("#marzLogDiv").html(table.responseText);
-	
 	function query()
 	{
 		var table=$.ajax({url:"../mar/queryMarzLog.action", data:$("#marzLogReq").formSerialize(), async:false});

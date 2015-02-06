@@ -83,7 +83,7 @@ public class MarzThreadPool implements Runnable, ApplicationContextAware
         
         // 关闭线程
         executor.shutdown();
-        System.out.println("线程池正在关闭...");
+        System.out.println("线程池已经关闭...");
     }
     
     public void shutdown()

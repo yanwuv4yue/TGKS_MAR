@@ -11,8 +11,8 @@
                 <th>UUID</th>
                 <!-- <th>加密key</th> -->
                 <th>状态</th>
-                <th>创建时间</th>
-                <th>标题</th>
+                <!-- <th>创建时间</th>
+                <th>标题</th> -->
                 <th>水晶</th>
                 <th>价格</th>
                 <th>UR数量</th>
@@ -21,13 +21,13 @@
         </thead>
         <tbody>
 			<s:iterator  value="list" var="evt">
-				<tr <s:if test="#evt.status == 3">bgcolor="#ddd"</s:if>>
+				<tr bgcolor="<s:if test="#evt.status == 3">#aaa</s:if><s:elseif test="#evt.gachaHash == null">#ddd</s:elseif>">
 					<td width="20"><s:if test="#evt.status != 3"><input type="checkbox" name="accountId" value="<s:property value='#evt.id'/>" /></s:if></td>
                     <td width="100px"><b id="<s:property value='#evt.id'/>" class="accountUpdate"><s:property value="#evt.id"/></b></td>
                     <td width="100px"><s:property value="#evt.inviteCode"/></td>
                     <td width="300px"><s:property value='#evt.uuid'/></td>
                     <!-- <td><s:property value='#evt.accountKey'/></td> -->
-                    <td width="40px">
+                    <td width="60px">
                         <s:if test="#evt.status == 0">新建</s:if>
                         <s:elseif test="#evt.status == 1">执行中</s:elseif>
                         <s:elseif test="#evt.status == 2">已完成</s:elseif>
@@ -35,8 +35,8 @@
                         <s:elseif test="#evt.status == 4">招待预备</s:elseif>
                         <s:elseif test="#evt.status == 5">招待完成</s:elseif>
                     </td>
-                    <td width="150px"><s:date name="#evt.createTime" format="yyyy-MM-dd HH:mm:ss"/></td>
-                    <td width="300px"><s:property value='#evt.title'/></td>
+                    <!-- <td width="150px"><s:date name="#evt.createTime" format="yyyy-MM-dd HH:mm:ss"/></td>
+                    <td width="300px"><s:property value='#evt.title'/></td> -->
                     <td width="30px"><s:property value='#evt.crystal'/></td>
                     <td width="30px"><s:property value='#evt.price'/></td>
                     <td width="50px"><b><a style="color: red">佣<s:property value='#evt.urNumA'/></a> <a style="color: blue">壕<s:property value='#evt.urNumB'/></a> <a style="color: green">盗<s:property value='#evt.urNumC'/></a> <a style="color: black">姬<s:property value='#evt.urNumD'/></a></b></td>

@@ -29,9 +29,9 @@ import com.moemao.tgks.mar.marzsetting.entity.MarzSettingReq;
 import com.moemao.tgks.mar.marzsetting.service.MarzSettingService;
 import com.moemao.tgks.mar.tool.MarConstant;
 
-public class MarzTask implements Runnable, ApplicationContextAware
+public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
 {
-    private static Log logger = LogFactory.getLog(MarzTask.class);
+    private static Log logger = LogFactory.getLog(MarzTaskDiffusion.class);
     
     private MarzRequest request = MarzRequest.getInstance();
     
@@ -51,81 +51,91 @@ public class MarzTask implements Runnable, ApplicationContextAware
     
     private int resultCode = MarzConstant.SUCCESS;
     
-    public MarzTask(MarzAccountEvt marzAccountEvt)
+    private static int SLEEPTIME = 3 * 60 * 1000;
+    
+    public MarzTaskDiffusion(MarzAccountEvt marzAccountEvt)
     {
         account = marzAccountEvt;
         marzAccountService = (MarzAccountService) ContextUtil.getBean("mar_marzAccountService");
         marzLogService = (MarzLogService) ContextUtil.getBean("mar_marzLogService");
         marzSettingService = (MarzSettingService) ContextUtil.getBean("mar_marzSettingService");
+        
+        // 默认线程调用的执行方法
+        System.out.println("执行任务开始 ID：" + account.getTgksId());
+        
+        this.initSetting();
     }
 
     @Override
     public void run()
     {
-        // 默认线程调用的执行方法
-        System.out.println("执行任务开始 ID：" + account.getTgksId());
-        
-        this.initSetting();
+        Thread.currentThread().setName(MarConstant.MODULE_TAG + account.getTgksId());
         
         // 尽量保证流程上的简洁 run流程只负责调用以及返回失败时的处理 并不做各个条件判断的限制
         
-        // 1、账号登陆
-        if (CommonUtil.isEmpty(account.getSessionId()))
+        while (true)
         {
-            resultCode = this.login();
+            // 1、账号登陆
+            if (CommonUtil.isEmpty(account.getSessionId()))
+            {
+                resultCode = this.login();
+                
+                if (MarzConstant.SUCCESS > resultCode)
+                {
+                    System.out.println("发生了错误！当前resultCode：" + resultCode);
+                    
+                    resultCode = this.login();
+                    
+                    if (MarzConstant.SUCCESS > resultCode)
+                    {
+                        // 2次登陆失败 该账号无法执行 直接返回
+                        this.sleep(SLEEPTIME);
+                        continue;
+                    }
+                }
+            }
+            else
+            {
+                // 当前的逻辑 每次扫描出的任务如果包含sid 则跳过登录
+                // 在用户操作下线的时候 将account的sid一同清空即可
+                // 如果sid已经失效 会在下面的homeShow中重新登录
+                sid = account.getSessionId();
+            }
+            
+            
+            // 2、更新当前账号基础数据
+            resultCode = this.baseInfo();
             
             if (MarzConstant.SUCCESS > resultCode)
             {
                 System.out.println("发生了错误！当前resultCode：" + resultCode);
                 
                 resultCode = this.login();
+                resultCode = this.baseInfo();
                 
                 if (MarzConstant.SUCCESS > resultCode)
                 {
-                    // 2次登陆失败 该账号无法执行 直接返回
-                    return;
+                    this.sleep(SLEEPTIME);
+                    continue;
                 }
             }
-        }
-        else
-        {
-            // 当前的逻辑 每次扫描出的任务如果包含sid 则跳过登录
-            // 在用户操作下线的时候 将account的sid一同清空即可
-            // 如果sid已经失效 会在下面的homeShow中重新登录
-            sid = account.getSessionId();
-        }
-        
-        
-        // 2、更新当前账号基础数据
-        resultCode = this.baseInfo();
-        
-        if (MarzConstant.SUCCESS > resultCode)
-        {
-            System.out.println("发生了错误！当前resultCode：" + resultCode);
             
-            resultCode = this.login();
-            resultCode = this.baseInfo();
+            // 3、探索
+            resultCode = this.explore();
             
-            if (MarzConstant.SUCCESS > resultCode)
-            {
-                return;
-            }
+            // 4、卡片处理
+            resultCode = this.card();
+            
+            // 5、战斗
+            resultCode = this.battle();
+            
+            // 最后要保存一下sessionId
+            account.setSessionId(sid);
+            this.marzAccountService.updateMarzAccount(account);
+            
+            // 等待时间间隔
+            this.sleep(SLEEPTIME);
         }
-        
-        // 3、探索
-        resultCode = this.explore();
-        
-        // 4、卡片处理
-        resultCode = this.card();
-        
-        // 5、战斗
-        resultCode = this.battle();
-        
-        // 最后要保存一下sessionId
-        account.setSessionId(sid);
-        this.marzAccountService.updateMarzAccount(account);
-        
-        System.out.println("执行任务结束 ID：" + account.getTgksId());
     }
     
     private void initSetting()
@@ -167,6 +177,26 @@ public class MarzTask implements Runnable, ApplicationContextAware
                     marzSettingEvt.setBattleNowaste(setting.getValue());
                 }
             }
+        }
+    }
+    
+    /**
+     * 
+     * @Title: sleep
+     * @Description: 循环等待
+     * @param sleepTime
+     * @return void 返回类型
+     * @throws
+     */
+    private void sleep(int sleepTime)
+    {
+        try
+        {
+            Thread.sleep(sleepTime);
+        }
+        catch (Exception e)
+        {
+            
         }
     }
     
@@ -761,6 +791,6 @@ public class MarzTask implements Runnable, ApplicationContextAware
 
     public static void setLogger(Log logger)
     {
-        MarzTask.logger = logger;
+        MarzTaskDiffusion.logger = logger;
     }
 }

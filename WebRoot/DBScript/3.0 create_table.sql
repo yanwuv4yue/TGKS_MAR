@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_account` (
   `id` varchar(30) NOT NULL COMMENT '表唯一主键',
   `uuid` varchar(50) NOT NULL COMMENT 'UUID（登录用）',
   `hashtoken` varchar(50) default NULL COMMENT 'HASHTOKEN',
+  `gachaHash` varchar(50) default NULL COMMENT 'GACHAHASH',
   `accountKey` varchar(200) default NULL COMMENT '账号加密key',
   `status` varchar(3) NOT NULL COMMENT '状态（0 新建；1 执行中；2 已完成；3 已售出）',
   `inviteCode` varchar(9) default NULL COMMENT '招待ID',

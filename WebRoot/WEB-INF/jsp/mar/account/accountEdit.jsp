@@ -9,14 +9,14 @@
         <td><input type="text" name="accountEvt.hashToken" value="${accountEvt.hashToken }" /></td>
 	</tr>
     <tr>
-        <td>状态：</td>
-        <td><input type="text" name="accountEvt.status" value="${accountEvt.status }" /></td>
         <td>Key：</td>
         <td><input type="text" name="accountEvt.accountKey" value="${accountEvt.accountKey }" /></td>
+        <td>GachaHash：</td>
+        <td><input type="text" name="accountEvt.gachaHash" value="${accountEvt.gachaHash }" /></td>
     </tr>
     <tr>
-        <td>标题：</td>
-        <td><input type="text" name="accountEvt.title" value="${accountEvt.title }" /></td>
+        <td>状态：</td>
+        <td><input type="text" name="accountEvt.status" value="${accountEvt.status }" /></td>
         <td>招待ID：</td>
         <td><input type="text" name="accountEvt.inviteCode" value="${accountEvt.inviteCode }" /></td>
     </tr>
@@ -40,9 +40,11 @@
     </tr>
     <tr>
         <td>卡片ID：</td>
-        <td colspan="3">
+        <td>
             <textarea name="accountEvt.cardIds">${accountEvt.cardIds }</textarea>
         </td>
+        <td>标题：</td>
+        <td><input type="text" name="accountEvt.title" value="${accountEvt.title }" /></td>
     </tr>
     <tr>
         <td>备注：</td>

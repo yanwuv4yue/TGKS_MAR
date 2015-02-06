@@ -56,9 +56,6 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-	var table=$.ajax({url:"../mar/queryPasswordCard.action",async:false});
-	$("#passwordCardDiv").html(table.responseText);
-	
 	function query()
 	{
 		var table=$.ajax({url:"../mar/queryPasswordCard.action", data:$("#passwordCardReq").formSerialize(), async:false});

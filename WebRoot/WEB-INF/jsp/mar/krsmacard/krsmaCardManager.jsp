@@ -41,9 +41,6 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-	var table=$.ajax({url:"../mar/queryKrsmaCard.action",async:false});
-	$("#krsmaCardDiv").html(table.responseText);
-	
 	function query()
 	{
 		var table=$.ajax({url:"../mar/queryKrsmaCard.action", data:$("#krsmaCardReq").formSerialize(), async:false});

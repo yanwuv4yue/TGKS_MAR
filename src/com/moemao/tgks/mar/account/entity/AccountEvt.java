@@ -17,6 +17,8 @@ public class AccountEvt
     
     private String hashToken;
     
+    private String gachaHash;
+    
     /**
      * 账号加密accountKey
      */
@@ -120,6 +122,16 @@ public class AccountEvt
     public void setHashToken(String hashToken)
     {
         this.hashToken = hashToken;
+    }
+
+    public String getGachaHash()
+    {
+        return gachaHash;
+    }
+
+    public void setGachaHash(String gachaHash)
+    {
+        this.gachaHash = gachaHash;
     }
 
     public String getAccountKey()

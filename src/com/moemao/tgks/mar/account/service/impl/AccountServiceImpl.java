@@ -314,11 +314,11 @@ public class AccountServiceImpl implements AccountService
                 //sid = result[0];
                 
                 // gachaPlayTen 新人的10连首抽
-                result = request.gachaPlay(sid, gachaIdTen, payType);
+                result = request.gachaPlay(sid, gachaIdTen, payType, accountEvt.getGachaHash());
                 sid = result[0];
                 Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
                 // 抽取当前活动的11连 2次
-                sid = this.doGacha(sid, 50);
+                sid = this.doGacha(sid, 50, accountEvt.getGachaHash());
                 
                 // cardShow 检索卡组信息
                 try
@@ -468,13 +468,22 @@ public class AccountServiceImpl implements AccountService
         // 遍历查询出的账号 对每个账号执行过checkCard
         for (AccountEvt accountEvt : list)
         {
-            this.checkCard(accountEvt);
+            if (!CommonUtil.isEmpty(accountEvt.getHashToken()))
+            {
+                this.checkCard(accountEvt);
+            }
+            
             System.out.println(MarConstant.LOG_SYSTEM_INFO + "已完成第" + (list.indexOf(accountEvt) + 1) + "个任务！共" + list.size() + "个！");
         }
     }
     
     public void checkCard(AccountEvt accountEvt)
     {
+        if (CommonUtil.isEmpty(accountEvt.getHashToken()))
+        {
+            return;
+        }
+        
         String[] result = new String[2];
         String sid;
         JSONObject json= null;
@@ -531,6 +540,12 @@ public class AccountServiceImpl implements AccountService
         json = JSONObject.fromObject(result[1]);
         crystal = json.getJSONObject("user").getInt("coin_free");
         inviteCode = json.getJSONObject("user").getString("inviteid");
+        
+        // 判断是否要抽卡
+        if (crystal >= 15 && !CommonUtil.isEmpty(accountEvt.getGachaHash()))
+        {
+            sid = this.doGacha(sid, crystal, accountEvt.getGachaHash());
+        }
         
         // cardShow 检索卡组信息
         try
@@ -683,10 +698,14 @@ public class AccountServiceImpl implements AccountService
      */
     public void gacha(AccountEvt accountEvt)
     {
-        String[] result = new String[2];
+        if (CommonUtil.isEmpty(accountEvt.getGachaHash()))
+        {
+            return;
+        }
+        
         String sid;
-        JSONObject json= null;
         int coin = accountEvt.getCrystal();
+        String gachaHash = accountEvt.getGachaHash();
         
         try
         {
@@ -699,7 +718,7 @@ public class AccountServiceImpl implements AccountService
         
         try
         {
-            this.doGacha(sid, coin);
+            this.doGacha(sid, coin, gachaHash);
         }
         catch (Exception e)
         {
@@ -708,7 +727,7 @@ public class AccountServiceImpl implements AccountService
         
     }
     
-    public String doGacha(String sid, int coin)
+    public String doGacha(String sid, int coin, String gachaHash)
     {
         String[] result;
         
@@ -730,15 +749,16 @@ public class AccountServiceImpl implements AccountService
             
             for (JSONObject obj : jsonList)
             {
+                /*
                 if (obj.getInt("price") == 10)
                 {
                     // gachaPlayTen 当前优惠活动抽取 10
-                    result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                    result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"), gachaHash);
                     sid = result[0];
                     Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
                     continue;
                 }
-                
+                */
                 // 如果抽奖存档15石头
                 if (obj.getInt("price") == 15)
                 {
@@ -758,13 +778,13 @@ public class AccountServiceImpl implements AccountService
                     if (coin >= 15)
                     {
                         // gachaPlayEleven 当前优惠活动抽取 15
-                        result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                        result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"), gachaHash);
                         sid = result[0];
                         Thread.sleep(MarConstant.SLEEP_TIME_GACHA);
                         
                         if (coin >= 40)
                         {
-                            result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                            result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"), gachaHash);
                             sid = result[0];
                         }
                     }
@@ -776,7 +796,7 @@ public class AccountServiceImpl implements AccountService
                     sid = this.sellCard(sid);
                     if (coin >= 25)
                     {
-                        result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"));
+                        result = request.gachaPlay(sid, obj.getString("gachaid"), obj.getString("pay_type"), gachaHash);
                         sid = result[0];
                     }
                     break;
@@ -806,7 +826,7 @@ public class AccountServiceImpl implements AccountService
         // 需要卖掉的卡
         for (JSONObject obj : jsonList)
         {
-            if (obj.getInt("lv_max") > 10 && obj.getInt("lv_max") < 30)
+            if (obj.getInt("lv_max") < 30)
             {
                 uniqiIds.add(obj.getString("uniqid"));
                 if (uniqiIds.size() == 10)
@@ -820,7 +840,7 @@ public class AccountServiceImpl implements AccountService
         {
             for (JSONObject obj : jsonList)
             {
-                if (obj.getInt("lv_max") > 10 && obj.getInt("lv_max") < 40)
+                if (obj.getInt("lv_max") < 40)
                 {
                     uniqiIds.add(obj.getString("uniqid"));
                     if (uniqiIds.size() == 10)
@@ -831,7 +851,7 @@ public class AccountServiceImpl implements AccountService
             }
         }
         
-        if (jsonList.size() > 80 && uniqiIds != null && uniqiIds.size() > 1)
+        if (jsonList.size() > 70 && uniqiIds != null && uniqiIds.size() > 1)
         {
             // 出售卡片
             result = request.cardSell(sid, CommonUtil.listToString(uniqiIds).replace(" ", ""));
