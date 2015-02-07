@@ -49,7 +49,7 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
     
     private boolean bRunning = true;
     
-    private int defaultThreadNum = 100;
+    private int defaultThreadNum = 500;
     
     private int mainThreadSleep = 300000;
     
@@ -80,6 +80,7 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
         // 循环建立新的任务 放入线程池执行
         for (MarzAccountEvt account : accountList)
         {
+            account.setSessionId("");
             executor.execute(new MarzTaskDiffusion(account));
         }
         

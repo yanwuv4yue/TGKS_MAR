@@ -79,25 +79,11 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             if (CommonUtil.isEmpty(account.getSessionId()))
             {
                 resultCode = this.login();
-                
-                if (MarzConstant.SUCCESS > resultCode)
-                {
-                    System.out.println("发生了错误！当前resultCode：" + resultCode);
-                    
-                    resultCode = this.login();
-                    
-                    if (MarzConstant.SUCCESS > resultCode)
-                    {
-                        // 2次登陆失败 该账号无法执行 直接返回
-                        this.sleep(SLEEPTIME);
-                        continue;
-                    }
-                }
             }
             else
             {
                 // 当前的逻辑 每次扫描出的任务如果包含sid 则跳过登录
-                // 在用户操作下线的时候 将account的sid一同清空即可
+                // 在用户操作上下线的时候 将account的sid一同清空即可
                 // 如果sid已经失效 会在下面的homeShow中重新登录
                 sid = account.getSessionId();
             }
@@ -132,6 +118,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             // 最后要保存一下sessionId
             account.setSessionId(sid);
             this.marzAccountService.updateMarzAccount(account);
+            
+            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "本轮执行完毕，等待下一次执行...");
             
             // 等待时间间隔
             this.sleep(SLEEPTIME);

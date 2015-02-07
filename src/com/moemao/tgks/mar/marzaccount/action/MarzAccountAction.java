@@ -162,10 +162,12 @@ public class MarzAccountAction extends TGKSAction
         }
         else
         {
+            marzAccountEvt = list.get(0);
+            
             // 关闭线程
             MarzThreadPoolDiffusion.getInstance().interruptThread(MarConstant.MODULE_TAG + marzAccountEvt.getTgksId());
             
-            marzAccountEvt = list.get(0);
+            // 初始化状态
             marzAccountEvt.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
             marzAccountEvt.setAp(0);
             marzAccountEvt.setApMax(0);
