@@ -1,5 +1,6 @@
 package com.moemao.tgks.mar.marzaccount.action;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -139,13 +140,26 @@ public class MarzAccountAction extends TGKSAction
         else
         {
             marzAccountEvt = list.get(0);
-            marzAccountEvt.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_1);
-            marzAccountEvt.setSessionId("");
-            mar_marzAccountService.updateMarzAccount(marzAccountEvt);
+            // 检查是否到期
+            if (new Date().after(marzAccountEvt.getEndTime()))
+            {
+                return ERROR;
+            }
         }
         
         // 启动线程
-        MarzThreadPoolDiffusion.getInstance().createThread(marzAccountEvt);
+        if (MarzThreadPoolDiffusion.getInstance().createThread(marzAccountEvt))
+        {
+            marzAccountEvt.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_1);
+            marzAccountEvt.setSessionId("");
+            marzAccountEvt.setRemark("");
+            mar_marzAccountService.updateMarzAccount(marzAccountEvt);
+        }
+        else
+        {
+            marzAccountEvt.setRemark("账号正在下线，请3分钟后再操作！");
+            mar_marzAccountService.updateMarzAccount(marzAccountEvt);
+        }
         
         return SUCCESS;
     }
@@ -165,7 +179,7 @@ public class MarzAccountAction extends TGKSAction
             marzAccountEvt = list.get(0);
             
             // 关闭线程
-            MarzThreadPoolDiffusion.getInstance().interruptThread(MarConstant.MODULE_TAG + marzAccountEvt.getTgksId());
+            MarzThreadPoolDiffusion.getInstance().stopThread(MarConstant.MODULE_TAG + marzAccountEvt.getTgksId());
             
             // 初始化状态
             marzAccountEvt.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
@@ -179,6 +193,7 @@ public class MarzAccountAction extends TGKSAction
             marzAccountEvt.setFp(0);
             marzAccountEvt.setGold(0);
             marzAccountEvt.setSessionId("");
+            marzAccountEvt.setRemark("");
             mar_marzAccountService.updateMarzAccount(marzAccountEvt);
         }
         

@@ -1,5 +1,6 @@
 package com.moemao.tgks.mar.marz.thread;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -10,6 +11,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import com.moemao.tgks.common.core.spring.ContextUtil;
 import com.moemao.tgks.mar.marz.task.MarzTaskDiffusion;
+import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
 import com.moemao.tgks.mar.tool.MarConstant;
@@ -84,13 +86,19 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
             executor.execute(new MarzTaskDiffusion(account));
         }
         
-        try
+        while (bRunning)
         {
-            Thread.sleep(mainThreadSleep);
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
+            // 定时销毁已经释放了的线程
+            this.destoryOverThread();
+            
+            try
+            {
+                Thread.sleep(mainThreadSleep);
+            }
+            catch (InterruptedException e)
+            {
+                
+            }
         }
     }
     
@@ -103,14 +111,22 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
         }
         else
         {
-            // 创建新线程
-            executor.execute(new MarzTaskDiffusion(marzAccountEvt));
-            return true;
+            if (!existThread(MarConstant.MODULE_TAG + marzAccountEvt.getTgksId()))
+            {
+                // 创建新线程
+                executor.execute(new MarzTaskDiffusion(marzAccountEvt));
+            }
+            else
+            {
+                System.out.println("已经存在同名的线程！" + marzAccountEvt.getTgksId());
+                return false;
+            }
         }
+        
+        return true;
     }
     
-    @SuppressWarnings("deprecation")
-    public synchronized boolean interruptThread(String threadName)
+    public synchronized boolean stopThread(String threadName)
     {
         ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
         Thread[] threads = new Thread[threadGroup.activeCount()];
@@ -124,14 +140,59 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
                 {
                     try
                     {
-                        thread.stop();
-                        System.out.println("关闭线程..." + thread.getName());
-                        return true;
+                        System.out.println(thread.getName() + "线程关闭中...");
+                        thread.setName(thread.getName() + MarzConstant.OVER);
                     }
                     catch (Throwable t)
                     {
                         
                     }
+                }
+            }
+        }
+        return false;
+    }
+    
+    @SuppressWarnings("deprecation")
+    public void destoryOverThread()
+    {
+        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
+        Thread[] threads = new Thread[threadGroup.activeCount()];
+        threadGroup.enumerate(threads);
+        
+        for (Thread thread : threads)
+        {
+            if (thread != null && thread.getName().contains(MarzConstant.OVER))
+            {
+                try
+                {
+                    thread.stop();
+                }
+                catch (Throwable t)
+                {
+                    
+                }
+            }
+        }
+    }
+    
+    public boolean existThread(String threadName)
+    {
+        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
+        Thread[] threads = new Thread[threadGroup.activeCount()];
+        threadGroup.enumerate(threads);
+        
+        for (Thread thread : threads)
+        {
+            if (thread != null && thread.getName().contains(threadName))
+            {
+                try
+                {
+                    return true;
+                }
+                catch (Throwable t)
+                {
+                    
                 }
             }
         }
@@ -152,36 +213,37 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
         {
             if (thread != null && thread.getName().contains(MarConstant.MODULE_TAG))
             {
-                if (Thread.State.RUNNABLE != thread.getState())
+                try
                 {
-                    try
-                    {
-                        thread.stop();
-                        System.out.println("关闭线程..." + thread.getName());
-                    }
-                    catch (Throwable t)
-                    {
-                        
-                    }
+                    thread.stop();
+                    System.out.println("关闭线程..." + thread.getName());
+                }
+                catch (Throwable t)
+                {
+                    
                 }
             }
         }
         System.out.println("线程池已经关闭...");
     }
     
-    public void showAllThread()
+    public List<String> showAllThread()
     {
+        List<String> list = new ArrayList<String>();
         ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
         Thread[] threads = new Thread[threadGroup.activeCount()];
         threadGroup.enumerate(threads);
         
         for (Thread thread : threads)
         {
-            if (thread != null && Thread.State.RUNNABLE != thread.getState() && thread.getName().contains(MarConstant.MODULE_TAG))
+            if (thread != null && thread.getName().contains(MarConstant.MODULE_TAG))
             {
+                list.add(thread.getName());
                 System.out.println(thread.getName());
             }
         }
+        
+        return list;
     }
     
     public boolean isbRunning()

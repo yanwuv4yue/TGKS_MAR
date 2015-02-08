@@ -2,6 +2,7 @@ package com.moemao.tgks.mar.marz.task;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
     
     private static int SLEEPTIME = 3 * 60 * 1000;
     
+    public boolean running = true;
+    
     public MarzTaskDiffusion(MarzAccountEvt marzAccountEvt)
     {
         account = marzAccountEvt;
@@ -62,8 +65,6 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         
         // 默认线程调用的执行方法
         System.out.println("执行任务开始 ID：" + account.getTgksId());
-        
-        this.initSetting();
     }
 
     @Override
@@ -73,8 +74,37 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         
         // 尽量保证流程上的简洁 run流程只负责调用以及返回失败时的处理 并不做各个条件判断的限制
         
-        while (true)
+        while (running)
         {
+            try
+            {
+                // 为了防止出现点击上线按钮立即生成线程却跳出的情况 线程需要先暂停1秒
+                Thread.sleep(1000);
+            }
+            catch (Exception e)
+            {
+                
+            }
+            
+            account = this.marzAccountService.queryMarzAccountById(account.getId());
+            if (MarzConstant.MARZ_ACCOUNT_STATUS_0.equals(account.getStatus()))
+            {
+                break;
+            }
+            
+            // 每次循环检查点卡是否到期
+            if (new Date().after(account.getEndTime()))
+            {
+                this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经到期，退出挂机...");
+                account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
+                this.marzAccountService.updateMarzAccount(account);
+                break;
+            }
+            
+            // 更新设置
+            this.initSetting();
+            
+            
             // 1、账号登陆
             if (CommonUtil.isEmpty(account.getSessionId()))
             {
@@ -88,6 +118,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 sid = account.getSessionId();
             }
             
+            if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+            {
+                break;
+            }
             
             // 2、更新当前账号基础数据
             resultCode = this.baseInfo();
@@ -106,24 +140,66 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 }
             }
             
+            if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+            {
+                break;
+            }
+            
             // 3、探索
             resultCode = this.explore();
             
+            if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+            {
+                break;
+            }
+            
             // 4、卡片处理
             resultCode = this.card();
+            
+            if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+            {
+                break;
+            }
             
             // 5、战斗
             resultCode = this.battle();
             
             // 最后要保存一下sessionId
             account.setSessionId(sid);
+            MarzAccountEvt tempAccount = this.marzAccountService.queryMarzAccountById(account.getId());
+            account.setBossIds(tempAccount.getBossIds());
+            account.setStatus(tempAccount.getStatus());
             this.marzAccountService.updateMarzAccount(account);
             
             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "本轮执行完毕，等待下一次执行...");
             
+            if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+            {
+                break;
+            }
+            
             // 等待时间间隔
             this.sleep(SLEEPTIME);
         }
+        
+        // 初始化状态
+        account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
+        account.setAp(0);
+        account.setApMax(0);
+        account.setBp(0);
+        account.setBpMax(0);
+        account.setCardNum(0);
+        account.setCardMax(0);
+        account.setCoin(0);
+        account.setFp(0);
+        account.setGold(0);
+        account.setSessionId("");
+        account.setRemark("");
+        this.marzAccountService.updateMarzAccount(account);
+        
+        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经下线...");
+        System.out.println(MarConstant.MODULE_TAG + account.getTgksId() + "线程已关闭...");
+        Thread.currentThread().setName(MarConstant.MODULE_TAG + MarzConstant.OVER);
     }
     
     private void initSetting()
@@ -264,6 +340,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 account.setUserId(user.getJSONObject("user").getString("userid"));
                 
                 account.setSessionId(sid);
+                // 保存之前先查询最新的BOSSID 防止
+                MarzAccountEvt tempAccount = this.marzAccountService.queryMarzAccountById(account.getId());
+                account.setBossIds(tempAccount.getBossIds());
+                account.setStatus(tempAccount.getStatus());
                 this.marzAccountService.updateMarzAccount(account);
             }
         }

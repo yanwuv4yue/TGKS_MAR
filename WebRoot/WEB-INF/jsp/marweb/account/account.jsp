@@ -66,7 +66,8 @@
 	    </tr>
 	    <tr>
 	        <td>战斗地图</td>
-	        <td colspan="5">${marzAccountEvt.bossIds }</td>
+	        <td colspan="3">${marzAccountEvt.bossIds }</td>
+	        <td colspan="2"><a style="color:red;">${marzAccountEvt.remark }</a></td>
 	    </tr>
 	</table>
 </div>

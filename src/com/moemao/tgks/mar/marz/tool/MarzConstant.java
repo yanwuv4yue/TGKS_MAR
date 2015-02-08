@@ -10,6 +10,8 @@ public class MarzConstant
     
     public static final int RES_CODE_0 = 0;
     
+    public static final String OVER = "over";
+    
     public static final int SLEEPTIME_BATTLE_SOLO = 60000;
     
     public static final String JSON_TAG_SID = "sid";

@@ -4,10 +4,12 @@
 <div id="marzManagerDiv">
     <button id="threadPoolStart">启动</button>
     <button id="threadPoolShutdown">关闭</button>
-    <button id="threadPoolStatus">刷新</button>
+    <!-- <button id="threadPoolStatus">刷新</button> -->
 </div>
 <div id="marzStatusDiv">
-    
+    <s:iterator  value="marzThreadList" var="evt">
+        <s:property value='#evt'/>
+    </s:iterator>
 </div>
 <div id="marzSystemLogDiv">
 
