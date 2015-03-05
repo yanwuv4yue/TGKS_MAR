@@ -21,7 +21,7 @@
 </head>
 <body>
 <div style="height: 300px; font-size: 30px; background: url(http://www.itmo.com/images/wiki/glx.jpg) no-repeat center top;">
-<a style="padding-left: 100px;" onclick="window.open('http://item.taobao.com/item.htm?id=42441167875')"><b>→点击进入淘宝页面购买←</b></a>
+<a style="padding-left: 100px;" onclick="window.open('http://item.taobao.com/item.htm?id=43813070651')"><b>→点击进入淘宝页面购买←</b></a>
 </div>
 <div>
 	<form id="accountReq" action="../mar/queryAccountTB_login.action" method="post">
@@ -58,6 +58,9 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+    var table=$.ajax({url:"../mar/queryAccountTB_login.action", data:$("#accountReq").formSerialize(), async:false});
+    $("#accountDiv").html(table.responseText);
+    
 	// 查询方法
 	function query()
 	{

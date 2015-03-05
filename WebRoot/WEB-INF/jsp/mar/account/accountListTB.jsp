@@ -7,7 +7,7 @@
 				<th>ID</th>
                 <th>标题</th>
                 <th>价格</th>
-                <th>水晶</th>
+                <!-- <th>水晶</th> -->
                 <th>UR数量</th>
                 <th>卡牌</th>
             </tr>
@@ -18,7 +18,7 @@
 					<td width="100px"><b id="<s:property value='#evt.id'/>" class="accountUpdate"><s:property value="#evt.inviteCode"/></b></td>
                     <td width="300px"><s:property value='#evt.title'/></td>
                     <td width="30px"><s:property value='#evt.price'/></td>
-                    <td width="30px"><s:property value='#evt.crystal'/></td>
+                    <!-- <td width="30px"><s:property value='#evt.crystal'/></td> -->
                     <td width="100px"><b><a style="color: red">佣<s:property value='#evt.urNumA'/></a> <a style="color: blue">壕<s:property value='#evt.urNumB'/></a> <a style="color: green">盗<s:property value='#evt.urNumC'/></a> <a style="color: black">姬<s:property value='#evt.urNumD'/></a></b></td>
                     <td>
                         <s:iterator  value="#evt.iconList" var="icon">

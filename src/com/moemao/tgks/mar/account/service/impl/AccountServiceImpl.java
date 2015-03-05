@@ -500,6 +500,11 @@ public class AccountServiceImpl implements AccountService
         int crystal = 0;
         String inviteCode = "";
         
+        String fusionBaseId = "";
+        String fusionAddId = "";
+        List<String> cardDeckSetCardTypeList = new ArrayList<String>();
+        List<String> cardDeckSetCardIdList = new ArrayList<String>();
+        
         try
         {
             sid = this.login(accountEvt);
@@ -563,6 +568,71 @@ public class AccountServiceImpl implements AccountService
         @SuppressWarnings("unchecked")
         List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(cards, JSONObject.class);
         
+        // 收集SR以及UR信息
+        for (JSONObject obj : jsonList)
+        {
+            if (cardDeckSetCardIdList.size() < 10 && !cardDeckSetCardTypeList.contains(obj.getString("cardid")))
+            {
+                cardDeckSetCardIdList.add(obj.getString("uniqid"));
+                cardDeckSetCardTypeList.add(obj.getString("cardid"));
+            }
+            
+            if (obj.getString("lv_max").equals("50") && !urList.contains(obj.getString("cardid")))
+            {
+                urList.add(obj.getString("cardid"));
+                
+                // 卡片合成base
+                if (CommonUtil.isEmpty(fusionBaseId))
+                {
+                    fusionBaseId = obj.getString("uniqid");
+                }
+            }
+            else if (obj.getString("lv_max").equals("40") && !srList.contains(obj.getString("cardid")))
+            {
+                srList.add(obj.getString("cardid"));
+                
+                // 卡片合成base
+                if (CommonUtil.isEmpty(fusionBaseId))
+                {
+                    fusionBaseId = obj.getString("uniqid");
+                }
+            }
+            else
+            {
+                // 卡片合成add
+                if (CommonUtil.isEmpty(fusionAddId) && !cardDeckSetCardIdList.contains(obj.getString("uniqid")))
+                {
+                    fusionAddId = obj.getString("uniqid");
+                }
+            }
+        }
+        
+        // 卡片合成
+        if (!CommonUtil.isEmpty(fusionBaseId) && !CommonUtil.isEmpty(fusionAddId))
+        {
+            try
+            {
+                sid = request.cardFusion(sid, fusionBaseId, fusionAddId)[0];
+            }
+            catch (Exception e)
+            {
+                
+            }
+        }
+        
+        // 卡组配置
+        if (!CommonUtil.isEmpty(cardDeckSetCardIdList))
+        {
+            try
+            {
+                sid = request.cardDeckSet(sid, null, null, null, null, CommonUtil.listToString(cardDeckSetCardIdList))[0];
+            }
+            catch (Exception e)
+            {
+                
+            }
+        }
+        
         try
         {
             // 如果卡组大于80张，则调用卖卡
@@ -574,19 +644,6 @@ public class AccountServiceImpl implements AccountService
         catch (Exception e)
         {
             
-        }
-        
-        // 收集SR以及UR信息
-        for (JSONObject obj : jsonList)
-        {
-            if (obj.getString("lv_max").equals("40") && !srList.contains(obj.getString("cardid")))
-            {
-                srList.add(obj.getString("cardid"));
-            }
-            else if (obj.getString("lv_max").equals("50") && !urList.contains(obj.getString("cardid")))
-            {
-                urList.add(obj.getString("cardid"));
-            }
         }
         
         // 查询数据库卡组信息
@@ -851,7 +908,7 @@ public class AccountServiceImpl implements AccountService
             }
         }
         
-        if (jsonList.size() > 70 && uniqiIds != null && uniqiIds.size() > 1)
+        if (jsonList.size() > 60 && uniqiIds != null && uniqiIds.size() > 1)
         {
             // 出售卡片
             result = request.cardSell(sid, CommonUtil.listToString(uniqiIds).replace(" ", ""));

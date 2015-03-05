@@ -28,8 +28,8 @@ $(document).ready(function(){
             type:'POST', 
             success: function(result){
                 dealResult(result);
-                var table=$.ajax({url:"../marweb/queryMarzLogByTgksId.action", async:false});
-                $("#logDiv").html(table.responseText);
+                 var table2=$.ajax({url:"../marweb/queryMarzLogByTgksIdOnlyMarzCard.action", async:false});
+                $("#logDiv").html(table2.responseText);
             },
             error:function(){ 
                 document.getElementById("message").innerHTML= "充值失败";

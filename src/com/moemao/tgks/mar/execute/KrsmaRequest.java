@@ -68,7 +68,8 @@ public class KrsmaRequest
     
     public String login2(String uuid, String hashToken) throws Exception
     {
-        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
+        //String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"4\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\",\"os_ver\":\"iPhone OS 7.1.2\"}";
         String result = httpRequest.sendPost(MarConstant.URL_LOGIN, paramStr);
         System.out.println(MarConstant.LOG_SYSTEM_INFO + "login " + uuid);
         if (bDebug)
@@ -87,9 +88,11 @@ public class KrsmaRequest
      * @return String 返回类型
      * @throws
      */
-    public String loginAndroid(String uuid) throws Exception
+    public String loginAndroid(String uuid, String hashToken) throws Exception
     {
-        String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"2\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"samsung GT-N7100\",\"token\":\"\"}";
+        //String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"2\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"samsung GT-N7100\",\"token\":\"\"}";
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"4\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\",\"os_ver\":\"Android OS 4.4.3 / API-19 (FUCK YOU)\"}";
+        
         String result = httpRequest.sendPost(MarConstant.URL_LOGIN, paramStr);
         System.out.println(MarConstant.LOG_SYSTEM_INFO + "loginAndroid " + uuid);
         if (bDebug)
@@ -224,6 +227,33 @@ public class KrsmaRequest
         String paramStr = sid + "={\"base_uniqid\":" + baseId + ",\"add_uniqids\":[" + addId + "]}";
         String result = httpRequest.sendPost(MarConstant.URL_CARDFUSION, paramStr);
         System.out.println(MarConstant.LOG_SYSTEM_INFO + "cardFusion " + sid);
+        if (bDebug)
+        {
+            System.out.println(result);
+        }
+        return result.split(MarConstant.KRSMA_SPLIT);
+    }
+    
+    /**
+     * 
+     * @Title: cardDeskSet
+     * @Description: 卡片配置
+     * @param sid
+     * @param arthur_type
+     * @param idx
+     * @param job_type
+     * @param leader_card_idx
+     * @param card_uniqid
+     * @return
+     * @throws Exception
+     * @return String[] 返回类型
+     * @throws
+     */
+    public String[] cardDeckSet(String sid, String arthur_type, String idx, String job_type, String leader_card_idx, String card_uniqid) throws Exception
+    {
+        String paramStr = sid + "={\"decks\":[{\"arthur_type\":3,\"idx\":0,\"job_type\":3,\"leader_card_idx\":0,\"card_uniqid\":[" + card_uniqid + "],\"name\":\"\",\"is_active\":1,\"is_rental\":1,\"deck_rank\":0}]}";
+        String result = httpRequest.sendPost(MarConstant.URL_CARDDECKSET, paramStr);
+        System.out.println(MarConstant.LOG_SYSTEM_INFO + "cardDeckSet " + sid);
         if (bDebug)
         {
             System.out.println(result);

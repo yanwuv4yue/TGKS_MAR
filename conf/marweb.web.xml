@@ -15,6 +15,11 @@
         <result name="error">/marweb/register.jsp</result>
     </action>
     
+    <action name="marzLocalPage" class="com.moemao.tgks.marweb.login.action.LoginAction" method="marzLocalPage">
+        <result name="success">/WEB-INF/jsp/marweb/local/local.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
     <action name="queryMarzLogByTgksId" class="com.moemao.tgks.mar.marzlog.action.MarzLogAction" method="queryMarzLogByTgksId">
         <result name="success">/WEB-INF/jsp/marweb/log/log.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>

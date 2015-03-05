@@ -32,8 +32,14 @@ private Integer bpCost;
  */
 private Integer target;
 
+/**
+ * 设置页面是否被选中
+ */
 private String check;
 
+/**
+ * 设置页面是否显示选择框
+ */
 private String show;
 
 @Override

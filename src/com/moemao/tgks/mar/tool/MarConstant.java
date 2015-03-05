@@ -139,6 +139,11 @@ public class MarConstant
      * 卡片合成
      */
     public static final String URL_CARDFUSION = "http://app.kairisei-ma.jp/Game/CardFusion";
+
+    /**
+     * 卡组配置
+     */
+    public static final String URL_CARDDECKSET = "http://app.kairisei-ma.jp/Game/CardDeckSet";
     
     /**
      * 卡片出售

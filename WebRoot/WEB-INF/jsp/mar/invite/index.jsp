@@ -6,6 +6,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <!DOCTYPE html>
 <!-- saved from url=(0027)http://www.moemao.com/krsma/ -->
+<!-- zhaodai  http://item.taobao.com/item.htm?id=43824719662 -->
+<!-- chushi    http://item.taobao.com/item.htm?id=43821423159 -->
+<!-- CD         http://item.taobao.com/item.htm?id=43902252153 -->
 <html>
  <!--<![endif]-->
  <head>
@@ -24,7 +27,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     -->
   <meta content="乖離性ミリオンアーサーの招待！" name="description" />
   <meta content="乖離性ミリオンアーサー,ミリオンアーサー,招待" name="keywords" />
-  <link rel="shortcut icon" href="favicon.ico">
+  <link href="https://d2e1xl20cw0m26.cloudfront.net/pre/assets/favicon-5862cadf3d85c514f2068142cfb97eb3.ico" rel="icon" type="image/png">
   <link href="<%=basePath%>resources/mar/invite/style.css" media="all" rel="stylesheet" />
   <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <!-- 
@@ -90,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           test
          </div>
          <div id="term_finished">
-          ☆ 请在输入框中填写您的 招待ID（9位数字 中间请勿加逗号空格）以及 <a href="http://item.taobao.com/item.htm?id=42502732828"><b>神秘代码</b></a> ，点击 获取招待 按钮即可 ☆
+          ☆ 请在输入框中填写您的 招待ID（9位数字 中间请勿加逗号空格）以及 <a href="http://item.taobao.com/item.htm?id=43824719662"><b>神秘代码</b></a> ，点击 获取招待 按钮即可 ☆
          </div>
          <div id="contentsBox">
           <div id="countBox">
@@ -108,7 +111,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								    <label alt="请输入神秘代码（很长的那串）" placeholder="神秘代码" id="passwordLabel" ></label>
                             </td>
                             <td>
-                                    <a id="buyPassword" onclick="window.open('http://item.taobao.com/item.htm?id=42502732828')"><b>→点击购买神秘代码←</b></a>
+                                    <a id="buyPassword" onclick="window.open('http://item.taobao.com/item.htm?id=43824719662')"><b>→点击购买神秘代码←</b></a>
                             </td>
 			            </tr>
 			        </table>
@@ -144,12 +147,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <ul>
       <li>
        <figure>
-        <a href="http://item.taobao.com/item.htm?id=42502732828" target="_blank"><img alt="招待神秘代码购买" class="banner01" src="<%=basePath%>resources/mar/invite/banner01.png" /></a>
+        <a href="http://item.taobao.com/item.htm?id=43824719662" target="_blank"><img alt="招待神秘代码购买" class="banner01" src="<%=basePath%>resources/mar/invite/banner01.png" /></a>
        </figure>
        </li>
       <li>
        <figure>
-        <a href="http://item.taobao.com/item.htm?id=42441167875" target="_blank"><img alt="初始账号列表" class="banner02" src="<%=basePath%>resources/mar/invite/banner02.png" /></a>
+        <a href="http://www.moemao.com/krsma/chushi.html" target="_blank"><img alt="初始账号列表" class="banner02" src="<%=basePath%>resources/mar/invite/banner02.png" /></a>
        </figure>
        </li>
      </ul>
@@ -185,9 +188,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        </div>
       </div>
       <ul class="clearfix">
-       <li><a href="http://item.taobao.com/item.htm?id=42502732828">自助招待</a></li>
-       <li><a href="http://item.taobao.com/item.htm?id=42441167875">初始账号</a></li>
-       <li><a href="http://item.taobao.com/item.htm?id=42749120053">CD特典</a></li>
+       <li><a href="http://item.taobao.com/item.htm?id=43824719662">自助招待</a></li>
+       <li><a href="http://item.taobao.com/item.htm?id=43821423159">初始账号</a></li>
+       <li><a href="http://item.taobao.com/item.htm?id=43902252153">CD特典</a></li>
        <li><a href="http://wiki.famitsu.com/kairi/">WIKI攻略</a></li>
       </ul>
       <div class="sqex-footer-copy-logo">

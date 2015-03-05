@@ -1,5 +1,6 @@
 package com.moemao.tgks.mar.marz.task;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -52,7 +53,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
     
     private int resultCode = MarzConstant.SUCCESS;
     
-    private static int SLEEPTIME = 3 * 60 * 1000;
+    private static int SLEEPTIME = 1 * 60 * 1000;
     
     public boolean running = true;
     
@@ -73,113 +74,115 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         Thread.currentThread().setName(MarConstant.MODULE_TAG + account.getTgksId());
         
         // 尽量保证流程上的简洁 run流程只负责调用以及返回失败时的处理 并不做各个条件判断的限制
-        
-        while (running)
+        try
         {
-            try
+            while (running)
             {
+                
                 // 为了防止出现点击上线按钮立即生成线程却跳出的情况 线程需要先暂停1秒
                 Thread.sleep(1000);
-            }
-            catch (Exception e)
-            {
                 
-            }
-            
-            account = this.marzAccountService.queryMarzAccountById(account.getId());
-            if (MarzConstant.MARZ_ACCOUNT_STATUS_0.equals(account.getStatus()))
-            {
-                break;
-            }
-            
-            // 每次循环检查点卡是否到期
-            if (new Date().after(account.getEndTime()))
-            {
-                this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经到期，退出挂机...");
-                account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
-                this.marzAccountService.updateMarzAccount(account);
-                break;
-            }
-            
-            // 更新设置
-            this.initSetting();
-            
-            
-            // 1、账号登陆
-            if (CommonUtil.isEmpty(account.getSessionId()))
-            {
-                resultCode = this.login();
-            }
-            else
-            {
-                // 当前的逻辑 每次扫描出的任务如果包含sid 则跳过登录
-                // 在用户操作上下线的时候 将account的sid一同清空即可
-                // 如果sid已经失效 会在下面的homeShow中重新登录
-                sid = account.getSessionId();
-            }
-            
-            if (Thread.currentThread().getName().contains(MarzConstant.OVER))
-            {
-                break;
-            }
-            
-            // 2、更新当前账号基础数据
-            resultCode = this.baseInfo();
-            
-            if (MarzConstant.SUCCESS > resultCode)
-            {
-                System.out.println("发生了错误！当前resultCode：" + resultCode);
+                account = this.marzAccountService.queryMarzAccountById(account.getId());
+                if (MarzConstant.MARZ_ACCOUNT_STATUS_0.equals(account.getStatus()))
+                {
+                    break;
+                }
                 
-                resultCode = this.login();
+                // 每次循环检查点卡是否到期
+                if (new Date().after(account.getEndTime()))
+                {
+                    this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经到期，退出挂机...");
+                    account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
+                    this.marzAccountService.updateMarzAccount(account);
+                    break;
+                }
+                
+                // 更新设置
+                this.initSetting();
+                
+                
+                // 1、账号登陆
+                if (CommonUtil.isEmpty(account.getSessionId()))
+                {
+                    resultCode = this.login();
+                }
+                else
+                {
+                    // 当前的逻辑 每次扫描出的任务如果包含sid 则跳过登录
+                    // 在用户操作上下线的时候 将account的sid一同清空即可
+                    // 如果sid已经失效 会在下面的homeShow中重新登录
+                    sid = account.getSessionId();
+                }
+                
+                if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+                {
+                    break;
+                }
+                
+                // 2、更新当前账号基础数据
                 resultCode = this.baseInfo();
                 
                 if (MarzConstant.SUCCESS > resultCode)
                 {
-                    this.sleep(SLEEPTIME);
-                    continue;
+                    System.out.println("发生了错误！当前resultCode：" + resultCode);
+                    
+                    resultCode = this.login();
+                    resultCode = this.baseInfo();
+                    
+                    if (MarzConstant.SUCCESS > resultCode)
+                    {
+                        this.sleep(SLEEPTIME);
+                        continue;
+                    }
                 }
+                
+                if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+                {
+                    break;
+                }
+                
+                // 3、探索
+                resultCode = this.explore();
+                
+                if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+                {
+                    break;
+                }
+                
+                // 4、卡片处理
+                resultCode = this.card();
+                
+                if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+                {
+                    break;
+                }
+                
+                // 5、战斗
+                resultCode = this.battle();
+                
+                // 最后要保存一下sessionId
+                account.setSessionId(sid);
+                MarzAccountEvt tempAccount = this.marzAccountService.queryMarzAccountById(account.getId());
+                account.setBossIds(tempAccount.getBossIds());
+                account.setStatus(tempAccount.getStatus());
+                this.marzAccountService.updateMarzAccount(account);
+                
+                this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "本轮执行完毕，等待下一次执行...");
+                
+                if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+                {
+                    break;
+                }
+                
+                System.out.println(Thread.currentThread().getName() + "本次任务执行完成 进入等待时间 [" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "]");
+                
+                // 等待时间间隔
+                this.sleep(SLEEPTIME);
             }
+        }
+        catch (Exception e)
+        {
             
-            if (Thread.currentThread().getName().contains(MarzConstant.OVER))
-            {
-                break;
-            }
-            
-            // 3、探索
-            resultCode = this.explore();
-            
-            if (Thread.currentThread().getName().contains(MarzConstant.OVER))
-            {
-                break;
-            }
-            
-            // 4、卡片处理
-            resultCode = this.card();
-            
-            if (Thread.currentThread().getName().contains(MarzConstant.OVER))
-            {
-                break;
-            }
-            
-            // 5、战斗
-            resultCode = this.battle();
-            
-            // 最后要保存一下sessionId
-            account.setSessionId(sid);
-            MarzAccountEvt tempAccount = this.marzAccountService.queryMarzAccountById(account.getId());
-            account.setBossIds(tempAccount.getBossIds());
-            account.setStatus(tempAccount.getStatus());
-            this.marzAccountService.updateMarzAccount(account);
-            
-            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "本轮执行完毕，等待下一次执行...");
-            
-            if (Thread.currentThread().getName().contains(MarzConstant.OVER))
-            {
-                break;
-            }
-            
-            // 等待时间间隔
-            this.sleep(SLEEPTIME);
         }
         
         // 初始化状态
@@ -507,15 +510,15 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     {
                         cardJSON = JSONObject.fromObject(cards.get(i));
                         
-                        // 自动合成只支持SR UR跟MR 而且必须手动锁上
-                        if (cardJSON.getInt("lv_max") >= 40 && cardJSON.getInt("lv") < cardJSON.getInt("lv_max")
-                                && 0 != cardJSON.getInt("is_lock"))
+                        // 自动合成只支持SR UR跟MR 而且必须手动锁上 先找MR 不锁也可
+                        if (cardJSON.getInt("lv_max") >= 60 && cardJSON.getInt("lv") < cardJSON.getInt("lv_max"))
                         {
                             baseId = cardJSON.getString("uniqid");
                         }
                         // 狗粮 一次喂4个 不能是已经出售了的
                         else if (!cardSellList.contains(cardJSON.getString("uniqid")) 
                                 && Arrays.asList(chiari).contains(cardJSON.getString("cardid"))
+                                && !cardFusionList.contains(cardJSON.getString("uniqid"))
                                 && cardFusionList.size() < 4)
                         {
                             cardFusionList.add(cardJSON.getString("uniqid"));
@@ -524,6 +527,61 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         if (!CommonUtil.isEmpty(baseId) && cardFusionList.size() == 4)
                         {
                             break;
+                        }
+                    }
+                    // 如果没有MR以上的卡 再挑UR喂
+                    if (CommonUtil.isEmpty(baseId))
+                    {
+                        for (int i = 0; i < cards.size(); i++)
+                        {
+                            cardJSON = JSONObject.fromObject(cards.get(i));
+                            
+                            // 没有MR可喂的时候，找锁上的UR以及SR喂
+                            if (cardJSON.getInt("lv_max") >= 50 && cardJSON.getInt("lv") < cardJSON.getInt("lv_max"))
+                            {
+                                baseId = cardJSON.getString("uniqid");
+                            }
+                            // 狗粮 一次喂4个 不能是已经出售了的
+                            else if (!cardSellList.contains(cardJSON.getString("uniqid")) 
+                                    && Arrays.asList(chiari).contains(cardJSON.getString("cardid"))
+                                    && !cardFusionList.contains(cardJSON.getString("uniqid"))
+                                    && cardFusionList.size() < 4)
+                            {
+                                cardFusionList.add(cardJSON.getString("uniqid"));
+                            }
+                            
+                            if (!CommonUtil.isEmpty(baseId) && cardFusionList.size() == 4)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    // 如果没有UR以上的卡 再挑SR喂
+                    if (CommonUtil.isEmpty(baseId))
+                    {
+                        for (int i = 0; i < cards.size(); i++)
+                        {
+                            cardJSON = JSONObject.fromObject(cards.get(i));
+                            
+                            // 没有MR可喂的时候，找锁上的UR以及SR喂
+                            if (cardJSON.getInt("lv_max") >= 40 && cardJSON.getInt("lv") < cardJSON.getInt("lv_max"))
+                                //        && 0 != cardJSON.getInt("is_lock"))
+                            {
+                                baseId = cardJSON.getString("uniqid");
+                            }
+                            // 狗粮 一次喂4个 不能是已经出售了的
+                            else if (!cardSellList.contains(cardJSON.getString("uniqid")) 
+                                    && Arrays.asList(chiari).contains(cardJSON.getString("cardid"))
+                                    && !cardFusionList.contains(cardJSON.getString("uniqid"))
+                                    && cardFusionList.size() < 4)
+                            {
+                                cardFusionList.add(cardJSON.getString("uniqid"));
+                            }
+                            
+                            if (!CommonUtil.isEmpty(baseId) && cardFusionList.size() == 4)
+                            {
+                                break;
+                            }
                         }
                     }
                     

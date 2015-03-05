@@ -15,6 +15,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <script type="text/javascript"  src="<%=basePath%>resources/js/jquery-1.8.2.js"></script>
   <script type="text/javascript"  src="<%=basePath%>resources/js/jquery.form.js"></script>
  </head>
+ 您的浏览器无法使用本系统，请发招待ID给店长
+ <!-- 
  <body>
     <div align="center">
 		<form id="inviteReq" action="../mar/invite.action" method="post">
@@ -36,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <td></td>
 				</tr>
 				<tr>
-                    <td colspan="2"><a id="buyPassword" onclick="window.open('http://item.taobao.com/item.htm?id=42502732828')"><b>→点击购买神秘代码←</b></a></td>
+                    <td colspan="2"><a id="buyPassword" onclick="window.open('http://item.taobao.com/item.htm?id=43849981319')"><b>→点击购买神秘代码←</b></a></td>
                 </tr>
 			</table>
 	</form>
@@ -133,4 +135,5 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 	});
 </script>
+ -->
 </html>

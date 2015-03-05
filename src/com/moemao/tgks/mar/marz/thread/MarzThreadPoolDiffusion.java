@@ -1,7 +1,11 @@
 package com.moemao.tgks.mar.marz.thread;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,7 +39,7 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
     
     private static MarzThreadPoolDiffusion instance;
     
-    public static synchronized MarzThreadPoolDiffusion getInstance()
+    public static MarzThreadPoolDiffusion getInstance()
     {
         if (null == instance)
         {
@@ -51,11 +55,17 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
     
     private boolean bRunning = true;
     
-    private int defaultThreadNum = 500;
+    private static final int defaultThreadNum = 50;
     
-    private int mainThreadSleep = 300000;
+    private static final int mainThreadSleep = 300000;
+    
+    private static final int singleTime = 4000;
     
     private List<MarzAccountEvt> accountList;
+    
+    private ThreadGroup threadGroup;
+    
+    private Thread[] threads;
     
     public void run()
     {
@@ -79,30 +89,35 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
         
         System.out.println("取出需要执行的任务数：" + accountList.size());
         
-        // 循环建立新的任务 放入线程池执行
-        for (MarzAccountEvt account : accountList)
+        try
         {
-            account.setSessionId("");
-            executor.execute(new MarzTaskDiffusion(account));
-        }
-        
-        while (bRunning)
-        {
-            // 定时销毁已经释放了的线程
-            this.destoryOverThread();
-            
-            try
+            // 循环建立新的任务 放入线程池执行
+            for (MarzAccountEvt account : accountList)
             {
+                account.setSessionId("");
+                marzAccountService.updateMarzAccount(account);
+                executor.execute(new MarzTaskDiffusion(account));
+                
+                Thread.sleep(singleTime);
+            }
+            
+            while (bRunning)
+            {
+                System.out.println("主线程目前正常运行中！" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                
+                // 定时销毁已经释放了的线程
+                this.destoryOverThread();
+                
                 Thread.sleep(mainThreadSleep);
             }
-            catch (InterruptedException e)
-            {
-                
-            }
+        }
+        catch (InterruptedException e)
+        {
+            System.out.println("出问题了！我不行了！" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         }
     }
     
-    public synchronized boolean createThread(MarzAccountEvt marzAccountEvt)
+    public boolean createThread(MarzAccountEvt marzAccountEvt)
     {
         if (null == executor || executor.isTerminated())
         {
@@ -126,10 +141,27 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
         return true;
     }
     
-    public synchronized boolean stopThread(String threadName)
+    public boolean createThread_new(MarzAccountEvt marzAccountEvt)
     {
-        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-        Thread[] threads = new Thread[threadGroup.activeCount()];
+        if (!existThread(MarConstant.MODULE_TAG + marzAccountEvt.getTgksId()))
+        {
+            // 创建新线程
+            Thread thread = new Thread(new MarzTaskDiffusion(marzAccountEvt));
+            thread.start();
+        }
+        else
+        {
+            System.out.println("已经存在同名的线程！" + marzAccountEvt.getTgksId());
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public boolean stopThread(String threadName)
+    {
+        threadGroup = Thread.currentThread().getThreadGroup();
+        threads = new Thread[threadGroup.activeCount()];
         threadGroup.enumerate(threads);
         
         for (Thread thread : threads)
@@ -156,8 +188,8 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
     @SuppressWarnings("deprecation")
     public void destoryOverThread()
     {
-        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-        Thread[] threads = new Thread[threadGroup.activeCount()];
+        threadGroup = Thread.currentThread().getThreadGroup();
+        threads = new Thread[threadGroup.activeCount()];
         threadGroup.enumerate(threads);
         
         for (Thread thread : threads)
@@ -178,8 +210,8 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
     
     public boolean existThread(String threadName)
     {
-        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-        Thread[] threads = new Thread[threadGroup.activeCount()];
+        threadGroup = Thread.currentThread().getThreadGroup();
+        threads = new Thread[threadGroup.activeCount()];
         threadGroup.enumerate(threads);
         
         for (Thread thread : threads)
@@ -205,8 +237,8 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
         // 关闭线程
         executor.shutdown();
         
-        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-        Thread[] threads = new Thread[threadGroup.activeCount()];
+        threadGroup = Thread.currentThread().getThreadGroup();
+        threads = new Thread[threadGroup.activeCount()];
         threadGroup.enumerate(threads);
         
         for (Thread thread : threads)
@@ -236,14 +268,32 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
         
         for (Thread thread : threads)
         {
+            System.out.println(thread.getName() + " " + thread.getState());
             if (thread != null && thread.getName().contains(MarConstant.MODULE_TAG))
             {
-                list.add(thread.getName());
-                System.out.println(thread.getName());
+                list.add(thread.getName() + " " + thread.getState());
             }
         }
         
         return list;
+    }
+    
+    public int getMarzThreadNum()
+    {
+        int num = 0;
+        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
+        Thread[] threads = new Thread[threadGroup.activeCount()];
+        threadGroup.enumerate(threads);
+        
+        for (Thread thread : threads)
+        {
+            if (thread != null && thread.getName().contains(MarConstant.MODULE_TAG))
+            {
+                num++;
+            }
+        }
+        
+        return num;
     }
     
     public boolean isbRunning()
@@ -275,8 +325,11 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
 
     public static void main(String[] args)
     {
-        Thread thread = new Thread(new MarzThreadPoolDiffusion());
-        thread.start();
-        System.out.println("over==========");
+        String str = "123456";
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("abc", str);
+        str = null;
+        System.out.println(str);
+        System.out.println(map.get("abc"));
     }
 }

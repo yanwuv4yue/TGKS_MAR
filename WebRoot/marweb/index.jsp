@@ -31,7 +31,7 @@
 			</div>
 		</form><!-- form -->
 		<div class="button">
-			<a href="#" onclick="window.open('http://moemao.taobao.com/');">没事请不要戳这里_(:з」∠)_</a>
+            <a href="#" onclick="window.open('http://www.moemao.com/index.php/marweb-help');">乖离性MA离线挂机工具使用说明</a>
 		</div><!-- button -->
 	</section><!-- content -->
 </div><!-- container -->

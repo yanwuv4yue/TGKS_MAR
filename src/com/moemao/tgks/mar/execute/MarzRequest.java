@@ -19,6 +19,8 @@ public class MarzRequest
     
     private boolean bDebug = false;
     
+    private Map<String, JSONObject> map;
+    
     public static synchronized MarzRequest getInstance()
     {
         if (null == instance)
@@ -37,11 +39,12 @@ public class MarzRequest
     
     public Map<String, JSONObject> loginIOS(String uuid, String hashToken) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         //String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"1\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
-        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
-
+        //String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"4\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\",\"os_ver\":\"iPhone OS 7.1.2\"}";
+        
         if (bDebug)
         {
             System.out.println(paramStr);
@@ -55,16 +58,19 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(resCode.getString("sess_key").replace("=", "")));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> loginAndroid(String uuid, String hashToken) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         //String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"2\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"samsung GT-N7100\",\"token\":\"\"}";
-        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\"}";
-
+        //String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\"}";
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"4\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\",\"os_ver\":\"Android OS 4.4.3 / API-19 (FUCK YOU)\"}";
+        
         if (bDebug)
         {
             System.out.println(paramStr);
@@ -78,6 +84,8 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(resCode.getString("sess_key").replace("=", "")));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         
+        result = null;
+        resCode = null;
         return map;
     }
     
@@ -95,7 +103,7 @@ public class MarzRequest
     
     public Map<String, JSONObject> connect(String sid) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_CONNECT, paramStr).split(MarConstant.KRSMA_SPLIT);
@@ -105,13 +113,15 @@ public class MarzRequest
         
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> homeShow(String sid) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_HOMESHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
@@ -123,13 +133,15 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         map.put(MarzConstant.JSON_TAG_HOMWSHOW, homeShow);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> exploreStart(String sid, String arthurType, String deckIdx) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "={\"arthur_type\":" + arthurType + ",\"deck_idx\":" + deckIdx + "}";
 
@@ -147,13 +159,15 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         map.put(MarzConstant.JSON_TAG_EXPLORESTART, exploreStart);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> exploreEnd(String sid) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_EXPLOREEND, paramStr).split(MarConstant.KRSMA_SPLIT);
@@ -168,13 +182,15 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         map.put(MarzConstant.JSON_TAG_EXPLOREEND, exploreEnd);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> cardShow(String sid) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_CARDSHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
@@ -186,13 +202,15 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         map.put(MarzConstant.JSON_TAG_CARDSHOW, cardShow);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> cardFusion(String sid, String baseId, String addId) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "={\"base_uniqid\":" + baseId + ",\"add_uniqids\":[" + addId + "]}";
         
@@ -210,13 +228,15 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         map.put(MarzConstant.JSON_TAG_CARDFUSION, cardFusion);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> cardSell(String sid, String uniqiIds) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "={\"uniqids\":["+uniqiIds+"]}";
 
@@ -234,13 +254,15 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         map.put(MarzConstant.JSON_TAG_CARDSELL, cardSell);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> presentBoxMultiRecv(String sid) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_PRESENTBOXMULTIRECV, paramStr).split(MarConstant.KRSMA_SPLIT);
@@ -252,13 +274,15 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         map.put(MarzConstant.JSON_TAG_PRESENTBOXMULTIRECV, presentBoxMultiRecv);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> teamBattleSoloShow(String sid) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOSHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
@@ -273,13 +297,15 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         map.put(MarzConstant.JSON_TAG_TEAMBATTLESOLOSHOW, teamBattleSoloShow);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> teamBattleSoloStart(String sid, String bossId, String userOne, String userTwo, String userFour) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "={\"bossid\":" + bossId + ",\"deck_arthur_type\":3,\"deck_arthur_type_idx\":0,\"partner_deck_selects\":[{\"userid\":" + userOne + ",\"arthur_type\":1,\"deck_idx\":0},{\"userid\":" + userTwo + ",\"arthur_type\":2,\"deck_idx\":0},{\"userid\":" + userFour + ",\"arthur_type\":4,\"deck_idx\":0}]}";
 
@@ -297,13 +323,15 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         map.put(MarzConstant.JSON_TAG_TEAMBATTLESOLOSTART, teamBattleSoloStart);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     
     public Map<String, JSONObject> teamBattleSoloEnd(String sid, String battleInfo) throws Exception
     {
-        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "=" + battleInfo;
 
@@ -324,7 +352,9 @@ public class MarzRequest
         map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
         map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
         map.put(MarzConstant.JSON_TAG_TEAMBATTLESOLOEND, teamBattleSoloEnd);
-        
+
+        result = null;
+        resCode = null;
         return map;
     }
     

@@ -15,13 +15,33 @@
 		<a href="<%=basePath%>cgweb/kssmaCard.action"><img class="logo" src="../resources/images/cgweb/logo_kssma.png" /></a>
 	 </div>
 </li>
+<li style="width:80px;">
+    <a id="marzLocalGuaji" href="#">本地挂机</a>
+</li>
  -->
+<li style="width:80px;">
+    <a id="marzOfflineGuaji" href="#"><b>离线挂机</b></a>
+</li>
 <li style="width:80px;">
     <a id="marzCardUsePageA" href="#"><b>点卡充值</b></a>
 </li>
 
 <script type="text/javascript">
 $(document).ready(function(){
+    $("#marzLocalGuaji").click(function(){
+        var table=$.ajax({url:"../marweb/queryMarzAccountByTgksId.action", async:false});
+        $("#mainDiv").html(table.responseText);
+        var table2=$.ajax({url:"../marweb/marzLocalPage.action", async:false});
+        $("#logDiv").html(table2.responseText);
+    });
+    
+    $("#marzOfflineGuaji").click(function(){
+        var table=$.ajax({url:"../marweb/queryMarzAccountByTgksId.action", async:false});
+        $("#mainDiv").html(table.responseText);
+        var table=$.ajax({url:"../marweb/queryMarzLogByTgksId.action", async:false});
+        $("#logDiv").html(table.responseText);
+    });
+    
     $("#marzCardUsePageA").click(function(){
         var table=$.ajax({url:"../marweb/marzCardUsePage.action", async:false});
         $("#mainDiv").html(table.responseText);

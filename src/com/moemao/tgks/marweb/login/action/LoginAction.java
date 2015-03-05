@@ -131,6 +131,19 @@ public class LoginAction extends TGKSAction
         
         return SUCCESS;
     }
+    
+    /**
+     * 
+     * @Title: marzLocalPage
+     * @Description: 在线挂机
+     * @return
+     * @return String 返回类型
+     * @throws
+     */
+    public String marzLocalPage()
+    {
+        return SUCCESS;
+    }
 
     public static Log getLogger()
     {
