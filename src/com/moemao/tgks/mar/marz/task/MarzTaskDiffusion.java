@@ -53,7 +53,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
     
     private int resultCode = MarzConstant.SUCCESS;
     
-    private static int SLEEPTIME = 1 * 60 * 1000;
+    private static int SLEEPTIME = 2 * 60 * 1000;
     
     public boolean running = true;
     
@@ -536,8 +536,9 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         {
                             cardJSON = JSONObject.fromObject(cards.get(i));
                             
-                            // 没有MR可喂的时候，找锁上的UR以及SR喂
-                            if (cardJSON.getInt("lv_max") >= 50 && cardJSON.getInt("lv") < cardJSON.getInt("lv_max"))
+                            // 没有MR可喂的时候，找锁上的UR喂
+                            if (cardJSON.getInt("lv_max") >= 50 && cardJSON.getInt("lv") < cardJSON.getInt("lv_max")
+                                && 0 != cardJSON.getInt("is_lock"))
                             {
                                 baseId = cardJSON.getString("uniqid");
                             }
@@ -563,9 +564,9 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         {
                             cardJSON = JSONObject.fromObject(cards.get(i));
                             
-                            // 没有MR可喂的时候，找锁上的UR以及SR喂
-                            if (cardJSON.getInt("lv_max") >= 40 && cardJSON.getInt("lv") < cardJSON.getInt("lv_max"))
-                                //        && 0 != cardJSON.getInt("is_lock"))
+                            // 没有MR UR可喂的时候，找锁上的SR喂
+                            if (cardJSON.getInt("lv_max") >= 40 && cardJSON.getInt("lv") < cardJSON.getInt("lv_max")
+                                        && 0 != cardJSON.getInt("is_lock"))
                             {
                                 baseId = cardJSON.getString("uniqid");
                             }

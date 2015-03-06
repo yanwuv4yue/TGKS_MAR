@@ -159,6 +159,8 @@ public class MarzAccountAction extends TGKSAction
         {
             marzAccountEvt.setRemark("账号正在下线，请3分钟后再操作！");
             mar_marzAccountService.updateMarzAccount(marzAccountEvt);
+            // 防止线程卡死  多加一个销毁请求
+            MarzThreadPoolDiffusion.getInstance().stopThread(MarConstant.MODULE_TAG + marzAccountEvt.getTgksId());
         }
         
         return SUCCESS;

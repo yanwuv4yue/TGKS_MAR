@@ -9,12 +9,13 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import com.moemao.tgks.mar.marz.thread.MarzThreadPoolDiffusion;
+import java.util.concurrent.Semaphore;
 
 public class HttpRequest
 {
-    private static int SLEEP_TIME = 10 * 1000;
+    private static int SLEEP_TIME = 4000;
+    
+    private static final Semaphore semp = new Semaphore(1);
     
     /**
      * 向指定URL发送GET方法的请求
@@ -101,35 +102,36 @@ public class HttpRequest
         String result = "";
         try
         {
-            //synchronized (this)
-            //{
-                URL realUrl = new URL(url);
-                // 打开和URL之间的连接
-                URLConnection conn = realUrl.openConnection();
-                // 设置通用的请求属性
-                conn.setRequestProperty("accept", "*/*");
-                conn.setRequestProperty("connection", "Keep-Alive");
-                conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-                // 设置超时
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(10000);
-                // 发送POST请求必须设置如下两行
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                // 获取URLConnection对象对应的输出流
-                out = new PrintWriter(conn.getOutputStream());
-                // 发送请求参数
-                out.print(param);
-                // flush输出流的缓冲
-                out.flush();
-                // 定义BufferedReader输入流来读取URL的响应
-                in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String line;
-                while ((line = in.readLine()) != null)
-                {
-                    result += line;
-                }
-            //}
+            semp.acquire();
+            
+            URL realUrl = new URL(url);
+            // 打开和URL之间的连接
+            URLConnection conn = realUrl.openConnection();
+            // 设置通用的请求属性
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 设置超时
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            // 发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            // 获取URLConnection对象对应的输出流
+            out = new PrintWriter(conn.getOutputStream());
+            // 发送请求参数
+            out.print(param);
+            // flush输出流的缓冲
+            out.flush();
+            // 定义BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null)
+            {
+                result += line;
+            }
+            
+            Thread.sleep(SLEEP_TIME);
         }
         catch (Exception e)
         {
@@ -141,6 +143,8 @@ public class HttpRequest
         // 使用finally块来关闭输出流、输入流
         finally
         {
+            semp.release();
+            
             try
             {
                 if (out != null)
@@ -176,10 +180,6 @@ public class HttpRequest
         {
             result = result.replace("�?}", "\"}");
         }
-        
-        SLEEP_TIME = (MarzThreadPoolDiffusion.getInstance().getMarzThreadNum() + 1) * 4 *1000;
-        
-        Thread.sleep(SLEEP_TIME);
         
         return result;
     }

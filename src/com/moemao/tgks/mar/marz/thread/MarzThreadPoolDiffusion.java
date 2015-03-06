@@ -194,7 +194,7 @@ public class MarzThreadPoolDiffusion implements Runnable, ApplicationContextAwar
         
         for (Thread thread : threads)
         {
-            if (thread != null && thread.getName().contains(MarzConstant.OVER))
+            if (thread != null && thread.getName().equals(MarConstant.MODULE_TAG + MarzConstant.OVER))
             {
                 try
                 {
