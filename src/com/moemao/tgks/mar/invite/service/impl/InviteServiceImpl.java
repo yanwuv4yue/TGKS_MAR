@@ -4,14 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.mar.account.entity.AccountEvt;
 import com.moemao.tgks.mar.account.entity.AccountReq;
 import com.moemao.tgks.mar.account.service.AccountService;
-import com.moemao.tgks.mar.execute.KrsmaRequest;
 import com.moemao.tgks.mar.execute.MarzRequest;
 import com.moemao.tgks.mar.invite.service.InviteService;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
@@ -112,27 +110,17 @@ public class InviteServiceImpl implements InviteService
                 this.mar_accountService.updateAccount(accountEvt);
             }
         }
-
-        try
+        
+        Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        
+        for (AccountEvt accountEvt : accountList)
         {
-            Map<String, JSONObject> map = new HashMap<String, JSONObject>();
-            
-            for (AccountEvt accountEvt : accountList)
+            try
             {
                 // 1 登录
                 map = request.loginIOS(accountEvt.getUuid(), accountEvt.getHashToken());
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 map = request.connect(sid);
-                
-                // 1.5 IOSv1.1.1更新完必须打完第一仗
-                this.teamBattleSoloStart(sid, MarConstant.BATTLESOLOSTART_FIRST);
-                accountEvt.setSessionId(sid);
-            }
-            
-            for (AccountEvt accountEvt : accountList)
-            {
-                sid = accountEvt.getSessionId();
-                this.teamBattleSoloEnd(sid, MarConstant.BATTLESOLOEND_3);
                 
                 // 2 填招待ID
                 request.inviteCodeEnter(sid, inviteCode);
@@ -141,79 +129,13 @@ public class InviteServiceImpl implements InviteService
                 accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_5);
                 this.mar_accountService.updateAccount(accountEvt);
             }
-        }
-        catch (Exception e)
-        {
-            
-        }
-    }
-    
-    public void teamBattleSoloStart(String sid, String battleSoloStart)
-    {
-        KrsmaRequest request = KrsmaRequest.getInstance();
-        try
-        {
-            String[] result = request.teamBattleSoloShow(sid);
-            sid = result[0];
-            result[1] = ("{\"normal_groups\"" + result[1].split("normal_groups\"")[1]);
-            JSONObject json = JSONObject.fromObject(result[1]);
-            JSONArray arthers = json.getJSONArray("arthurs");
-            @SuppressWarnings("unchecked")
-            List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(arthers, JSONObject.class);
-            JSONArray users;
-            String userA = "";
-            String userB = "";
-            String userD = "";
-            for (JSONObject obj : jsonList)
+            catch (Exception e)
             {
-                if (MarConstant.KRSMACARD_TYPE_1.equals(obj.getString("arthur_type")))
-                {
-                    users = obj.getJSONArray("partners");
-                    @SuppressWarnings("unchecked")
-                    List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
-                    userA = userList.get(0).getString("userid");
-                }
-                else if (MarConstant.KRSMACARD_TYPE_2.equals(obj.getString("arthur_type")))
-                {
-                    users = obj.getJSONArray("partners");
-                    @SuppressWarnings("unchecked")
-                    List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
-                    userB = userList.get(0).getString("userid");
-                }
-                else if (MarConstant.KRSMACARD_TYPE_4.equals(obj.getString("arthur_type")))
-                {
-                    users = obj.getJSONArray("partners");
-                    @SuppressWarnings("unchecked")
-                    List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
-                    userD = userList.get(0).getString("userid");
-                }
+                continue;
             }
-            
-            result = request.teamBattleSoloStart(sid, battleSoloStart, userA, userB, userD);
-            sid = result[0];
-            //Thread.sleep(MarConstant.SLEEP_TIME_BATTLE);
-            
-            //request.teamBattleSoloEnd(sid, battleSoloEnd);
-        }
-        catch (Exception e)
-        {
-            return;
         }
     }
     
-    public void teamBattleSoloEnd(String sid, String battleSoloEnd)
-    {
-        KrsmaRequest request = KrsmaRequest.getInstance();
-        try
-        {
-            request.teamBattleSoloEnd(sid, battleSoloEnd);
-        }
-        catch (Exception e)
-        {
-            return;
-        }
-    }
-
     public MarzRequest getRequest()
     {
         return request;

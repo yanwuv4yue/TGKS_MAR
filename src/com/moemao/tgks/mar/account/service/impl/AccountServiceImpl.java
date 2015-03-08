@@ -1011,7 +1011,7 @@ public class AccountServiceImpl implements AccountService
             
         }
     
-        // 3、所有账号执行userCreate homeShow 以及招待
+        // 3、所有账号执行userCreate homeShow
         for (AccountEvt accountEvt : list)
         {
             try
@@ -1020,9 +1020,42 @@ public class AccountServiceImpl implements AccountService
                 result = request.userCreate(accountEvt.getSessionId(), name, chara);
                 sid = result[0];
                 
+                accountEvt.setSessionId(sid);
+            }
+            catch (Exception e)
+            {
+                // 起名字失败重新登录直接走战斗
+                sid = this.login(accountEvt);
+                accountEvt.setSessionId(sid);
+                continue;
+            }
+        }
+                
+        // 4、IOS1.1.1必须战斗后才能刷招待
+        for (AccountEvt accountEvt : list)
+        {
+            try
+            {
                 // homeShow 主页
-                result = request.homeShow(sid);
+                result = request.homeShow(accountEvt.getSessionId());
                 sid = result[0];
+                
+                // 1.5 IOSv1.1.1更新完必须打完第一仗
+                this.teamBattleSoloStart(sid, MarConstant.BATTLESOLOSTART_FIRST);
+                accountEvt.setSessionId(sid);
+            }
+            catch (Exception e)
+            {
+                continue;
+            }
+        }
+        
+        for (AccountEvt accountEvt : list)
+        {
+            try
+            {
+                sid = accountEvt.getSessionId();
+                this.teamBattleSoloEnd(sid, MarConstant.BATTLESOLOEND_3);
                 
                 accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_4);
                 this.updateAccount(accountEvt);
@@ -1031,6 +1064,72 @@ public class AccountServiceImpl implements AccountService
             {
                 continue;
             }
+        }
+    }
+    
+    public void teamBattleSoloStart(String sid, String battleSoloStart)
+    {
+        KrsmaRequest request = KrsmaRequest.getInstance();
+        try
+        {
+            String[] result = request.teamBattleSoloShow(sid);
+            sid = result[0];
+            result[1] = ("{\"normal_groups\"" + result[1].split("normal_groups\"")[1]);
+            JSONObject json = JSONObject.fromObject(result[1]);
+            JSONArray arthers = json.getJSONArray("arthurs");
+            @SuppressWarnings("unchecked")
+            List<JSONObject> jsonList = (List<JSONObject>) JSONArray.toCollection(arthers, JSONObject.class);
+            JSONArray users;
+            String userA = "";
+            String userB = "";
+            String userD = "";
+            for (JSONObject obj : jsonList)
+            {
+                if (MarConstant.KRSMACARD_TYPE_1.equals(obj.getString("arthur_type")))
+                {
+                    users = obj.getJSONArray("partners");
+                    @SuppressWarnings("unchecked")
+                    List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
+                    userA = userList.get(0).getString("userid");
+                }
+                else if (MarConstant.KRSMACARD_TYPE_2.equals(obj.getString("arthur_type")))
+                {
+                    users = obj.getJSONArray("partners");
+                    @SuppressWarnings("unchecked")
+                    List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
+                    userB = userList.get(0).getString("userid");
+                }
+                else if (MarConstant.KRSMACARD_TYPE_4.equals(obj.getString("arthur_type")))
+                {
+                    users = obj.getJSONArray("partners");
+                    @SuppressWarnings("unchecked")
+                    List<JSONObject> userList = (List<JSONObject>) JSONArray.toCollection(users, JSONObject.class);
+                    userD = userList.get(0).getString("userid");
+                }
+            }
+            
+            result = request.teamBattleSoloStart(sid, battleSoloStart, userA, userB, userD);
+            sid = result[0];
+            //Thread.sleep(MarConstant.SLEEP_TIME_BATTLE);
+            
+            //request.teamBattleSoloEnd(sid, battleSoloEnd);
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+    }
+    
+    public void teamBattleSoloEnd(String sid, String battleSoloEnd)
+    {
+        KrsmaRequest request = KrsmaRequest.getInstance();
+        try
+        {
+            request.teamBattleSoloEnd(sid, battleSoloEnd);
+        }
+        catch (Exception e)
+        {
+            return;
         }
     }
     
