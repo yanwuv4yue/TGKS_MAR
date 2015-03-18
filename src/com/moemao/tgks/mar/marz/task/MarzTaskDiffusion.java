@@ -20,6 +20,7 @@ import com.moemao.tgks.common.core.spring.ContextUtil;
 import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.mar.execute.MarzRequest;
+import com.moemao.tgks.mar.marz.entity.CardEvt;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.marz.tool.MarzUtil;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
@@ -243,6 +244,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 {
                     marzSettingEvt.setBattleNowaste(setting.getValue());
                 }
+                else if (MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setBattleNowasteBossId(setting.getValue());
+                }
             }
         }
     }
@@ -406,6 +411,245 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
      * @throws
      */
     private int card()
+    {
+        try
+        {
+            // 更新卡片信息
+            map = request.cardShow2(sid);
+            
+            resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+            
+            //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "卡片信息更新" + MarzUtil.resultCodeStr(resultCode));
+            
+            if (MarzConstant.RES_CODE_0 == resultCode)
+            {
+                sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                
+                JSONObject cardShowJSON = map.get(MarzConstant.JSON_TAG_CARDSHOW);
+                
+                // cardShow2接口中 cards → 0
+                JSONArray cardsJSON = cardShowJSON.getJSONArray("0");
+                
+                List<CardEvt> cardList = new ArrayList<CardEvt>();
+                JSONObject cardJSON;
+                CardEvt cardEvt = new CardEvt();
+                
+                for (int i = 0, size = cardsJSON.size(); i < size; i++)
+                {
+                    cardJSON = JSONObject.fromObject(cardsJSON.get(i));
+                    cardEvt = new CardEvt();
+                    cardEvt.setUniqid(cardJSON.getString("0"));
+                    cardEvt.setCardid(cardJSON.getString("1"));
+                    cardEvt.setLv(cardJSON.getInt("2"));
+                    cardEvt.setLv_max(cardJSON.getInt("3"));
+                    cardEvt.setExp(cardJSON.getInt("4"));
+                    cardEvt.setLove(cardJSON.getInt("5"));
+                    cardEvt.setSkill_lv(cardJSON.getString("6"));
+                    cardEvt.setHp(cardJSON.getInt("7"));
+                    cardEvt.setAtkp(cardJSON.getInt("8"));
+                    cardEvt.setIntp(cardJSON.getInt("9"));
+                    cardEvt.setMndp(cardJSON.getInt("10"));
+                    cardEvt.setNext_lv_exp(cardJSON.getInt("11"));
+                    cardEvt.setNow_lv_exp(cardJSON.getInt("12"));
+                    cardEvt.setAdd_exp(cardJSON.getInt("13"));
+                    cardEvt.setBase_add_price(cardJSON.getInt("14"));
+                    cardEvt.setEvolution_price(cardJSON.getInt("15"));
+                    cardEvt.setIs_lock(cardJSON.getInt("16"));
+                    cardEvt.setCreate_time(cardJSON.getInt("17"));
+                    cardEvt.setFame(cardJSON.getInt("18"));
+                    
+                    cardList.add(cardEvt);
+                }
+                
+                
+                List<String> cardSellList = new ArrayList<String>();
+                List<String> cardFusionList = new ArrayList<String>();
+                
+                // 自动卖卡
+                if (validateSetting(MarzConstant.VALIDATE_SETTING_CARDSELL))
+                {
+                    // 查询用户设定的售卡列表
+                    // TODO
+                    List<String> userSellList = new ArrayList<String>();
+                    
+                    if (validateSetting(MarzConstant.VALIDATE_SETTING_CARDSELL_COMMON))
+                    {
+                        // 金币卡
+                        userSellList.add("20000026");
+                        userSellList.add("20000027");
+                        userSellList.add("20000028");
+                        userSellList.add("20000029");
+                        // 蓝狗粮
+                        userSellList.add("20000001");
+                        // 2星进化素材
+                        userSellList.add("20000009");
+                        userSellList.add("20000008");
+                        userSellList.add("20000007");
+                        userSellList.add("20000006");
+                        userSellList.add("20000005");
+                    }
+            
+                    // 遍历所有卡片 把需要出售的卡片ID放入cardSellList
+                    for (CardEvt card : cardList)
+                    {
+                        // 只能出售未锁定以及是1级的卡
+                        if (0 == card.getIs_lock() && 1 == card.getLv())
+                        {
+                            // 先卖 出售列表中的卡
+                            if (userSellList.contains(card.getCardid()))
+                            {
+                                cardSellList.add(card.getUniqid());
+                            }
+                            // 然后卖一些基础的垃圾卡 10~30
+                            else if (validateSetting(MarzConstant.VALIDATE_SETTING_CARDSELL_COMMON)
+                                    && card.getLv_max() >= 10 && card.getLv_max() <= 30)
+                            {
+                                cardSellList.add(card.getUniqid());
+                            }
+                        }
+                        
+                        // 当出售的卡片满10张时 跳出
+                        if (cardSellList.size() == 10)
+                        {
+                            break;
+                        }
+                    }
+                    
+                    // 组装卡牌ID调用cardSell请求
+                    if (cardSellList.size() > 0)
+                    {
+                        map = request.cardSell(sid, MarzUtil.listToString(cardSellList));
+                        
+                        resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+                        
+                        //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_5, "卡片出售" + MarzUtil.resultCodeStr(resultCode));
+                        
+                        if (MarzConstant.RES_CODE_0 == resultCode)
+                        {
+                            sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                            
+                            account.setCardNum(map.get(MarzConstant.JSON_TAG_CARDSELL).getInt("card_num"));
+                            account.setGold(account.getGold() + map.get(MarzConstant.JSON_TAG_CARDSELL).getInt("get_gold"));
+                            
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_5, "已卖出卡片ID " + MarzUtil.listToString(cardSellList));
+                        }
+                    }
+                }
+                
+                // 狗粮合成
+                if (validateSetting(MarzConstant.VALIDATE_SETTING_CARDFUSION))
+                {
+                    // 只自动喂 蓝狗 红狗 粉狗
+                    String[] chiari = {"20000001", "20000002", "20000003"};
+                    String baseId = "";
+                    
+                    for (CardEvt card : cardList)
+                    {
+                        // 自动合成只支持SR UR跟MR 而且必须手动锁上 先找MR 不锁也可
+                        if (card.getLv_max() >= 60 && card.getLv() < card.getLv_max())
+                        {
+                            baseId = card.getUniqid();
+                        }
+                        // 狗粮 一次喂4个 不能是已经出售了的
+                        else if (!cardSellList.contains(card.getUniqid()) 
+                                && Arrays.asList(chiari).contains(card.getCardid())
+                                && !cardFusionList.contains(card.getUniqid())
+                                && cardFusionList.size() < 4)
+                        {
+                            cardFusionList.add(card.getUniqid());
+                        }
+                        
+                        if (!CommonUtil.isEmpty(baseId) && cardFusionList.size() == 4)
+                        {
+                            break;
+                        }
+                    }
+                    // 如果没有MR以上的卡 再挑UR喂
+                    if (CommonUtil.isEmpty(baseId))
+                    {
+                        for (CardEvt card : cardList)
+                        {
+                            // 没有MR可喂的时候，找锁上的UR喂
+                            if (card.getLv_max() >= 50 && card.getLv() < card.getLv_max()
+                                && 0 != card.getIs_lock())
+                            {
+                                baseId = card.getUniqid();
+                            }
+                            // 狗粮 一次喂4个 不能是已经出售了的
+                            else if (!cardSellList.contains(card.getUniqid()) 
+                                    && Arrays.asList(chiari).contains(card.getCardid())
+                                    && !cardFusionList.contains(card.getUniqid())
+                                    && cardFusionList.size() < 4)
+                            {
+                                cardFusionList.add(card.getUniqid());
+                            }
+                            
+                            if (!CommonUtil.isEmpty(baseId) && cardFusionList.size() == 4)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    // 如果没有UR以上的卡 再挑SR喂
+                    if (CommonUtil.isEmpty(baseId))
+                    {
+                        for (CardEvt card : cardList)
+                        {
+                            // 没有MR UR可喂的时候，找锁上的SR喂
+                            if (card.getLv_max() >= 40 && card.getLv() < card.getLv_max()
+                                        && 0 != card.getIs_lock())
+                            {
+                                baseId = card.getUniqid();
+                            }
+                            // 狗粮 一次喂4个 不能是已经出售了的
+                            else if (!cardSellList.contains(card.getUniqid()) 
+                                    && Arrays.asList(chiari).contains(card.getCardid())
+                                    && !cardFusionList.contains(card.getUniqid())
+                                    && cardFusionList.size() < 4)
+                            {
+                                cardFusionList.add(card.getUniqid());
+                            }
+                            
+                            if (!CommonUtil.isEmpty(baseId) && cardFusionList.size() == 4)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (!CommonUtil.isEmpty(baseId) && cardFusionList.size() > 0)
+                    {
+                        map = request.cardFusion(sid, baseId, MarzUtil.listToString(cardFusionList));
+                        
+                        resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+                        
+                        //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_4, "卡片合成" + MarzUtil.resultCodeStr(resultCode));
+                        
+                        if (MarzConstant.RES_CODE_0 == resultCode)
+                        {
+                            sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                            
+                            account.setCardNum(map.get(MarzConstant.JSON_TAG_CARDFUSION).getInt("card_num"));
+                            account.setGold(map.get(MarzConstant.JSON_TAG_CARDFUSION).getInt("gold"));
+                            
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_4, "主卡ID " + baseId + " 消耗狗粮 " + MarzUtil.listToString(cardFusionList));
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            return MarzConstant.FAILED;
+        }
+        
+        return resultCode;
+    }
+    
+    
+    
+    @SuppressWarnings("unused")
+    private int card_old()
     {
         try
         {
@@ -656,7 +900,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 {
                     mapJSON = JSONObject.fromObject(battleMapNormal.get(i));
                     
-                    if (!CommonUtil.isEmpty(mapJSON.getString("bosses")))
+                    if (mapJSON.containsKey("bosses") && !CommonUtil.isEmpty(mapJSON.getString("bosses")))
                     {
                         bossArray = mapJSON.getJSONArray("bosses");
                         
@@ -679,7 +923,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 {
                     mapJSON = JSONObject.fromObject(battleMapEvent.get(i));
                     
-                    if (!CommonUtil.isEmpty(mapJSON.getString("bosses")))
+                    if (mapJSON.containsKey("bosses") && !CommonUtil.isEmpty(mapJSON.getString("bosses")))
                     {
                         bossArray = mapJSON.getJSONArray("bosses");
                         
@@ -764,35 +1008,48 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     // 是否启用不浪费BP
                     if (validateSetting(MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE) && (account.getBpMax() - account.getBp()) < 3)
                     {
-                        for (MarzMapEvt m : battleMapList)
+                        if (CommonUtil.isEmpty(marzSettingEvt.getBattleNowasteBossId()) || "0".equals(marzSettingEvt.getBattleNowasteBossId()))
                         {
-                            if (MarConstant.BATTLE_START_MONDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                            for (MarzMapEvt m : battleMapList)
                             {
-                                mapEvt = m;
+                                if (MarConstant.BATTLE_START_MONDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                                {
+                                    mapEvt = m;
+                                }
+                                else if (MarConstant.BATTLE_START_TUESDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                                {
+                                    mapEvt = m;
+                                }
+                                else if (MarConstant.BATTLE_START_WEDNESDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                                {
+                                    mapEvt = m;
+                                }
+                                else if (MarConstant.BATTLE_START_THURSDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                                {
+                                    mapEvt = m;
+                                }
+                                else if (MarConstant.BATTLE_START_FRIDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                                {
+                                    mapEvt = m;
+                                }
+                                else if (MarConstant.BATTLE_START_SATURDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                                {
+                                    mapEvt = m;
+                                }
+                                else if (MarConstant.BATTLE_START_SUNDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                                {
+                                    mapEvt = m;
+                                }
                             }
-                            else if (MarConstant.BATTLE_START_TUESDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                        }
+                        else
+                        {
+                            for (MarzMapEvt m : battleMapList)
                             {
-                                mapEvt = m;
-                            }
-                            else if (MarConstant.BATTLE_START_WEDNESDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
-                            {
-                                mapEvt = m;
-                            }
-                            else if (MarConstant.BATTLE_START_THURSDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
-                            {
-                                mapEvt = m;
-                            }
-                            else if (MarConstant.BATTLE_START_FRIDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
-                            {
-                                mapEvt = m;
-                            }
-                            else if (MarConstant.BATTLE_START_SATURDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
-                            {
-                                mapEvt = m;
-                            }
-                            else if (MarConstant.BATTLE_START_SUNDAY.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
-                            {
-                                mapEvt = m;
+                                if (marzSettingEvt.getBattleNowasteBossId().equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                                {
+                                    mapEvt = m;
+                                }
                             }
                         }
                     }

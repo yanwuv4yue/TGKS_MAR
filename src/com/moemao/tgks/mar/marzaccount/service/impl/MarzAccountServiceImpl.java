@@ -49,6 +49,11 @@ public class MarzAccountServiceImpl implements MarzAccountService
         return marzAccountEvt;
     }
     
+    public List<MarzAccountEvt> queryMarzAccountByIds(List<String> ids)
+    {
+        return mar_marzAccountDao.mar_queryMarzAccountByIds(ids);
+    }
+    
     public int addMarzAccount(MarzAccountEvt marzAccountEvt)
     {
         marzAccountEvt.setId(MarUtil.createUniqueID());

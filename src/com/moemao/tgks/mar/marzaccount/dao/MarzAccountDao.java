@@ -15,4 +15,6 @@ public int mar_addMarzAccount(MarzAccountEvt marzAccountEvt) throws DataAccessEx
 public int mar_updateMarzAccount(MarzAccountEvt marzAccountEvt) throws DataAccessException;
 
 public int mar_deleteMarzAccount(List<String> list) throws DataAccessException;
+
+public List<MarzAccountEvt> mar_queryMarzAccountByIds(List<String> list) throws DataAccessException;
 }

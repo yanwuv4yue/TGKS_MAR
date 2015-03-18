@@ -208,6 +208,26 @@ public class MarzRequest
         return map;
     }
     
+    public Map<String, JSONObject> cardShow2(String sid) throws Exception
+    {
+        map = new HashMap<String, JSONObject>();
+        
+        String paramStr = sid + "=";
+        String[] result = httpRequest.sendPost(MarConstant.URL_CARDSHOW2, paramStr).split(MarConstant.KRSMA_SPLIT);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardShow2 " + sid);
+        
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        JSONObject cardShow = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        map.put(MarzConstant.JSON_TAG_CARDSHOW, cardShow);
+
+        result = null;
+        resCode = null;
+        return map;
+    }
+    
     public Map<String, JSONObject> cardFusion(String sid, String baseId, String addId) throws Exception
     {
         map = new HashMap<String, JSONObject>();

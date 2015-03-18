@@ -971,9 +971,31 @@ public class AccountServiceImpl implements AccountService
     
     public void forInviteAccount(List<String> ids)
     {
-        List<AccountEvt> accountList = mar_accountDao.mar_queryAccountByIds(ids);
+        // 现在不论多少一次全部查询出来执行
+        AccountReq accountReq = new AccountReq();
+        accountReq.setStatus(MarConstant.ACCOUNT_STATUS_0);
+        List<AccountEvt> accountList = mar_accountDao.mar_queryAccount(accountReq);
         
-        this.forInvite(accountList);
+        // 每次执行50个
+        List<AccountEvt> tempList = new ArrayList<AccountEvt>();
+        for (int i = 0; i < accountList.size(); i++)
+        {
+            tempList.add(accountList.get(i));
+            
+            if (i > 0 && i % 20 ==0)
+            {
+                // 每20个满了就执行一次
+                this.forInvite(tempList);
+                System.out.println(MarConstant.LOG_SYSTEM_INFO + "已经执行完 " + (i+1) + " 个！共 " + accountList.size() + " 个！");
+                tempList = new ArrayList<AccountEvt>();
+            }
+        }
+        
+        // 最后一批如果不满50个，那么需要执行最后一次
+        if (tempList.size() > 0)
+        {
+            this.forInvite(tempList);
+        }
         
         System.out.println(MarConstant.LOG_SYSTEM_INFO + "全部招待账号已经准备完成！共 " + accountList.size() + " 个！");
     }

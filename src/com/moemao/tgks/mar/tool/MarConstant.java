@@ -136,6 +136,11 @@ public class MarConstant
     public static final String URL_CARDSHOW = "http://app.kairisei-ma.jp/Game/CardShow";
 
     /**
+     * 卡组信息 新
+     */
+    public static final String URL_CARDSHOW2 = "http://app.kairisei-ma.jp/Game/CardShow2";
+
+    /**
      * 卡片合成
      */
     public static final String URL_CARDFUSION = "http://app.kairisei-ma.jp/Game/CardFusion";

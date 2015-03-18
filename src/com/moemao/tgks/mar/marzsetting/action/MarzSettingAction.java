@@ -147,6 +147,10 @@ public class MarzSettingAction extends TGKSAction
                 {
                     marzSettingEvt.setBattleNowaste(setting.getValue());
                 }
+                else if (MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setBattleNowasteBossId(setting.getValue());
+                }
             }
         }
         
@@ -248,6 +252,14 @@ public class MarzSettingAction extends TGKSAction
         setting.setType(MarzConstant.MARZSETTING_TYPE_0);
         setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE));
         setting.setValue(marzSettingEvt.getBattleNowaste());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 战斗 不浪费BP地图ID
+        setting = new MarzSettingEvt();
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_1);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID));
+        setting.setValue(marzSettingEvt.getBattleNowasteBossId());
         this.mar_marzSettingService.addMarzSetting(setting);
         
         return SUCCESS;

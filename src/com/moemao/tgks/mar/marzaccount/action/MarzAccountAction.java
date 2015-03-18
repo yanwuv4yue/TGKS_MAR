@@ -202,6 +202,63 @@ public class MarzAccountAction extends TGKSAction
         return SUCCESS;
     }
     
+    public String changeStatusMarzAccount()
+    {
+        String ids = this.getRequest().getParameter("ids");
+        String status = this.getRequest().getParameter("status");
+        
+        list = mar_marzAccountService.queryMarzAccountByIds(CommonUtil.stringToList(ids));
+        
+        for (MarzAccountEvt acc : list)
+        {
+            if (MarzConstant.MARZ_ACCOUNT_STATUS_0.equals(status))
+            {
+                // 下线
+                // 关闭线程
+                MarzThreadPoolDiffusion.getInstance().stopThread(MarConstant.MODULE_TAG + acc.getTgksId());
+                
+                // 初始化状态
+                acc.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
+                acc.setAp(0);
+                acc.setApMax(0);
+                acc.setBp(0);
+                acc.setBpMax(0);
+                acc.setCardNum(0);
+                acc.setCardMax(0);
+                acc.setCoin(0);
+                acc.setFp(0);
+                acc.setGold(0);
+                acc.setSessionId("");
+                acc.setRemark("");
+                mar_marzAccountService.updateMarzAccount(acc);
+            }
+            else if (MarzConstant.MARZ_ACCOUNT_STATUS_1.equals(status))
+            {
+                // 上线
+                if (new Date().after(acc.getEndTime()))
+                {
+                    continue;
+                }
+                
+                // 启动线程
+                if (MarzThreadPoolDiffusion.getInstance().createThread(acc))
+                {
+                    acc.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_1);
+                    acc.setSessionId("");
+                    acc.setRemark("");
+                    mar_marzAccountService.updateMarzAccount(acc);
+                }
+                else
+                {
+                    // 防止线程卡死  多加一个销毁请求
+                    MarzThreadPoolDiffusion.getInstance().stopThread(MarConstant.MODULE_TAG + marzAccountEvt.getTgksId());
+                }
+            }
+        }
+        
+        return SUCCESS;
+    }
+    
     public String editMarzAccountPage()
     {
         String id = this.getRequest().getParameter("id");

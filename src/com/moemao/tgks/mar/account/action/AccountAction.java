@@ -240,8 +240,9 @@ public class AccountAction extends TGKSAction
     
     public String forInviteAccount()
     {
-        String ids = this.getRequest().getParameter("ids");
-        mar_accountService.forInviteAccount(CommonUtil.stringToList(ids));
+        //String ids = this.getRequest().getParameter("ids");
+        //mar_accountService.forInviteAccount(CommonUtil.stringToList(ids));
+        mar_accountService.forInviteAccount(new ArrayList<String>());
         return SUCCESS;
     }
     

@@ -534,6 +534,8 @@ $(document).ready(function(){
             }
             
             $("#accountManagerSubmit").val("1");
+            
+            /*
             // 获取选中的记录ids
             var ids = "";
             var array = document.getElementsByName("accountId");
@@ -559,17 +561,19 @@ $(document).ready(function(){
                 $("#accountManagerSubmit").val("0");
                 return false;
             }
-            
+            */
             // ajax调用删除action
             var options = { 
-                url:"../mar/forInviteAccount.action?ids=" + ids , // 提交给哪个执行
+                url:"../mar/forInviteAccount.action",// + ids , // 提交给哪个执行
                 type:'POST', 
                 success: function(){
                     // 执行成功刷新form
+                    $("#accountManagerSubmit").val("0");
                     query();
                 },
                 error:function(){ 
                     //alert("操作失败"); 
+                    $("#accountManagerSubmit").val("0");
                 }
             };
             

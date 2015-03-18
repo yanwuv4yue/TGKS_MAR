@@ -241,6 +241,11 @@
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
     
+    <action name="changeStatusMarzAccount" class="com.moemao.tgks.mar.marzaccount.action.MarzAccountAction" method="changeStatusMarzAccount">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+    
     <!-- mar_marzcard -->
     <action name="marzCardManager" class="com.moemao.tgks.mar.marzcard.action.MarzCardAction" method="marzCardManager">
         <result name="success">/WEB-INF/jsp/mar/marzcard/marzCardManager.jsp</result>

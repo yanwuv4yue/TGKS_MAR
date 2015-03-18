@@ -59,8 +59,8 @@
 
 <button id="addMarzAccount">新增</button>
 <button id="deleteMarzAccount">删除</button>
-<button id="onMarzAccount">启用</button>
-<button id="offMarzAccount">禁用</button>
+<button id="onlineMarzAccount">上线</button>
+<button id="offlineMarzAccount">下线</button>
 
 <div id="marzAccountDiv"></div>
 
@@ -221,7 +221,7 @@ $(document).ready(function(){
 	});
 	 
 	 // 启用按钮
-	$( "#onMarzAccount" ).button({
+	$( "#onlineMarzAccount" ).button({
 		icons: {
 			primary: "ui-icon-check"
 			}
@@ -272,7 +272,7 @@ $(document).ready(function(){
 	});
 	 
 	 // 停用按钮
-	$( "#offMarzAccount" ).button({
+	$( "#offlineMarzAccount" ).button({
 		icons: {
 			primary: "ui-icon-close"
 			}

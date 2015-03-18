@@ -50,6 +50,8 @@ public class MarzConstant
     
     public static final int VALIDATE_SETTING_BATTLE_NOWASTE = 6;
     
+    public static final int VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID = 7;
+    
     /**
      * MARZACCOUNT 账号类型 0 IOS
      */

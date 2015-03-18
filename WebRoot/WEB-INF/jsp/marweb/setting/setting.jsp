@@ -48,8 +48,17 @@
                          <option value="1" <s:if test="marzSettingEvt.battleNowaste == 1">selected="selected"</s:if>>开</option>
                     </select>
                 </td>
-                <td></td>
-                <td></td>
+                <td>不浪费BP地图</td>
+                <td>
+                    <select id="marzSettingEvt.battleNowasteBossId" name="marzSettingEvt.battleNowasteBossId">
+                         <option value="0" <s:if test="marzSettingEvt.battleNowasteBossId == 0">selected="selected"</s:if>>每日限定素材</option>
+                         <s:iterator value="allMapList" var="evt" status="idx">
+                            <s:if test="#evt.show == 1">
+                                <option value="<s:property value='#evt.bossId'/>" <s:if test="marzSettingEvt.battleNowasteBossId == #evt.bossId">selected="selected"</s:if>><s:property value='#evt.bossName'/></option>
+                            </s:if>
+                         </s:iterator>
+                    </select>
+                </td>
                 <td></td>
                 <td></td>
             </tr>

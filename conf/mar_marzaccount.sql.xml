@@ -84,6 +84,16 @@
         </if>
 </select>
 
+
+<select id="mar_queryMarzAccountByIds" parameterType="list" resultType="MarzAccountEvt" resultMap="MarzAccountEvtMap">
+        <![CDATA[  
+            SELECT t.id, t.tgksid, t.iosuuid, t.androiduuid, t.ioskey, t.androidkey, t.type, t.status, t.sessionid, t.vip, t.name, t.userid, t.lv, t.ap, t.apmax, t.bp, t.bpmax, t.cardnum, t.cardmax, t.gold, t.fp, t.coin, t.bossids, t.createtime, t.endtime, t.remark FROM t_tgks_mar_marzaccount t WHERE id IN
+        ]]>
+        <foreach collection="list" item="ids"  open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+</select>
+
 <insert id="mar_addMarzAccount" parameterType="MarzAccountEvt">
         <![CDATA[  
             INSERT INTO t_tgks_mar_marzaccount (id, tgksid, iosuuid, androiduuid, ioskey, androidkey, type, status, sessionid, vip, name, userid, lv, ap, apmax, bp, bpmax, cardnum, cardmax, gold, fp, coin, bossids,createtime, endtime, remark) 

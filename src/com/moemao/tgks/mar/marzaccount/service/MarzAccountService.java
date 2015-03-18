@@ -11,6 +11,8 @@ public List<MarzAccountEvt> queryMarzAccount(MarzAccountReq marzAccountReq);
 
 public List<MarzAccountEvt> queryMarzAccountOnline();
 
+public List<MarzAccountEvt> queryMarzAccountByIds(List<String> ids);
+
 public MarzAccountEvt queryMarzAccountById(String id);
 
 public int addMarzAccount(MarzAccountEvt marzAccountEvt);
