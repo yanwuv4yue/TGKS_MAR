@@ -8,6 +8,7 @@
 <head>
 <meta charset="utf-8">
 <title>乖离性MA账号托管系统——猫萌公社</title>
+<link href="https://d2e1xl20cw0m26.cloudfront.net/pre/assets/favicon-5862cadf3d85c514f2068142cfb97eb3.ico" rel="icon" type="image/png">
 <link rel="stylesheet" type="text/css" href="../resources/mar/marweb/login/style.css" />
 </head>
 <body>

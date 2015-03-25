@@ -1,6 +1,8 @@
 package com.moemao.tgks.mar.account.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import net.sf.json.JSONArray;
@@ -976,7 +978,7 @@ public class AccountServiceImpl implements AccountService
         accountReq.setStatus(MarConstant.ACCOUNT_STATUS_0);
         List<AccountEvt> accountList = mar_accountDao.mar_queryAccount(accountReq);
         
-        // 每次执行50个
+        // 每次执行20个
         List<AccountEvt> tempList = new ArrayList<AccountEvt>();
         for (int i = 0; i < accountList.size(); i++)
         {
@@ -1002,6 +1004,7 @@ public class AccountServiceImpl implements AccountService
     
     private void forInvite(List<AccountEvt> list)
     {
+        HashSet<AccountEvt> faildSet = new HashSet<AccountEvt>();
         String[] result = new String[2];
         String sid;
         
@@ -1019,6 +1022,7 @@ public class AccountServiceImpl implements AccountService
             }
             catch (Exception e)
             {
+                faildSet.add(accountEvt);
                 continue;
             }
         }
@@ -1068,6 +1072,7 @@ public class AccountServiceImpl implements AccountService
             }
             catch (Exception e)
             {
+                faildSet.add(accountEvt);
                 continue;
             }
         }
@@ -1084,8 +1089,19 @@ public class AccountServiceImpl implements AccountService
             }
             catch (Exception e)
             {
+                accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_0);
+                this.updateAccount(accountEvt);
                 continue;
             }
+        }
+        
+        // 重置失败了的初始账号
+        Iterator<AccountEvt> it = faildSet.iterator();
+        while (it.hasNext())
+        {
+            AccountEvt accountEvt = it.next();
+            accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_0);
+            this.updateAccount(accountEvt);
         }
     }
     

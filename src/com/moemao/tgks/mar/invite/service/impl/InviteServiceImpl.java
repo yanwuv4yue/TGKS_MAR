@@ -97,11 +97,12 @@ public class InviteServiceImpl implements InviteService
             // 如果之前没有刷过
             accountReq = new AccountReq();
             accountReq.setStatus(MarConstant.ACCOUNT_STATUS_4);
-            accountReq.setSortSql(" t.ID Limit 0, 10");
+            accountReq.setSortSql(" t.ID Limit 0, 20");
             
-            // 查询出10个可以用来刷招待的号
+            // 查询出20个可以用来刷招待的号
             accountList = this.mar_accountService.queryAccount(accountReq);
             
+            /*
             // 先绑定这10个号
             for (AccountEvt accountEvt : accountList)
             {
@@ -109,9 +110,11 @@ public class InviteServiceImpl implements InviteService
                 accountEvt.setTitle(password);
                 this.mar_accountService.updateAccount(accountEvt);
             }
+            */
         }
         
         Map<String, JSONObject> map = new HashMap<String, JSONObject>();
+        int complete = 0;
         
         for (AccountEvt accountEvt : accountList)
         {
@@ -127,10 +130,23 @@ public class InviteServiceImpl implements InviteService
                 
                 // 刷完招待更新一下账号状态
                 accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_5);
+                accountEvt.setInviteCode(inviteCode);
+                accountEvt.setTitle(password);
                 this.mar_accountService.updateAccount(accountEvt);
+                
+                complete++;
+                
+                if (complete >= 10)
+                {
+                    break;
+                }
             }
             catch (Exception e)
             {
+                accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_0);
+                accountEvt.setInviteCode("");
+                accountEvt.setTitle("");
+                this.mar_accountService.updateAccount(accountEvt);
                 continue;
             }
         }

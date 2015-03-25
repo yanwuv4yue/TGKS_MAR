@@ -21,6 +21,7 @@ import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.mar.execute.MarzRequest;
 import com.moemao.tgks.mar.marz.entity.CardEvt;
+import com.moemao.tgks.mar.marz.thread.MarzThreadPoolDiffusion;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.marz.tool.MarzUtil;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
@@ -106,6 +107,27 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 if (CommonUtil.isEmpty(account.getSessionId()))
                 {
                     resultCode = this.login();
+                    
+                    if (MarzConstant.RES_CODE_MAINTAIN_M5 == resultCode)
+                    {
+                        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "系统维护中，账号自动下线，请留意游戏公告等开服后手动上线...");
+                        // 初始化状态
+                        account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
+                        account.setAp(0);
+                        account.setApMax(0);
+                        account.setBp(0);
+                        account.setBpMax(0);
+                        //account.setCardNum(0);
+                        //account.setCardMax(0);
+                        account.setCoin(0);
+                        account.setFp(0);
+                        account.setGold(0);
+                        account.setSessionId("");
+                        account.setRemark("");
+                        this.marzAccountService.updateMarzAccount(account);
+                        
+                        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经下线...");
+                    }
                 }
                 else
                 {
@@ -132,6 +154,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     
                     if (MarzConstant.SUCCESS > resultCode)
                     {
+                        account.setSessionId("");
+                        account.setRemark("");
+                        this.marzAccountService.updateMarzAccount(account);
+                        
                         this.sleep(SLEEPTIME);
                         continue;
                     }
@@ -177,6 +203,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 
                 System.out.println(Thread.currentThread().getName() + "本次任务执行完成 进入等待时间 [" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "]");
                 
+                SLEEPTIME = ((2 * 60) + (MarzThreadPoolDiffusion.getInstance().getMarzThreadNum() * 4)) * 1000;
+                
                 // 等待时间间隔
                 this.sleep(SLEEPTIME);
             }
@@ -192,8 +220,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         account.setApMax(0);
         account.setBp(0);
         account.setBpMax(0);
-        account.setCardNum(0);
-        account.setCardMax(0);
+        //account.setCardNum(0);
+        //account.setCardMax(0);
         account.setCoin(0);
         account.setFp(0);
         account.setGold(0);
@@ -300,7 +328,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             
             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号登录" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -329,7 +357,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             
             //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号基本信息更新" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -382,7 +410,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             
             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_2, "探索" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -421,7 +449,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             
             //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "卡片信息更新" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -524,7 +552,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         
                         //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_5, "卡片出售" + MarzUtil.resultCodeStr(resultCode));
                         
-                        if (MarzConstant.RES_CODE_0 == resultCode)
+                        if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                         {
                             sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                             
@@ -625,7 +653,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         
                         //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_4, "卡片合成" + MarzUtil.resultCodeStr(resultCode));
                         
-                        if (MarzConstant.RES_CODE_0 == resultCode)
+                        if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                         {
                             sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                             
@@ -660,7 +688,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             
             //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "卡片信息更新" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -731,7 +759,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         
                         //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_5, "卡片出售" + MarzUtil.resultCodeStr(resultCode));
                         
-                        if (MarzConstant.RES_CODE_0 == resultCode)
+                        if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                         {
                             sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                             
@@ -838,7 +866,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         
                         //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_4, "卡片合成" + MarzUtil.resultCodeStr(resultCode));
                         
-                        if (MarzConstant.RES_CODE_0 == resultCode)
+                        if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                         {
                             sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                             
@@ -875,7 +903,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             
             //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, "战斗信息查询" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -1068,7 +1096,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     
                     this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, "战斗开始" + MarzUtil.resultCodeStr(resultCode) + " 目标副本 " + mapEvt.getBossName());
                     
-                    if (MarzConstant.RES_CODE_0 == resultCode)
+                    if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                     {
                         sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                         
@@ -1105,7 +1133,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         
                         this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, "战斗结束" + MarzUtil.resultCodeStr(resultCode) + " 目标副本 " + mapEvt.getBossName());
                         
-                        if (MarzConstant.RES_CODE_0 == resultCode)
+                        if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                         {
                             sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                             
@@ -1127,13 +1155,13 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 }
                 else
                 {
-                    this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, "当前时间没有找到适合战斗的副本，返回并等待BP恢复！");
+                    this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, account.getTgksId() + "当前时间没有找到适合战斗的副本，返回并等待BP恢复！");
                 }
             }
         }
         catch (Exception e)
         {
-            CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, String.format("战斗过程中发生异常！"));
+            CommonUtil.infoLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_OUT, String.format(account.getTgksId() + "战斗过程中发生异常！"));
             return MarzConstant.FAILED;
         }
         

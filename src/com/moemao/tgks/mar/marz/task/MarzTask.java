@@ -198,7 +198,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
             
             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号登录" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -227,7 +227,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
             
             //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号基本信息更新" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -276,7 +276,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
             
             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_2, "探索" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -315,7 +315,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
             
             //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "卡片信息更新" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -386,7 +386,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                         
                         //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_5, "卡片出售" + MarzUtil.resultCodeStr(resultCode));
                         
-                        if (MarzConstant.RES_CODE_0 == resultCode)
+                        if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                         {
                             sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                             
@@ -437,7 +437,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                         
                         //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_4, "卡片合成" + MarzUtil.resultCodeStr(resultCode));
                         
-                        if (MarzConstant.RES_CODE_0 == resultCode)
+                        if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                         {
                             sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                             
@@ -474,7 +474,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
             
             //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, "战斗信息查询" + MarzUtil.resultCodeStr(resultCode));
             
-            if (MarzConstant.RES_CODE_0 == resultCode)
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
@@ -654,7 +654,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                     
                     this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, "战斗开始" + MarzUtil.resultCodeStr(resultCode) + " 目标副本 " + mapEvt.getBossName());
                     
-                    if (MarzConstant.RES_CODE_0 == resultCode)
+                    if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                     {
                         sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                         
@@ -691,7 +691,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                         
                         this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_1, "战斗结束" + MarzUtil.resultCodeStr(resultCode) + " 目标副本 " + mapEvt.getBossName());
                         
-                        if (MarzConstant.RES_CODE_0 == resultCode)
+                        if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                         {
                             sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                             

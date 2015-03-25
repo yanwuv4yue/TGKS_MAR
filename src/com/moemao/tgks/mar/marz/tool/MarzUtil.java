@@ -9,7 +9,7 @@ public class MarzUtil
 {
     public static String resultCodeStr(int resultCode)
     {
-        return resultCode == MarzConstant.RES_CODE_0 ? "成功" : "失败";
+        return resultCode == MarzConstant.RES_CODE_SUCCESS_0 ? "成功" : "失败";
     }
     
     public static String listToString(List<String> list)

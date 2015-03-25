@@ -12,6 +12,7 @@
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="0"> 
     <meta http-equiv="keywords" content="幻影帝国,猫盟公社,乖离性MA,账号托管,挂机">
+    <link href="https://d2e1xl20cw0m26.cloudfront.net/pre/assets/favicon-5862cadf3d85c514f2068142cfb97eb3.ico" rel="icon" type="image/png">
     <link rel="stylesheet" type="text/css" href="../resources/mar/marweb/login/style.css" />
     <link rel="stylesheet" type="text/css" href="../resources/mar/marweb/cardlist/css/style.css" />
     <style type="text/css">

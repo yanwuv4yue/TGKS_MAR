@@ -8,7 +8,9 @@ public class MarzConstant
     
     public static final int FAILED = -1;
     
-    public static final int RES_CODE_0 = 0;
+    public static final int RES_CODE_SUCCESS_0 = 0;
+    
+    public static final int RES_CODE_MAINTAIN_M5 = -5;
     
     public static final String OVER = "over";
     
