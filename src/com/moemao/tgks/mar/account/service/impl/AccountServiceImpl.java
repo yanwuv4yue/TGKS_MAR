@@ -1019,6 +1019,7 @@ public class AccountServiceImpl implements AccountService
             {
                 sid = this.login(accountEvt);
                 accountEvt.setSessionId(sid);
+                Thread.sleep(500);
             }
             catch (Exception e)
             {
@@ -1047,6 +1048,7 @@ public class AccountServiceImpl implements AccountService
                 sid = result[0];
                 
                 accountEvt.setSessionId(sid);
+                Thread.sleep(500);
             }
             catch (Exception e)
             {
@@ -1069,6 +1071,7 @@ public class AccountServiceImpl implements AccountService
                 // 1.5 IOSv1.1.1更新完必须打完第一仗
                 this.teamBattleSoloStart(sid, MarConstant.BATTLESOLOSTART_FIRST);
                 accountEvt.setSessionId(sid);
+                Thread.sleep(500);
             }
             catch (Exception e)
             {
@@ -1086,6 +1089,7 @@ public class AccountServiceImpl implements AccountService
                 
                 accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_4);
                 this.updateAccount(accountEvt);
+                Thread.sleep(500);
             }
             catch (Exception e)
             {

@@ -43,7 +43,8 @@ public class MarzRequest
         
         //String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"1\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
         //String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\"}";
-        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"4\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\",\"os_ver\":\"iPhone OS 7.1.2\"}";
+        //String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"4\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\",\"os_ver\":\"iPhone OS 7.1.2\"}";
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"5\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\",\"os_ver\":\"iPhone OS 7.1.2\"}";
         
         if (bDebug)
         {
@@ -51,7 +52,7 @@ public class MarzRequest
         }
         
         String result = httpRequest.sendPost(MarConstant.URL_LOGIN, paramStr);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "loginIOS " + uuid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "loginIOS " + uuid + " " + Thread.currentThread().getName());
 
         JSONObject resCode= JSONObject.fromObject(result);
         
@@ -69,7 +70,8 @@ public class MarzRequest
         
         //String paramStr = "{\"uuid\":\"" + uuid + "\",\"clver\":\"2\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"samsung GT-N7100\",\"token\":\"\"}";
         //String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\"}";
-        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"4\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\",\"os_ver\":\"Android OS 4.4.3 / API-19 (FUCK YOU)\"}";
+        //String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"4\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\",\"os_ver\":\"Android OS 4.4.3 / API-19 (FUCK YOU)\"}";
+        String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"5\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\",\"os_ver\":\"Android OS 4.4.3 / API-19 (FUCK YOU)\"}";
         
         if (bDebug)
         {
@@ -77,7 +79,7 @@ public class MarzRequest
         }
         
         String result = httpRequest.sendPost(MarConstant.URL_LOGIN, paramStr);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "loginAndroid " + uuid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "loginAndroid " + uuid + " " + Thread.currentThread().getName());
 
         JSONObject resCode= JSONObject.fromObject(result);
         
@@ -107,7 +109,7 @@ public class MarzRequest
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_CONNECT, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "connect " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "connect " + Thread.currentThread().getName());
         
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         
@@ -125,7 +127,7 @@ public class MarzRequest
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_HOMESHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "homeShow " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "homeShow " + Thread.currentThread().getName());
 
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject homeShow = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
@@ -151,7 +153,7 @@ public class MarzRequest
         }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_EXPLORESTART, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "exploreStart " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "exploreStart " + Thread.currentThread().getName());
 
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject exploreStart = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
@@ -171,7 +173,7 @@ public class MarzRequest
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_EXPLOREEND, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "exploreEnd " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "exploreEnd " + Thread.currentThread().getName());
         
         // 有问候语信息 必须设置过滤
         result = this.requestFilter(result);
@@ -194,7 +196,7 @@ public class MarzRequest
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_CARDSHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardShow " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardShow " + Thread.currentThread().getName());
         
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject cardShow = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
@@ -214,7 +216,7 @@ public class MarzRequest
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_CARDSHOW2, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardShow2 " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardShow2 " + Thread.currentThread().getName());
         
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject cardShow = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
@@ -240,7 +242,7 @@ public class MarzRequest
         }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_CARDFUSION, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardFusion " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardFusion " + Thread.currentThread().getName());
         
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject cardFusion = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
@@ -266,7 +268,7 @@ public class MarzRequest
         }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_CARDSELL, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardSell " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardSell " + Thread.currentThread().getName());
         
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject cardSell = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
@@ -286,7 +288,7 @@ public class MarzRequest
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_PRESENTBOXMULTIRECV, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "presentBoxMultiRecv " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "presentBoxMultiRecv " + Thread.currentThread().getName());
         
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject presentBoxMultiRecv = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
@@ -306,7 +308,7 @@ public class MarzRequest
         
         String paramStr = sid + "=";
         String[] result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOSHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "teamBattleSoloShow " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "teamBattleSoloShow " + Thread.currentThread().getName());
         
         // 有好友信息 必须设置过滤
         result = this.requestFilter(result);
@@ -335,7 +337,7 @@ public class MarzRequest
         }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOSTART, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "teamBattleSoloStart " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "teamBattleSoloStart " + Thread.currentThread().getName());
         
         JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
         JSONObject teamBattleSoloStart = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
@@ -361,7 +363,7 @@ public class MarzRequest
         }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOEND, paramStr).split(MarConstant.KRSMA_SPLIT);
-        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "teamBattleSoloEnd " + sid);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "teamBattleSoloEnd " + Thread.currentThread().getName());
         
         // 有问候语信息 必须设置过滤
         result = this.requestFilter(result);

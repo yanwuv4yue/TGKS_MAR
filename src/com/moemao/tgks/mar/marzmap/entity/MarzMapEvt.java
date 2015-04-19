@@ -28,9 +28,14 @@ private String vip;
 private Integer bpCost;
 
 /**
- * 攻击目标数
+ * 攻击弱点数
  */
 private Integer target;
+
+/**
+ * 敌人数量
+ */
+private Integer enemy;
 
 /**
  * 设置页面是否被选中
@@ -120,6 +125,16 @@ public Integer getTarget()
 public void setTarget(Integer target)
 {
     this.target = target;
+}
+
+public Integer getEnemy()
+{
+    return enemy;
+}
+
+public void setEnemy(Integer enemy)
+{
+    this.enemy = enemy;
 }
 
 public String getVip()

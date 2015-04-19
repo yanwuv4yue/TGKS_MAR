@@ -9,8 +9,16 @@ public class MarzConstant
     public static final int FAILED = -1;
     
     public static final int RES_CODE_SUCCESS_0 = 0;
-    
+
+    /**
+     * 登录错误码：-5 服务器维护中
+     */
     public static final int RES_CODE_MAINTAIN_M5 = -5;
+    
+    /**
+     * 登录错误码：-7 账号重新引继过
+     */
+    public static final int RES_CODE_MAINTAIN_M7 = -7;
     
     public static final String OVER = "over";
     

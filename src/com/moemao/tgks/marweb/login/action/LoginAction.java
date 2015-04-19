@@ -94,6 +94,9 @@ public class LoginAction extends TGKSAction
     {
         CommonUtil.debugLog(logger, CommonConstant.SYSTEM_INFO_LOG_METHOD_IN, "LoginAction.register");
         
+        userEvt.setUsername(userEvt.getUsername().trim());
+        userEvt.setPassword(userEvt.getPassword().trim());
+        
         // 查询该账号是否已经存在
         UserReq userReq = new UserReq();
         userReq.setUsername(userEvt.getUsername());

@@ -108,9 +108,17 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 {
                     resultCode = this.login();
                     
-                    if (MarzConstant.RES_CODE_MAINTAIN_M5 == resultCode)
+                    if (MarzConstant.RES_CODE_MAINTAIN_M5 == resultCode || MarzConstant.RES_CODE_MAINTAIN_M7 == resultCode)
                     {
-                        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "系统维护中，账号自动下线，请留意游戏公告等开服后手动上线...");
+                        if (MarzConstant.RES_CODE_MAINTAIN_M5 == resultCode)
+                        {
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "系统维护中，账号自动下线，请留意游戏公告等开服后手动上线...");
+                        }
+                        else if (MarzConstant.RES_CODE_MAINTAIN_M7 == resultCode)
+                        {
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号被重新引继过，原存档文件失效，无法继续挂机需要重新绑定账号...");
+                        }
+                        
                         // 初始化状态
                         account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
                         account.setAp(0);
@@ -127,6 +135,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         this.marzAccountService.updateMarzAccount(account);
                         
                         this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经下线...");
+                        
+                        break;
                     }
                 }
                 else
@@ -150,6 +160,38 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     System.out.println("发生了错误！当前resultCode：" + resultCode);
                     
                     resultCode = this.login();
+                    
+                    if (MarzConstant.RES_CODE_MAINTAIN_M5 == resultCode || MarzConstant.RES_CODE_MAINTAIN_M7 == resultCode)
+                    {
+                        if (MarzConstant.RES_CODE_MAINTAIN_M5 == resultCode)
+                        {
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "系统维护中，账号自动下线，请留意游戏公告等开服后手动上线...");
+                        }
+                        else if (MarzConstant.RES_CODE_MAINTAIN_M7 == resultCode)
+                        {
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号被重新引继过，原存档文件失效，无法继续挂机需要重新绑定账号...");
+                        }
+                        
+                        // 初始化状态
+                        account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
+                        account.setAp(0);
+                        account.setApMax(0);
+                        account.setBp(0);
+                        account.setBpMax(0);
+                        //account.setCardNum(0);
+                        //account.setCardMax(0);
+                        account.setCoin(0);
+                        account.setFp(0);
+                        account.setGold(0);
+                        account.setSessionId("");
+                        account.setRemark("");
+                        this.marzAccountService.updateMarzAccount(account);
+                        
+                        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经下线...");
+                        
+                        break;
+                    }
+                    
                     resultCode = this.baseInfo();
                     
                     if (MarzConstant.SUCCESS > resultCode)
@@ -203,7 +245,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 
                 System.out.println(Thread.currentThread().getName() + "本次任务执行完成 进入等待时间 [" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "]");
                 
-                SLEEPTIME = ((2 * 60) + (MarzThreadPoolDiffusion.getInstance().getMarzThreadNum() * 4)) * 1000;
+                SLEEPTIME = ((2 * 60) + (MarzThreadPoolDiffusion.getInstance().getMarzThreadNum() * 6)) * 1000;
                 
                 // 等待时间间隔
                 this.sleep(SLEEPTIME);
