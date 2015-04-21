@@ -180,6 +180,10 @@ public class HttpRequest
         {
             result = result.replace("�?}", "\"}");
         }
+        if (result.contains("�?]"))
+        {
+            result = result.replace("�?]", "\"]");
+        }
         
         return result;
     }
