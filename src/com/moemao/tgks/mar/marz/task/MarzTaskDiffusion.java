@@ -171,6 +171,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号被重新引继过，原存档文件失效，无法继续挂机需要重新绑定账号...");
                         }
+                        else if (MarzConstant.RES_CODE_MAINTAIN_M8 == resultCode)
+                        {
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "游戏客户端已更新，服务器需要同步更新，请关注公告...");
+                        }
                         
                         // 初始化状态
                         account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);

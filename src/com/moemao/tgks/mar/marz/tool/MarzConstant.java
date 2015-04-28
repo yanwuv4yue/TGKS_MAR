@@ -20,6 +20,11 @@ public class MarzConstant
      */
     public static final int RES_CODE_MAINTAIN_M7 = -7;
     
+    /**
+     * 登录错误码：-8 客户端已更新 服务器需要同步更新
+     */
+    public static final int RES_CODE_MAINTAIN_M8 = -8;
+    
     public static final String OVER = "over";
     
     public static final int SLEEPTIME_BATTLE_SOLO = 60000;
