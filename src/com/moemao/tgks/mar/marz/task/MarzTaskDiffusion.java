@@ -506,33 +506,11 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 
                 List<CardEvt> cardList = new ArrayList<CardEvt>();
                 JSONObject cardJSON;
-                CardEvt cardEvt = new CardEvt();
                 
                 for (int i = 0, size = cardsJSON.size(); i < size; i++)
                 {
                     cardJSON = JSONObject.fromObject(cardsJSON.get(i));
-                    cardEvt = new CardEvt();
-                    cardEvt.setUniqid(cardJSON.getString("0"));
-                    cardEvt.setCardid(cardJSON.getString("1"));
-                    cardEvt.setLv(cardJSON.getInt("2"));
-                    cardEvt.setLv_max(cardJSON.getInt("3"));
-                    cardEvt.setExp(cardJSON.getInt("4"));
-                    cardEvt.setLove(cardJSON.getInt("5"));
-                    cardEvt.setSkill_lv(cardJSON.getString("6"));
-                    cardEvt.setHp(cardJSON.getInt("7"));
-                    cardEvt.setAtkp(cardJSON.getInt("8"));
-                    cardEvt.setIntp(cardJSON.getInt("9"));
-                    cardEvt.setMndp(cardJSON.getInt("10"));
-                    cardEvt.setNext_lv_exp(cardJSON.getInt("11"));
-                    cardEvt.setNow_lv_exp(cardJSON.getInt("12"));
-                    cardEvt.setAdd_exp(cardJSON.getInt("13"));
-                    cardEvt.setBase_add_price(cardJSON.getInt("14"));
-                    cardEvt.setEvolution_price(cardJSON.getInt("15"));
-                    cardEvt.setIs_lock(cardJSON.getInt("16"));
-                    cardEvt.setCreate_time(cardJSON.getInt("17"));
-                    cardEvt.setFame(cardJSON.getInt("18"));
-                    
-                    cardList.add(cardEvt);
+                    cardList.add(new CardEvt(cardJSON));
                 }
                 
                 

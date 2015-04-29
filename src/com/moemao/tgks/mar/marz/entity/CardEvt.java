@@ -1,5 +1,6 @@
 package com.moemao.tgks.mar.marz.entity;
 
+import net.sf.json.JSONObject;
 /**
  * 
  * 项目名称：TGKS_MAR
@@ -24,14 +25,14 @@ package com.moemao.tgks.mar.marz.entity;
         atkp                 8
         intp                  9
         mndp               10
-        next_lv_exp       11
-        now_lv_exp       12
-        add_exp            13
-        base_add_price 14
-        evolution_price 15
-        is_lock              16
-        create_time      17
-        fame                18
+        next_lv_exp       11  // 1.3.0接口已经去除该字段
+        now_lv_exp       12  11
+        add_exp            13  12
+        base_add_price 14  13
+        evolution_price 15  14
+        is_lock              16  15
+        create_time      17  16
+        fame                18  17
  */
 public class CardEvt
 {
@@ -54,6 +55,35 @@ public class CardEvt
     private int is_lock;
     private int create_time;
     private int fame;
+    
+    public CardEvt()
+    {
+
+    }
+    
+    public CardEvt(JSONObject cardJSON)
+    {
+        
+        this.setUniqid(cardJSON.getString("0"));
+        this.setCardid(cardJSON.getString("1"));
+        this.setLv(cardJSON.getInt("2"));
+        this.setLv_max(cardJSON.getInt("3"));
+        this.setExp(cardJSON.getInt("4"));
+        this.setLove(cardJSON.getInt("5"));
+        this.setSkill_lv(cardJSON.getString("6"));
+        this.setHp(cardJSON.getInt("7"));
+        this.setAtkp(cardJSON.getInt("8"));
+        this.setIntp(cardJSON.getInt("9"));
+        this.setMndp(cardJSON.getInt("10"));
+        //this.setNext_lv_exp(cardJSON.getInt("11"));
+        this.setNow_lv_exp(cardJSON.getInt("11"));
+        this.setAdd_exp(cardJSON.getInt("12"));
+        this.setBase_add_price(cardJSON.getInt("13"));
+        this.setEvolution_price(cardJSON.getInt("14"));
+        this.setIs_lock(cardJSON.getInt("15"));
+        this.setCreate_time(cardJSON.getInt("16"));
+        this.setFame(cardJSON.getInt("17"));
+    }
     
     public String getUniqid()
     {
