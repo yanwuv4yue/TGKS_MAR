@@ -28,6 +28,8 @@ import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
 import com.moemao.tgks.mar.marzlog.service.MarzLogService;
 import com.moemao.tgks.mar.marzmap.entity.MarzMapEvt;
+import com.moemao.tgks.mar.marzmap.entity.MarzMapReq;
+import com.moemao.tgks.mar.marzmap.service.MarzMapService;
 import com.moemao.tgks.mar.marzsetting.entity.MarzSettingEvt;
 import com.moemao.tgks.mar.marzsetting.entity.MarzSettingReq;
 import com.moemao.tgks.mar.marzsetting.service.MarzSettingService;
@@ -44,6 +46,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
     private MarzLogService marzLogService;
     
     private MarzSettingService marzSettingService;
+    
+    private MarzMapService marzMapService;
     
     private MarzSettingEvt marzSettingEvt;
     
@@ -65,6 +69,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         marzAccountService = (MarzAccountService) ContextUtil.getBean("mar_marzAccountService");
         marzLogService = (MarzLogService) ContextUtil.getBean("mar_marzLogService");
         marzSettingService = (MarzSettingService) ContextUtil.getBean("mar_marzSettingService");
+        marzMapService = (MarzMapService) ContextUtil.getBean("mar_marzMapService");
         
         // 默认线程调用的执行方法
         System.out.println("执行任务开始 ID：" + account.getTgksId());
@@ -990,6 +995,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                             
                             // 狗粮本跟每日限定要塞成0
                             if (MarConstant.BATTLE_START_CHIARI.equals(bossJSON.getString("bossid"))
+                                    || MarConstant.BATTLE_START_CHIARI_GW.equals(bossJSON.getString("bossid"))
                                     || MarConstant.BATTLE_START_MONDAY.equals(bossJSON.getString("bossid"))
                                     || MarConstant.BATTLE_START_TUESDAY.equals(bossJSON.getString("bossid"))
                                     || MarConstant.BATTLE_START_WEDNESDAY.equals(bossJSON.getString("bossid"))
@@ -1044,6 +1050,14 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         if (id.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
                         {
                             mapEvt = m;
+                            MarzMapReq mapReq = new MarzMapReq();
+                            mapReq.setBossId(m.getBossId());
+                            List<MarzMapEvt> mapList = this.marzMapService.queryMarzMap(mapReq);
+                            if (mapList != null && !mapList.isEmpty())
+                            {
+                                mapEvt.setTarget(mapList.get(0).getTarget());
+                                mapEvt.setEnemy(mapList.get(0).getEnemy());
+                            }
                             break;
                         }
                     }

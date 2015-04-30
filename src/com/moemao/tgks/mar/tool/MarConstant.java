@@ -186,6 +186,7 @@ public class MarConstant
     public static final String BATTLESOLOSTART_FIRST = "10000101";
 
     public static final String BATTLE_START_CHIARI = "20000002";
+    public static final String BATTLE_START_CHIARI_GW = "20000802";
 
     public static final String BATTLE_START_MONDAY = "20000103";
     public static final String BATTLE_START_TUESDAY = "20000203";
