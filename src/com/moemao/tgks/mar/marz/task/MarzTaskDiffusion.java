@@ -603,7 +603,9 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     for (CardEvt card : cardList)
                     {
                         // 自动合成只支持SR UR跟MR 而且必须手动锁上 先找MR 不锁也可
-                        if (card.getLv_max() >= 60 && card.getLv() < card.getLv_max())
+                        // update by ken 20150503 MR不锁改为不自动喂卡
+                        if (card.getLv_max() >= 60 && card.getLv() < card.getLv_max()
+                                && 0 != card.getIs_lock())
                         {
                             baseId = card.getUniqid();
                         }
