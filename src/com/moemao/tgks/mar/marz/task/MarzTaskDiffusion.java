@@ -113,15 +113,19 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 {
                     resultCode = this.login();
                     
-                    if (MarzConstant.RES_CODE_MAINTAIN_M5 == resultCode || MarzConstant.RES_CODE_MAINTAIN_M7 == resultCode)
+                    if (MarzConstant.RES_CODE_ERROR_M5 == resultCode || MarzConstant.RES_CODE_ERROR_M7 == resultCode)
                     {
-                        if (MarzConstant.RES_CODE_MAINTAIN_M5 == resultCode)
+                        if (MarzConstant.RES_CODE_ERROR_M5 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "系统维护中，账号自动下线，请留意游戏公告等开服后手动上线...");
                         }
-                        else if (MarzConstant.RES_CODE_MAINTAIN_M7 == resultCode)
+                        else if (MarzConstant.RES_CODE_ERROR_M7 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号被重新引继过，原存档文件失效，无法继续挂机需要重新绑定账号...");
+                        }
+                        else if (MarzConstant.RES_CODE_ERROR_M8 == resultCode)
+                        {
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "游戏客户端已更新，服务器需要同步更新，请关注公告...");
                         }
                         
                         // 初始化状态
@@ -166,17 +170,17 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     
                     resultCode = this.login();
                     
-                    if (MarzConstant.RES_CODE_MAINTAIN_M5 == resultCode || MarzConstant.RES_CODE_MAINTAIN_M7 == resultCode)
+                    if (MarzConstant.RES_CODE_ERROR_M5 == resultCode || MarzConstant.RES_CODE_ERROR_M7 == resultCode)
                     {
-                        if (MarzConstant.RES_CODE_MAINTAIN_M5 == resultCode)
+                        if (MarzConstant.RES_CODE_ERROR_M5 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "系统维护中，账号自动下线，请留意游戏公告等开服后手动上线...");
                         }
-                        else if (MarzConstant.RES_CODE_MAINTAIN_M7 == resultCode)
+                        else if (MarzConstant.RES_CODE_ERROR_M7 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号被重新引继过，原存档文件失效，无法继续挂机需要重新绑定账号...");
                         }
-                        else if (MarzConstant.RES_CODE_MAINTAIN_M8 == resultCode)
+                        else if (MarzConstant.RES_CODE_ERROR_M8 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "游戏客户端已更新，服务器需要同步更新，请关注公告...");
                         }

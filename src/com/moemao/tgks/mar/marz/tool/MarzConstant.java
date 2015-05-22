@@ -13,17 +13,22 @@ public class MarzConstant
     /**
      * 登录错误码：-5 服务器维护中
      */
-    public static final int RES_CODE_MAINTAIN_M5 = -5;
+    public static final int RES_CODE_ERROR_M5 = -5;
     
     /**
      * 登录错误码：-7 账号重新引继过
      */
-    public static final int RES_CODE_MAINTAIN_M7 = -7;
+    public static final int RES_CODE_ERROR_M7 = -7;
     
     /**
      * 登录错误码：-8 客户端已更新 服务器需要同步更新
      */
-    public static final int RES_CODE_MAINTAIN_M8 = -8;
+    public static final int RES_CODE_ERROR_M8 = -8;
+    
+    /**
+     * 登录错误码：-607 招待已刷满
+     */
+    public static final int RES_CODE_ERROR_M607 = -607;
     
     public static final String OVER = "over";
     

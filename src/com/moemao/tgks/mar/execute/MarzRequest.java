@@ -8,7 +8,6 @@ import net.sf.json.JSONObject;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.net.HttpRequest;
 import com.moemao.tgks.mar.tool.MarConstant;
-import net.sf.json.JSONObject;
 
 public class MarzRequest
 {
@@ -92,16 +91,22 @@ public class MarzRequest
         return map;
     }
     
-    public String inviteCodeEnter(String sid, String inviteCode) throws Exception
+    public Map<String, JSONObject> inviteCodeEnter(String sid, String inviteCode) throws Exception
     {
+        map = new HashMap<String, JSONObject>();
+        
         String paramStr = sid + "={\"inviteid\":\"" + inviteCode + "\"}";
-        String result = httpRequest.sendPost(MarConstant.URL_INVITECODEENTER, paramStr);
+        String[] result = httpRequest.sendPost(MarConstant.URL_INVITECODEENTER, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarConstant.LOG_SYSTEM_INFO + "inviteCodeEnter " + sid + " invite : " + inviteCode);
-        if (bDebug)
-        {
-            System.out.println(result);
-        }
-        return result;
+        
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        
+        result = null;
+        resCode = null;
+        return map;
     }
     
     public Map<String, JSONObject> connect(String sid) throws Exception

@@ -126,15 +126,34 @@ public class InviteServiceImpl implements InviteService
                 map = request.connect(sid);
                 
                 // 2 填招待ID
-                request.inviteCodeEnter(sid, inviteCode);
-                
-                // 刷完招待更新一下账号状态
-                accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_5);
-                accountEvt.setInviteCode(inviteCode);
-                accountEvt.setTitle(password);
-                this.mar_accountService.updateAccount(accountEvt);
-                
-                complete++;
+                map = request.inviteCodeEnter(sid, inviteCode);
+                if (MarzConstant.RES_CODE_SUCCESS_0 == map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE))
+                {
+                    System.out.println("刷招待成功！");
+                    
+                    // 刷完招待更新一下账号状态
+                    accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_5);
+                    accountEvt.setInviteCode(inviteCode);
+                    accountEvt.setTitle(password);
+                    this.mar_accountService.updateAccount(accountEvt);
+                    
+                    complete++;
+                }
+                else if (MarzConstant.RES_CODE_ERROR_M607 == map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE))
+                {
+                    System.out.println(inviteCode + "的招待已经刷满，无法再刷！");
+                    break;
+                }
+                else
+                {
+                    System.out.println("刷招待失败！");
+                    
+                    accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_0);
+                    accountEvt.setInviteCode("");
+                    accountEvt.setTitle("");
+                    this.mar_accountService.updateAccount(accountEvt);
+                    continue;
+                }
                 
                 if (complete >= 10)
                 {
@@ -143,6 +162,8 @@ public class InviteServiceImpl implements InviteService
             }
             catch (Exception e)
             {
+                System.out.println("刷招待失败！");
+                
                 accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_0);
                 accountEvt.setInviteCode("");
                 accountEvt.setTitle("");
