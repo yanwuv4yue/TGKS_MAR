@@ -115,11 +115,14 @@ public class InviteServiceImpl implements InviteService
         
         Map<String, JSONObject> map = new HashMap<String, JSONObject>();
         int complete = 0;
+        int count = 0;
         
         for (AccountEvt accountEvt : accountList)
         {
             try
             {
+                count++;
+                
                 // 1 登录
                 map = request.loginIOS(accountEvt.getUuid(), accountEvt.getHashToken());
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
@@ -129,7 +132,7 @@ public class InviteServiceImpl implements InviteService
                 map = request.inviteCodeEnter(sid, inviteCode);
                 if (MarzConstant.RES_CODE_SUCCESS_0 == map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE))
                 {
-                    System.out.println("刷招待成功！");
+                    System.out.println("刷招待成功！当前第" + count + "个，成功" + complete + "个！");
                     
                     // 刷完招待更新一下账号状态
                     accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_5);
@@ -146,7 +149,7 @@ public class InviteServiceImpl implements InviteService
                 }
                 else
                 {
-                    System.out.println("刷招待失败！");
+                    System.out.println("刷招待失败！当前第" + count + "个，成功" + complete + "个！");
                     
                     accountEvt.setStatus(MarConstant.ACCOUNT_STATUS_0);
                     accountEvt.setInviteCode("");
