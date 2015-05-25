@@ -20,6 +20,21 @@ import com.moemao.tgks.mar.marzsetting.entity.MarzSettingEvt;
 import com.moemao.tgks.mar.marzsetting.entity.MarzSettingReq;
 import com.moemao.tgks.mar.marzsetting.service.MarzSettingService;
 
+/**
+ * 
+ * 项目名称：TGKS_MAR
+ * 类名称：MarzSettingAction
+ * 类描述：需要新增一个设置的话，首先在MarzConstant.java中新增一个常量，然后在Evt中新增该字段
+ *              MarzSettingAction.java中save方法下方加入新设置相关保存方法
+ *              最后再Task类中添加该设置的处理语句
+ * 创建人：Administrator
+ * 创建时间：2015-5-26 上午12:05:11
+ * 修改人：Administrator
+ * 修改时间：2015-5-26 上午12:05:11
+ * 修改备注：
+ * @version
+ *
+ */
 public class MarzSettingAction extends TGKSAction
 {
 
@@ -151,6 +166,10 @@ public class MarzSettingAction extends TGKSAction
                 {
                     marzSettingEvt.setBattleNowasteBossId(setting.getValue());
                 }
+                else if (MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setBattleGetStone(setting.getValue());
+                }
             }
         }
         
@@ -260,6 +279,14 @@ public class MarzSettingAction extends TGKSAction
         setting.setType(MarzConstant.MARZSETTING_TYPE_1);
         setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID));
         setting.setValue(marzSettingEvt.getBattleNowasteBossId());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 战斗 优先拿石
+        setting = new MarzSettingEvt();setting.setTgksId(tgksId);
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_0);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE));
+        setting.setValue(marzSettingEvt.getBattleGetStone());
         this.mar_marzSettingService.addMarzSetting(setting);
         
         return SUCCESS;

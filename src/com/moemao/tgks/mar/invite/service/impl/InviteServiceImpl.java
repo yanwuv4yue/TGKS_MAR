@@ -132,6 +132,8 @@ public class InviteServiceImpl implements InviteService
                 map = request.inviteCodeEnter(sid, inviteCode);
                 if (MarzConstant.RES_CODE_SUCCESS_0 == map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE))
                 {
+                    complete++;
+                    
                     System.out.println("刷招待成功！当前第" + count + "个，成功" + complete + "个！");
                     
                     // 刷完招待更新一下账号状态
@@ -139,8 +141,6 @@ public class InviteServiceImpl implements InviteService
                     accountEvt.setInviteCode(inviteCode);
                     accountEvt.setTitle(password);
                     this.mar_accountService.updateAccount(accountEvt);
-                    
-                    complete++;
                 }
                 else if (MarzConstant.RES_CODE_ERROR_M607 == map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE))
                 {

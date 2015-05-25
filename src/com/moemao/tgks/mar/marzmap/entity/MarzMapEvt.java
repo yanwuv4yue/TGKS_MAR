@@ -47,6 +47,11 @@ private String check;
  */
 private String show;
 
+/**
+ * 副本状态 0 未战斗；1 未通过；2 已通过
+ */
+private String state;
+
 @Override
 public String toString()
 {
@@ -165,6 +170,16 @@ public String getShow()
 public void setShow(String show)
 {
     this.show = show;
+}
+
+public String getState()
+{
+    return state;
+}
+
+public void setState(String state)
+{
+    this.state = state;
 }
 
 }

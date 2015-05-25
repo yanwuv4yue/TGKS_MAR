@@ -72,6 +72,8 @@ public class MarzConstant
     
     public static final int VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID = 7;
     
+    public static final int VALIDATE_SETTING_BATTLE_GET_STONE = 8;
+    
     /**
      * MARZACCOUNT 账号类型 0 IOS
      */
@@ -152,8 +154,28 @@ public class MarzConstant
 
     public static final String MARZSETTING_ON = "1";
     
+    /**
+     * MARZ设置 0 开关
+     */
     public static final String MARZSETTING_TYPE_0 = "0";
-
+    
+    /**
+     * MARZ设置 1 参数
+     */
     public static final String MARZSETTING_TYPE_1 = "1";
     
+    /**
+     * MARZ副本状态 0 未战斗
+     */
+    public static final String MARZMAP_STATE_0 = "0";
+    
+    /**
+     * MARZ副本状态 1 已战斗未通过
+     */
+    public static final String MARZMAP_STATE_1 = "1";
+    
+    /**
+     * MARZ副本状态 2 已通过
+     */
+    public static final String MARZMAP_STATE_2 = "2";
 }

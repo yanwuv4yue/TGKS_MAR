@@ -41,6 +41,13 @@
                          <option value="1" <s:if test="marzSettingEvt.battle == 1">selected="selected"</s:if>>开</option>
                     </select>
                 </td>
+                <td>优先拿水晶</td>
+                <td>
+                    <select id="marzSettingEvt.battleGetStone" name="marzSettingEvt.battleGetStone">
+                         <option value="0">关</option>
+                         <option value="1" <s:if test="marzSettingEvt.battleGetStone == 1">selected="selected"</s:if>>开</option>
+                    </select>
+                </td>
                 <td>不浪费BP</td>
                 <td>
                     <select id="marzSettingEvt.battleNowaste" name="marzSettingEvt.battleNowaste">
@@ -59,8 +66,6 @@
                          </s:iterator>
                     </select>
                 </td>
-                <td></td>
-                <td></td>
             </tr>
             <tr>
                 <td>战斗副本</td>

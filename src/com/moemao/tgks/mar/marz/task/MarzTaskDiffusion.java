@@ -113,7 +113,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 {
                     resultCode = this.login();
                     
-                    if (MarzConstant.RES_CODE_ERROR_M5 == resultCode || MarzConstant.RES_CODE_ERROR_M7 == resultCode)
+                    if (MarzConstant.RES_CODE_SUCCESS_0 != resultCode)
                     {
                         if (MarzConstant.RES_CODE_ERROR_M5 == resultCode)
                         {
@@ -170,7 +170,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     
                     resultCode = this.login();
                     
-                    if (MarzConstant.RES_CODE_ERROR_M5 == resultCode || MarzConstant.RES_CODE_ERROR_M7 == resultCode)
+                    if (MarzConstant.RES_CODE_SUCCESS_0 != resultCode)
                     {
                         if (MarzConstant.RES_CODE_ERROR_M5 == resultCode)
                         {
@@ -330,6 +330,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 else if (MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID == Integer.parseInt(setting.getName()))
                 {
                     marzSettingEvt.setBattleNowasteBossId(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setBattleGetStone(setting.getValue());
                 }
             }
         }
@@ -943,6 +947,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
                 List<MarzMapEvt> battleMapList = new ArrayList<MarzMapEvt>();
+                List<MarzMapEvt> eventMapList = new ArrayList<MarzMapEvt>();
                 MarzMapEvt mapEvt = new MarzMapEvt();
                 
                 JSONObject mapJSON;
@@ -957,6 +962,29 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 JSONArray battleMapEvent = map.get(MarzConstant.JSON_TAG_TEAMBATTLESOLOSHOW).getJSONArray("event_groups");
                 JSONArray arthurs = map.get(MarzConstant.JSON_TAG_TEAMBATTLESOLOSHOW).getJSONArray("arthurs");
                 JSONObject arthur;
+                
+                // 处理4个NPC亚瑟的ID
+                for (int i = 0; i < arthurs.size(); i++)
+                {
+                    arthur = JSONObject.fromObject(arthurs.get(i));
+                    
+                    if (1 == arthur.getInt("arthur_type"))
+                    {
+                        arthur1 = JSONObject.fromObject(arthur.getJSONArray("partners").get(0)).getString("userid");
+                    }
+                    else if (2 == arthur.getInt("arthur_type"))
+                    {
+                        arthur2 = JSONObject.fromObject(arthur.getJSONArray("partners").get(0)).getString("userid");
+                    }
+                    else if (3 == arthur.getInt("arthur_type"))
+                    {
+                        //arthur3 = JSONObject.fromObject(arthur.getJSONArray("partners").get(0)).getString("userid");
+                    }
+                    else if (4 == arthur.getInt("arthur_type"))
+                    {
+                        arthur4 = JSONObject.fromObject(arthur.getJSONArray("partners").get(0)).getString("userid");
+                    }
+                }
                 
                 // 整理当前可以战斗的BOSSID Normal
                 for (int i = 0; i < battleMapNormal.size(); i++)
@@ -998,6 +1026,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                             mapEvt.setBossId(bossJSON.getString("bossid"));
                             mapEvt.setBossName(mapJSON.getString("name") + " " + bossJSON.getString("difficulty"));
                             mapEvt.setBpCost(bossJSON.getInt("bp_use"));
+                            mapEvt.setState(bossJSON.getString("state"));
                             
                             // 狗粮本跟每日限定要塞成0
                             if (MarConstant.BATTLE_START_CHIARI.equals(bossJSON.getString("bossid"))
@@ -1012,74 +1041,89 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                             {
                                 mapEvt.setTarget(0);
                             }
+                            // 1000W DL祭临时新增的副本
+                            else if ("20001001".equals(bossJSON.getString("bossid")))
+                            {
+                                mapEvt.setTarget(1);
+                            }
                             else
                             {
                                 mapEvt.setTarget(4);
                             }
                             
                             battleMapList.add(mapEvt);
+                            
+                            eventMapList.add(mapEvt);
                         }
                     }
                 }
+                // 至此全部地图都已经处理完毕
                 
-                // 处理4个NPC亚瑟的ID
-                for (int i = 0; i < arthurs.size(); i++)
-                {
-                    arthur = JSONObject.fromObject(arthurs.get(i));
-                    
-                    if (1 == arthur.getInt("arthur_type"))
-                    {
-                        arthur1 = JSONObject.fromObject(arthur.getJSONArray("partners").get(0)).getString("userid");
-                    }
-                    else if (2 == arthur.getInt("arthur_type"))
-                    {
-                        arthur2 = JSONObject.fromObject(arthur.getJSONArray("partners").get(0)).getString("userid");
-                    }
-                    else if (3 == arthur.getInt("arthur_type"))
-                    {
-                        //arthur3 = JSONObject.fromObject(arthur.getJSONArray("partners").get(0)).getString("userid");
-                    }
-                    else if (4 == arthur.getInt("arthur_type"))
-                    {
-                        arthur4 = JSONObject.fromObject(arthur.getJSONArray("partners").get(0)).getString("userid");
-                    }
-                }
-                
-                // 判断应该打哪张图
-                List<String> userMapList = MarzUtil.stringToList(account.getBossIds());
+                // 先初始化地图对象 后续检查是否被赋值，然后再看是否需要走一般流程
                 mapEvt = new MarzMapEvt();
                 
-                for (String id : userMapList)
+                // 如果开启了优先拿石模式 则先找没拿过石头的副本 拿石模式下不包含8开头的带锁副本
+                if (validateSetting(MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE))
                 {
-                    for (MarzMapEvt m : battleMapList)
+                    // 拿石模式只处理Event副本
+                    for (MarzMapEvt map : eventMapList)
                     {
-                        if (id.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                        // 首先过滤掉 8开头的钥匙副本
+                        if (map.getBossId().startsWith("8"))
                         {
-                            mapEvt = m;
-                            MarzMapReq mapReq = new MarzMapReq();
-                            mapReq.setBossId(m.getBossId());
-                            List<MarzMapEvt> mapList = this.marzMapService.queryMarzMap(mapReq);
-                            if (mapList != null && !mapList.isEmpty())
-                            {
-                                mapEvt.setTarget(mapList.get(0).getTarget());
-                                mapEvt.setEnemy(mapList.get(0).getEnemy());
-                            }
+                            continue;
+                        }
+                        
+                        // 如果地图的标志为标明未通过 并且体力够打这个图 那么就打这个
+                        if ((MarzConstant.MARZMAP_STATE_0.equals(map.getState()) || MarzConstant.MARZMAP_STATE_1.equals(map.getState()))
+                                && account.getBp() >= map.getBpCost())
+                        {
+                            mapEvt = map;
                             break;
                         }
                     }
+                }
+                
+                // 这里判断上面的是否选中了需要打的图 如果没有 则走用户自定义流程
+                if (CommonUtil.isEmpty(mapEvt.getBossId()))
+                {
+                    // 判断应该打哪张图
+                    List<String> userMapList = MarzUtil.stringToList(account.getBossIds());
+                    mapEvt = new MarzMapEvt();
                     
-                    if (!CommonUtil.isEmpty(mapEvt.getBossId()))
+                    for (String id : userMapList)
                     {
-                        break;
+                        for (MarzMapEvt m : battleMapList)
+                        {
+                            if (id.equals(m.getBossId()) && account.getBp() >= m.getBpCost())
+                            {
+                                mapEvt = m;
+                                MarzMapReq mapReq = new MarzMapReq();
+                                mapReq.setBossId(m.getBossId());
+                                List<MarzMapEvt> mapList = this.marzMapService.queryMarzMap(mapReq);
+                                if (mapList != null && !mapList.isEmpty())
+                                {
+                                    mapEvt.setTarget(mapList.get(0).getTarget());
+                                    mapEvt.setEnemy(mapList.get(0).getEnemy());
+                                }
+                                break;
+                            }
+                        }
+                        
+                        if (!CommonUtil.isEmpty(mapEvt.getBossId()))
+                        {
+                            break;
+                        }
                     }
                 }
                 
+                // 没有可以打的副本时
                 if (CommonUtil.isEmpty(mapEvt.getBossId()))
                 {
-                    // 没有可以打的副本时
                     // 是否启用不浪费BP
                     if (validateSetting(MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE) && (account.getBpMax() - account.getBp()) < 3)
                     {
+                        // 不浪费BP打的地图为空或者为日限轮询的0时
                         if (CommonUtil.isEmpty(marzSettingEvt.getBattleNowasteBossId()) || "0".equals(marzSettingEvt.getBattleNowasteBossId()))
                         {
                             for (MarzMapEvt m : battleMapList)
@@ -1148,6 +1192,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         if (0 == mapEvt.getTarget())
                         {
                             battleEndParam = MarConstant.BATTLESOLOEND_3;
+                        }
+                        else if (1 == mapEvt.getTarget())
+                        {
+                            battleEndParam = MarConstant.BATTLESOLOEND_1_1;
                         }
                         else
                         {
@@ -1228,6 +1276,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattle());
             case MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE: // 自动战斗开关-不浪费BP
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattleNowaste());
+            case MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE: // 优先拿石
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattleGetStone());
             default:
                 return false;
         }
