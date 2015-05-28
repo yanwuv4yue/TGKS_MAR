@@ -1029,15 +1029,14 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                             mapEvt.setState(bossJSON.getString("state"));
                             
                             // 狗粮本跟每日限定要塞成0
-                            if (MarConstant.BATTLE_START_CHIARI.equals(bossJSON.getString("bossid"))
-                                    || MarConstant.BATTLE_START_CHIARI_GW.equals(bossJSON.getString("bossid"))
-                                    || MarConstant.BATTLE_START_MONDAY.equals(bossJSON.getString("bossid"))
-                                    || MarConstant.BATTLE_START_TUESDAY.equals(bossJSON.getString("bossid"))
-                                    || MarConstant.BATTLE_START_WEDNESDAY.equals(bossJSON.getString("bossid"))
-                                    || MarConstant.BATTLE_START_THURSDAY.equals(bossJSON.getString("bossid"))
-                                    || MarConstant.BATTLE_START_FRIDAY.equals(bossJSON.getString("bossid"))
-                                    || MarConstant.BATTLE_START_SATURDAY.equals(bossJSON.getString("bossid"))
-                                    || MarConstant.BATTLE_START_SUNDAY.equals(bossJSON.getString("bossid")))
+                            if (bossJSON.getString("bossid").startsWith(MarConstant.BATTLE_START_CHIARI_HEAD)
+                                    || bossJSON.getString("bossid").startsWith(MarConstant.BATTLE_START_MONDAY_HEAD)
+                                    || bossJSON.getString("bossid").startsWith(MarConstant.BATTLE_START_TUESDAY_HEAD)
+                                    || bossJSON.getString("bossid").startsWith(MarConstant.BATTLE_START_WEDNESDAY_HEAD)
+                                    || bossJSON.getString("bossid").startsWith(MarConstant.BATTLE_START_THURSDAY_HEAD)
+                                    || bossJSON.getString("bossid").startsWith(MarConstant.BATTLE_START_FRIDAY_HEAD)
+                                    || bossJSON.getString("bossid").startsWith(MarConstant.BATTLE_START_SATURDAY_HEAD)
+                                    || bossJSON.getString("bossid").startsWith(MarConstant.BATTLE_START_SUNDAY_HEAD))
                             {
                                 mapEvt.setTarget(0);
                             }

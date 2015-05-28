@@ -185,9 +185,18 @@ public class MarConstant
      */
     public static final String BATTLESOLOSTART_FIRST = "10000101";
 
+    public static final String BATTLE_START_CHIARI_HEAD = "2000000";
     public static final String BATTLE_START_CHIARI = "20000002";
     public static final String BATTLE_START_CHIARI_GW = "20000802";
 
+    public static final String BATTLE_START_MONDAY_HEAD = "2000010";
+    public static final String BATTLE_START_TUESDAY_HEAD = "2000020";
+    public static final String BATTLE_START_WEDNESDAY_HEAD = "2000030";
+    public static final String BATTLE_START_THURSDAY_HEAD = "2000040";
+    public static final String BATTLE_START_FRIDAY_HEAD = "2000050";
+    public static final String BATTLE_START_SATURDAY_HEAD = "2000060";
+    public static final String BATTLE_START_SUNDAY_HEAD = "2000070";
+    
     public static final String BATTLE_START_MONDAY = "20000103";
     public static final String BATTLE_START_TUESDAY = "20000203";
     public static final String BATTLE_START_WEDNESDAY = "20000303";
