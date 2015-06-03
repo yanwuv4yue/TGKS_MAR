@@ -58,6 +58,16 @@ public class MarzConstant
     
     public static final String JSON_TAG_TEAMBATTLESOLOEND = "teamBattleSoloEnd";
     
+    public static final String JSON_TAG_PVPSHOW = "pvpShow";
+    
+    public static final String JSON_TAG_PVPSTART = "pvpStart";
+    
+    public static final String JSON_TAG_PVPEND = "pvpEnd";
+    
+    public static final String JSON_TAG_MISSIONSHOW = "missionShow";
+    
+    public static final String JSON_TAG_MISSIONREWARD = "missionReward";
+    
     public static final int VALIDATE_SETTING_EXPLORE = 1;
     
     public static final int VALIDATE_SETTING_CARDSELL = 2;
@@ -73,6 +83,8 @@ public class MarzConstant
     public static final int VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID = 7;
     
     public static final int VALIDATE_SETTING_BATTLE_GET_STONE = 8;
+    
+    public static final int VALIDATE_SETTING_PVP = 9;
     
     /**
      * MARZACCOUNT 账号类型 0 IOS
@@ -133,6 +145,10 @@ public class MarzConstant
      * MARZLOG TYPE 5 出售
      */
     public static final String MARZ_LOG_TYPE_5 = "5";
+    /**
+     * MARZLOG TYPE 6 PVP
+     */
+    public static final String MARZ_LOG_TYPE_6 = "6";
     /**
      * MARZLOG TYPE 9 点卡充值
      */

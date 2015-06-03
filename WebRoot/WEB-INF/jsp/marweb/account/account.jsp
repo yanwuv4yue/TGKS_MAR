@@ -23,8 +23,8 @@
 	        </td>
 	    </tr>
 	    <tr>
-	        <td>角色ID</td>
-	        <td>${marzAccountEvt.userId }</td>
+	        <td><!-- 角色ID --></td>
+	        <td><!-- ${marzAccountEvt.userId } --></td>
 	        <td>角色等级</td>
 	        <td>${marzAccountEvt.lv }</td>
 	        <td>VIP等级</td>

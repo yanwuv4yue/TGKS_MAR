@@ -68,6 +68,18 @@
                 </td>
             </tr>
             <tr>
+                <td>PVP</td>
+                <td>
+                    <select id="marzSettingEvt.pvp" name="marzSettingEvt.pvp">
+                         <option value="0">关</option>
+                         <option value="1" <s:if test="marzSettingEvt.pvp == 1">selected="selected"</s:if>>开</option>
+                    </select>
+                </td>
+                <td></td><td></td>
+                <td></td><td></td>
+                <td></td><td></td>
+            </tr>
+            <tr>
                 <td>战斗副本</td>
                 <td colspan="7">
                     <table>

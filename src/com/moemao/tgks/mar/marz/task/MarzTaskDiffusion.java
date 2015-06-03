@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,8 @@ import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.mar.execute.MarzRequest;
 import com.moemao.tgks.mar.marz.entity.CardEvt;
+import com.moemao.tgks.mar.marz.entity.DeckEvt;
+import com.moemao.tgks.mar.marz.entity.MissionEvt;
 import com.moemao.tgks.mar.marz.thread.MarzThreadPoolDiffusion;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.marz.tool.MarzUtil;
@@ -61,6 +64,13 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
     
     private static int SLEEPTIME = 2 * 60 * 1000;
     
+    /**
+     * 账户的四职业第一卡组
+     */
+    private Map<String, String> deckMap;
+    
+    private Map<String, String> pvpEndMap;
+    
     public boolean running = true;
     
     public MarzTaskDiffusion(MarzAccountEvt marzAccountEvt)
@@ -70,6 +80,13 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         marzLogService = (MarzLogService) ContextUtil.getBean("mar_marzLogService");
         marzSettingService = (MarzSettingService) ContextUtil.getBean("mar_marzSettingService");
         marzMapService = (MarzMapService) ContextUtil.getBean("mar_marzMapService");
+        
+        // 初始化一些参数
+        pvpEndMap = new HashMap<String, String>();
+        pvpEndMap.put("1", MarConstant.PVPEND_1);
+        pvpEndMap.put("2", MarConstant.PVPEND_2);
+        pvpEndMap.put("3", MarConstant.PVPEND_3);
+        pvpEndMap.put("4", MarConstant.PVPEND_4);
         
         // 默认线程调用的执行方法
         System.out.println("执行任务开始 ID：" + account.getTgksId());
@@ -118,34 +135,24 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         if (MarzConstant.RES_CODE_ERROR_M5 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "系统维护中，账号自动下线，请留意游戏公告等开服后手动上线...");
+                            this.offLine();
+                            break;
                         }
                         else if (MarzConstant.RES_CODE_ERROR_M7 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号被重新引继过，原存档文件失效，无法继续挂机需要重新绑定账号...");
+                            this.offLine();
+                            break;
                         }
                         else if (MarzConstant.RES_CODE_ERROR_M8 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "游戏客户端已更新，服务器需要同步更新，请关注公告...");
+                            this.offLine();
+                            break;
                         }
                         
-                        // 初始化状态
-                        account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
-                        account.setAp(0);
-                        account.setApMax(0);
-                        account.setBp(0);
-                        account.setBpMax(0);
-                        //account.setCardNum(0);
-                        //account.setCardMax(0);
-                        account.setCoin(0);
-                        account.setFp(0);
-                        account.setGold(0);
-                        account.setSessionId("");
-                        account.setRemark("");
-                        this.marzAccountService.updateMarzAccount(account);
-                        
-                        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经下线...");
-                        
-                        break;
+                        this.sleep(SLEEPTIME);
+                        continue;
                     }
                 }
                 else
@@ -175,34 +182,24 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         if (MarzConstant.RES_CODE_ERROR_M5 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "系统维护中，账号自动下线，请留意游戏公告等开服后手动上线...");
+                            this.offLine();
+                            break;
                         }
                         else if (MarzConstant.RES_CODE_ERROR_M7 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "账号被重新引继过，原存档文件失效，无法继续挂机需要重新绑定账号...");
+                            this.offLine();
+                            break;
                         }
                         else if (MarzConstant.RES_CODE_ERROR_M8 == resultCode)
                         {
                             this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "游戏客户端已更新，服务器需要同步更新，请关注公告...");
+                            this.offLine();
+                            break;
                         }
                         
-                        // 初始化状态
-                        account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
-                        account.setAp(0);
-                        account.setApMax(0);
-                        account.setBp(0);
-                        account.setBpMax(0);
-                        //account.setCardNum(0);
-                        //account.setCardMax(0);
-                        account.setCoin(0);
-                        account.setFp(0);
-                        account.setGold(0);
-                        account.setSessionId("");
-                        account.setRemark("");
-                        this.marzAccountService.updateMarzAccount(account);
-                        
-                        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经下线...");
-                        
-                        break;
+                        this.sleep(SLEEPTIME);
+                        continue;
                     }
                     
                     resultCode = this.baseInfo();
@@ -239,8 +236,16 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     break;
                 }
                 
-                // 5、战斗
+                // 5、打副本
                 resultCode = this.battle();
+                
+                if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+                {
+                    break;
+                }
+                
+                // 6、PVP
+                resultCode = this.pvp();
                 
                 // 最后要保存一下sessionId
                 account.setSessionId(sid);
@@ -269,6 +274,15 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             
         }
         
+        this.offLine();
+        
+        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经下线...");
+        System.out.println(MarConstant.MODULE_TAG + account.getTgksId() + "线程已关闭...");
+        Thread.currentThread().setName(MarConstant.MODULE_TAG + MarzConstant.OVER);
+    }
+    
+    private void offLine()
+    {
         // 初始化状态
         account.setStatus(MarzConstant.MARZ_ACCOUNT_STATUS_0);
         account.setAp(0);
@@ -283,10 +297,6 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         account.setSessionId("");
         account.setRemark("");
         this.marzAccountService.updateMarzAccount(account);
-        
-        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "已经下线...");
-        System.out.println(MarConstant.MODULE_TAG + account.getTgksId() + "线程已关闭...");
-        Thread.currentThread().setName(MarConstant.MODULE_TAG + MarzConstant.OVER);
     }
     
     private void initSetting()
@@ -334,6 +344,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 else if (MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE == Integer.parseInt(setting.getName()))
                 {
                     marzSettingEvt.setBattleGetStone(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_PVP == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setPvp(setting.getValue());
                 }
             }
         }
@@ -526,6 +540,38 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     cardList.add(new CardEvt(cardJSON));
                 }
                 
+                // add by Ken 2015-6-3 for PVP & Solo
+                // cardShow2接口中 decks → 1
+                JSONArray decksJSON = cardShowJSON.getJSONArray("1");
+                deckMap = new HashMap<String, String>();
+                JSONObject deckJSON;
+                DeckEvt deckEvt;
+                
+                for (int i = 0, size = decksJSON.size(); i < size; i++)
+                {
+                    deckJSON = JSONObject.fromObject(decksJSON.get(i));
+                    deckEvt = new DeckEvt(deckJSON);
+                    if ("1".equals(deckEvt.getArthur_type()) && "0".equals(deckEvt.getIdx()) && "1".equals(deckEvt.getJob_type()))
+                    {
+                        // 佣兵第一卡组
+                        deckMap.put("1", deckEvt.getCard_uniqid().replace("[", "").replace("]", ""));
+                    }
+                    else if ("2".equals(deckEvt.getArthur_type()) && "0".equals(deckEvt.getIdx()) && "2".equals(deckEvt.getJob_type()))
+                    {
+                        // 富豪第一卡组
+                        deckMap.put("2", deckEvt.getCard_uniqid().replace("[", "").replace("]", ""));
+                    }
+                    else if ("3".equals(deckEvt.getArthur_type()) && "0".equals(deckEvt.getIdx()) && "3".equals(deckEvt.getJob_type()))
+                    {
+                        // 盗贼第一卡组
+                        deckMap.put("3", deckEvt.getCard_uniqid().replace("[", "").replace("]", ""));
+                    }
+                    else if ("4".equals(deckEvt.getArthur_type()) && "0".equals(deckEvt.getIdx()) && "4".equals(deckEvt.getJob_type()))
+                    {
+                        // 歌姬第一卡组
+                        deckMap.put("4", deckEvt.getCard_uniqid().replace("[", "").replace("]", ""));
+                    }
+                }
                 
                 List<String> cardSellList = new ArrayList<String>();
                 List<String> cardFusionList = new ArrayList<String>();
@@ -742,7 +788,6 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 if (validateSetting(MarzConstant.VALIDATE_SETTING_CARDSELL))
                 {
                     // 查询用户设定的售卡列表
-                    // TODO
                     List<String> userSellList = new ArrayList<String>();
                     
                     if (validateSetting(MarzConstant.VALIDATE_SETTING_CARDSELL_COMMON))
@@ -928,7 +973,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
     
     private int battle()
     {
-        if (!validateSetting(MarzConstant.VALIDATE_SETTING_BATTLE) && account.getAp() <= 5)
+        if (!validateSetting(MarzConstant.VALIDATE_SETTING_BATTLE) && account.getBp() <= 5)
         {
             return MarzConstant.SUCCESS;
         }
@@ -1259,6 +1304,157 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         return resultCode;
     }
     
+    private int pvp()
+    {
+        if (!validateSetting(MarzConstant.VALIDATE_SETTING_PVP))
+        {
+            return MarzConstant.SUCCESS;
+        }
+        
+        if (this.deckMap.size() < 4)
+        {
+            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_6, "四职业卡组没有配齐，请先设定好四职业卡组...");
+            return MarzConstant.SUCCESS;
+        }
+        
+        try
+        {
+            // 先调用pvpShow
+            map = request.pvpShow(sid);
+            resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+            
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+            {
+                sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                
+                // 看剩余次数是否>0
+                JSONObject pvpShow = map.get(MarzConstant.JSON_TAG_PVPSHOW);
+                
+                if (pvpShow.getInt("challenge") < 1)
+                {
+                    // 次数小于1时直接返回
+                    return MarzConstant.SUCCESS;
+                }
+                
+                // 调用missionShow 查看本日PVP任务该使用哪个职业
+                map = request.missionShow(sid);
+                resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+                
+                if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+                {
+                    sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                    
+                    // 处理报文整理为mission的List
+                    JSONObject missionShow = map.get(MarzConstant.JSON_TAG_MISSIONSHOW);
+                    JSONArray missions = missionShow.getJSONArray("missions");
+                    List<MissionEvt> missionList = new ArrayList<MissionEvt>();
+                    JSONObject missionJSON;
+                    
+                    for (int i = 0, size = missions.size(); i < size; i++)
+                    {
+                        missionJSON = JSONObject.fromObject(missions.get(i));
+                        missionList.add(new MissionEvt(missionJSON));
+                    }
+                    
+                    // 这里选出PVP的主职业
+                    String arthur_type = "1";
+                    for (MissionEvt m : missionList)
+                    {
+                        if ("2003001".equals(m.getMissionid()) && "0".equals(m.getState()))
+                        {
+                            arthur_type = "1";
+                            break;
+                        }
+                        else if ("2003002".equals(m.getMissionid()) && "0".equals(m.getState()))
+                        {
+                            arthur_type = "2";
+                            break;
+                        }
+                        else if ("2003003".equals(m.getMissionid()) && "0".equals(m.getState()))
+                        {
+                            arthur_type = "3";
+                            break;
+                        }
+                        else if ("2003004".equals(m.getMissionid()) && "0".equals(m.getState()))
+                        {
+                            arthur_type = "4";
+                            break;
+                        }
+                    }
+                    
+                    map = this.request.pvpStart(sid, arthur_type, deckMap);
+                    resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+                    
+                    if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+                    {
+                        sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                        
+                        JSONObject pvpStart = map.get(MarzConstant.JSON_TAG_PVPSTART);
+                        // 这个是用来发送结束报文用的 很重要
+                        String btluid = pvpStart.getString("btluid");
+                        String enemy = pvpStart.getJSONObject("enemy_info").getString("name");
+                        
+                        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_6, "斗技场PVP战斗开始，对手为：" + enemy);
+                        
+                        Thread.sleep(MarzConstant.SLEEPTIME_BATTLE_SOLO);
+                        
+                        map = this.request.pvpEnd(sid, btluid, pvpEndMap.get(arthur_type));
+                        resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+                        
+                        if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+                        {
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_6, "斗技场PVP战斗结束，战斗结果：胜利");
+                            
+                            sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                            
+                            JSONObject pvpEnd = map.get(MarzConstant.JSON_TAG_RESCODE);
+                            
+                            if (JSONObject.fromObject(pvpEnd.getJSONArray("notification").get(0)).getInt("mission_clear_receive") > 0)
+                            {
+                                // 如果可回收的任务奖励大于0时 再次调用任务请求
+                                map = request.missionShow(sid);
+                                resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+                                
+                                if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+                                {
+                                    sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                                    
+                                    // 处理报文整理为mission的List
+                                    missionShow = map.get(MarzConstant.JSON_TAG_MISSIONSHOW);
+                                    missions = missionShow.getJSONArray("missions");
+                                    missionList = new ArrayList<MissionEvt>();
+                                    
+                                    for (int i = 0, size = missions.size(); i < size; i++)
+                                    {
+                                        missionJSON = JSONObject.fromObject(missions.get(i));
+                                        missionList.add(new MissionEvt(missionJSON));
+                                    }
+                                    
+                                    for (MissionEvt m : missionList)
+                                    {
+                                        // 这里过滤任务只做收取任务奖励使用
+                                        if ("1".equals(m.getState()))
+                                        {
+                                            map = this.request.missionReward(sid, m.getMissionid());
+                                            sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "收取任务奖励：" + m.getTitle());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, "PVP执行失败...");
+        }
+        
+        return resultCode;
+    }
+    
     private boolean validateSetting(int settingTag)
     {
         switch (settingTag)
@@ -1275,8 +1471,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattle());
             case MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE: // 自动战斗开关-不浪费BP
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattleNowaste());
-            case MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE: // 优先拿石
+            case MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE: // 优先拿石开关
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattleGetStone());
+            case MarzConstant.VALIDATE_SETTING_PVP: // PVP开关
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getPvp());
             default:
                 return false;
         }

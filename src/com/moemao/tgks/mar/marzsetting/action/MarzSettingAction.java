@@ -170,6 +170,10 @@ public class MarzSettingAction extends TGKSAction
                 {
                     marzSettingEvt.setBattleGetStone(setting.getValue());
                 }
+                else if (MarzConstant.VALIDATE_SETTING_PVP == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setPvp(setting.getValue());
+                }
             }
         }
         
@@ -287,6 +291,14 @@ public class MarzSettingAction extends TGKSAction
         setting.setType(MarzConstant.MARZSETTING_TYPE_0);
         setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE));
         setting.setValue(marzSettingEvt.getBattleGetStone());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 竞技场 PVP
+        setting = new MarzSettingEvt();setting.setTgksId(tgksId);
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_0);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_PVP));
+        setting.setValue(marzSettingEvt.getPvp());
         this.mar_marzSettingService.addMarzSetting(setting);
         
         return SUCCESS;

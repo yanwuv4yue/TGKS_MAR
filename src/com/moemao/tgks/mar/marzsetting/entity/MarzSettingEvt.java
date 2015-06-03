@@ -43,6 +43,8 @@ private String battleNowasteBossId;
 
 private String battleGetStone;
 
+private String pvp;
+
 private String bossIds;
 
 @Override
@@ -209,6 +211,16 @@ public String getBattleGetStone()
 public void setBattleGetStone(String battleGetStone)
 {
     this.battleGetStone = battleGetStone;
+}
+
+public String getPvp()
+{
+    return pvp;
+}
+
+public void setPvp(String pvp)
+{
+    this.pvp = pvp;
 }
 
 public String getBossIds()

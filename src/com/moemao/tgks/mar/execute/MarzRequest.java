@@ -1,6 +1,9 @@
 package com.moemao.tgks.mar.execute;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
@@ -386,6 +389,176 @@ public class MarzRequest
         return map;
     }
     
+    public Map<String, JSONObject> pvpShow(String sid) throws Exception
+    {
+        map = new HashMap<String, JSONObject>();
+        
+        String paramStr = sid + "=";
+
+        if (bDebug)
+        {
+            System.out.println(paramStr);
+        }
+        
+        String[] result = httpRequest.sendPost(MarConstant.URL_PVPSHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "pvpShow " + Thread.currentThread().getName());
+        
+        // 有名字 必须设置过滤
+        result = this.requestFilter(result);
+        
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        JSONObject pvpShow = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        map.put(MarzConstant.JSON_TAG_PVPSHOW, pvpShow);
+
+        result = null;
+        resCode = null;
+        return map;
+    }
+    
+    /**
+     * 
+     * @Title: pvpStart
+     * @Description PVP战斗开始
+     * @param sid
+     * @param arthur_type 主选亚瑟类型 1 佣兵；2 富豪；3 盗贼；4 歌姬
+     * @param deckMap 卡组ID字符串的MAP 10个卡ID 逗号连接 Map Key为亚瑟类型的1,2,3,4
+     * @return
+     * @throws Exception
+     * @return Map<String,JSONObject> 返回类型
+     * @throws
+     */
+    public Map<String, JSONObject> pvpStart(String sid, String arthur_type, Map<String, String> deckMap) throws Exception
+    {
+        map = new HashMap<String, JSONObject>();
+        
+        List<String> typeList = new ArrayList<String>(Arrays.asList("1", "2", "3", "4"));
+        for (String type : typeList)
+        {
+            if (type.equals(arthur_type))
+            {
+                typeList.remove(type);
+                break;
+            }
+        }
+        
+        String startInfo = "{\"type\":1,\"pvp_my_deck\":["
+            + "{\"arthur_type\":" + arthur_type + ",\"job_type\":" + arthur_type + ",\"deck_idx\":0,\"leader_card_idx\":0,\"card_uniqid\":[" + deckMap.get(arthur_type) + "]},"
+            + "{\"arthur_type\":" + typeList.get(0) + ",\"job_type\":" + typeList.get(0) + ",\"deck_idx\":0,\"leader_card_idx\":0,\"card_uniqid\":[" + deckMap.get(typeList.get(0)) + "]},"
+            + "{\"arthur_type\":" + typeList.get(1) + ",\"job_type\":" + typeList.get(1) + ",\"deck_idx\":0,\"leader_card_idx\":0,\"card_uniqid\":[" + deckMap.get(typeList.get(1)) + "]},"
+            + "{\"arthur_type\":" + typeList.get(2) + ",\"job_type\":" + typeList.get(2) + ",\"deck_idx\":0,\"leader_card_idx\":0,\"card_uniqid\":[" + deckMap.get(typeList.get(2)) + "]}]}";
+        
+        String paramStr = sid + "=" + startInfo;
+
+        if (bDebug)
+        {
+            System.out.println(paramStr);
+        }
+        
+        String[] result = httpRequest.sendPost(MarConstant.URL_PVPSTART, paramStr).split(MarConstant.KRSMA_SPLIT);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "pvpStart " + Thread.currentThread().getName());
+        
+        // 有名字 必须设置过滤
+        result = this.requestFilter(result);
+        
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        JSONObject pvpStart = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        map.put(MarzConstant.JSON_TAG_PVPSTART, pvpStart);
+
+        result = null;
+        resCode = null;
+        return map;
+    }
+    
+    public Map<String, JSONObject> pvpEnd(String sid, String btluid, String pvpEndStr) throws Exception
+    {
+        map = new HashMap<String, JSONObject>();
+        
+        String endInfo = "{\"btluid\":" + btluid + pvpEndStr;
+        
+        String paramStr = sid + "=" + endInfo;
+
+        if (bDebug)
+        {
+            System.out.println(paramStr);
+        }
+        
+        String[] result = httpRequest.sendPost(MarConstant.URL_PVPEND, paramStr).split(MarConstant.KRSMA_SPLIT);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "pvpEnd " + Thread.currentThread().getName());
+        
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        JSONObject pvpEnd = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        map.put(MarzConstant.JSON_TAG_PVPEND, pvpEnd);
+
+        result = null;
+        resCode = null;
+        return map;
+    }
+    
+    /**
+     * 
+     * @Title: missionShow
+     * @Description: state 0 未完成；1 完成为领取；2 完成已领取
+     * @param sid
+     * @return
+     * @throws Exception
+     * @return Map<String,JSONObject> 返回类型
+     * @throws
+     */
+    public Map<String, JSONObject> missionShow(String sid) throws Exception
+    {
+        map = new HashMap<String, JSONObject>();
+        
+        String paramStr = sid + "=" + "{\"is_reward\":1}";
+        String[] result = httpRequest.sendPost(MarConstant.URL_MISSIONSHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "missionShow " + Thread.currentThread().getName());
+        
+        // 有任务信息 必须设置过滤
+        result = this.requestFilter(result);
+        
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        JSONObject missionShow = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        map.put(MarzConstant.JSON_TAG_MISSIONSHOW, missionShow);
+
+        result = null;
+        resCode = null;
+        return map;
+    }
+    
+    public Map<String, JSONObject> missionReward(String sid, String missionids) throws Exception
+    {
+        map = new HashMap<String, JSONObject>();
+        
+        String paramStr = sid + "=" + "{\"missionids\":[" + missionids + "]}";
+        String[] result = httpRequest.sendPost(MarConstant.URL_MISSIONREWARD, paramStr).split(MarConstant.KRSMA_SPLIT);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "missionReward " + Thread.currentThread().getName());
+        
+        // 有任务信息 必须设置过滤
+        result = this.requestFilter(result);
+        
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        JSONObject missionReward = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        map.put(MarzConstant.JSON_TAG_MISSIONREWARD, missionReward);
+
+        result = null;
+        resCode = null;
+        return map;
+    }
+    
     private String[] requestFilter(String[] result)
     {
         if (result.length > 2)
@@ -407,6 +580,17 @@ public class MarzRequest
         System.out.println(str.substring(str.indexOf("}{") + 1, str.length()));
         String uuid = "f57e8b2c-acbf-43a7-9d05-a3f0fc439a46";
         String token = "492N+ZrLTxcvj3h/gWTjdX/+RJE=";
+        
+        List<String> typeList = new ArrayList<String>(Arrays.asList("1", "2", "3", "4"));
+        for (String type : typeList)
+        {
+            if (type.equals("3"))
+            {
+                typeList.remove(type);
+                break;
+            }
+        }
+        System.out.println(typeList.get(0)+typeList.get(1)+typeList.get(2));
         */
     }
 }
