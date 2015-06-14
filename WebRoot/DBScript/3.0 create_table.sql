@@ -20,6 +20,9 @@ DROP TABLE IF EXISTS `t_tgks_mar_krsmacard`;
 CREATE TABLE IF NOT EXISTS `t_tgks_mar_krsmacard` (
   `id` varchar(30) NOT NULL COMMENT '表唯一主键',
   `cardId` varchar(30) NOT NULL COMMENT '卡牌ID',
+  `evoCardId` varchar(30) default NULL COMMENT '进化后卡牌ID',
+  `sellFlag` varchar(3) NOT NULL default '0' COMMENT '自动卖出标志',
+  `fameFlag` varchar(3) NOT NULL default '0' COMMENT '自动名声合成标志',
   `name` varchar(100) NOT NULL COMMENT '名字',
   `nickName` varchar(100) default NULL COMMENT '昵称',
   `type` varchar(3) NOT NULL COMMENT '职业（1 佣兵；2 富豪；3 盗贼；4 歌姬）',
@@ -86,6 +89,8 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzaccount` (
   `fp` int(10) default '0' COMMENT '友情点',
   `coin` int(10) default '0' COMMENT '水晶数量',
   `bossIds` varchar(500) default NULL COMMENT '挂机地图',
+  `sellCardIds` varchar(500) default NULL COMMENT '出售卡片ID',
+  `fameCardIds` varchar(500) default NULL COMMENT '自动合成名声卡片ID',
   `endtime` timestamp NULL default NULL COMMENT '到期时间',
   `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT '创建时间',
   `remark` varchar(500) default NULL COMMENT '备注',

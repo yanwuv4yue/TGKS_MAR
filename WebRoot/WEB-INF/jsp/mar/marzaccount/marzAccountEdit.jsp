@@ -94,11 +94,19 @@
     </tr>
     <tr>
         <td>战斗地图</td>
-        <td colspan="3"><textarea name="marzAccountEvt.bossIds" cols="56" rows="10">${marzAccountEvt.bossIds }</textarea></td>
+        <td colspan="3"><textarea name="marzAccountEvt.bossIds" cols="56" rows="3">${marzAccountEvt.bossIds }</textarea></td>
+    </tr>
+    <tr>
+        <td>自动卖卡</td>
+        <td colspan="3"><textarea name="marzAccountEvt.sellCardIds" cols="56" rows="3">${marzAccountEvt.sellCardIds }</textarea></td>
+    </tr>
+    <tr>
+        <td>名声合成</td>
+        <td colspan="3"><textarea name="marzAccountEvt.fameCardIds" cols="56" rows="3">${marzAccountEvt.fameCardIds }</textarea></td>
     </tr>
     <tr>
         <td>备注</td>
-        <td colspan="3"><textarea name="marzAccountEvt.remark" cols="56" rows="10">${marzAccountEvt.remark }</textarea></td>
+        <td colspan="3"><textarea name="marzAccountEvt.remark" cols="56" rows="5">${marzAccountEvt.remark }</textarea></td>
     </tr>
 </table>
 <script type="text/javascript">

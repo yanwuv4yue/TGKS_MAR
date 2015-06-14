@@ -5,7 +5,7 @@
 <mapper namespace="com.moemao.tgks.mar.krsmacard.dao.KrsmaCardDao">
 <select id="mar_queryKrsmaCard" parameterType="KrsmaCardReq" resultType="KrsmaCardEvt" resultMap="KrsmaCardEvtMap">
         <![CDATA[  
-            SELECT t.id, t.cardid, t.name, t.nickname, t.type, t.rarity, t.imageurl, t.iconurl FROM t_tgks_mar_krsmacard t
+            SELECT t.id, t.cardid, t.evocardid, t.sellflag, t.fameFlag, t.name, t.nickname, t.type, t.rarity, t.imageurl, t.iconurl FROM t_tgks_mar_krsmacard t
         ]]>
         <where>
                 1=1
@@ -14,6 +14,15 @@
             </if>
             <if test="cardId !=null and cardId !='' ">
                 AND t.CARDID = #{cardId}
+            </if>
+            <if test="evoCardId !=null and evoCardId !='' ">
+                AND t.EVOCARDID = #{evoCardId}
+            </if>
+            <if test="sellFlag !=null and sellFlag !='' ">
+                AND t.SELLFLAG = #{sellFlag}
+            </if>
+            <if test="fameFlag !=null and fameFlag !='' ">
+                AND t.FAMEFLAG = #{fameFlag}
             </if>
             <if test="name !=null and name !='' ">
                 AND t.NAME LIKE CONCAT(CONCAT('%', #{name}),'%')
@@ -41,8 +50,8 @@
 
 <insert id="mar_addKrsmaCard" parameterType="KrsmaCardEvt">
         <![CDATA[  
-            INSERT INTO t_tgks_mar_krsmacard (id, cardid, name, nickname, type, rarity, imageurl, iconurl) 
-            VALUES (#{id}, #{cardId}, #{name}, #{nickName}, #{type}, #{rarity}, #{imageUrl}, #{iconUrl}) 
+            INSERT INTO t_tgks_mar_krsmacard (id, cardid, evocardid, sellflag, fameFlag, name, nickname, type, rarity, imageurl, iconurl) 
+            VALUES (#{id}, #{cardId}, #{evoCardId}, #{sellFlag}, #{fameFlag}, #{name}, #{nickName}, #{type}, #{rarity}, #{imageUrl}, #{iconUrl}) 
         ]]>
 </insert>
 
@@ -50,6 +59,9 @@
         <![CDATA[  
             UPDATE t_tgks_mar_krsmacard SET 
                        cardid = #{cardId},
+                       evocardid = #{evoCardId},
+                       sellflag = #{sellFlag},
+                       fameflag = #{fameFlag},
                        name = #{name},
                        nickname = #{nickName},
                        type = #{type},

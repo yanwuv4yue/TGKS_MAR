@@ -9,6 +9,9 @@ import com.moemao.tgks.common.core.action.TGKSAction;
 import com.moemao.tgks.common.tool.CommonConstant;
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.common.tool.StringUtil;
+import com.moemao.tgks.mar.krsmacard.entity.KrsmaCardEvt;
+import com.moemao.tgks.mar.krsmacard.entity.KrsmaCardReq;
+import com.moemao.tgks.mar.krsmacard.service.KrsmaCardService;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountReq;
@@ -19,6 +22,7 @@ import com.moemao.tgks.mar.marzmap.service.MarzMapService;
 import com.moemao.tgks.mar.marzsetting.entity.MarzSettingEvt;
 import com.moemao.tgks.mar.marzsetting.entity.MarzSettingReq;
 import com.moemao.tgks.mar.marzsetting.service.MarzSettingService;
+import com.moemao.tgks.mar.tool.MarConstant;
 
 /**
  * 
@@ -54,13 +58,21 @@ public class MarzSettingAction extends TGKSAction
     
     private MarzMapService mar_marzMapService;
     
+    private KrsmaCardService mar_krsmaCardService;
+    
     /**
      * 查询结果集
      */
     private List<MarzSettingEvt> list;
     
+    // 设置页面展示
     List<MarzMapEvt> allMapList;
     
+    // 设置页面展示
+    List<KrsmaCardEvt> sellCardList;
+    List<KrsmaCardEvt> fameCardList;
+    
+    // 设置页面展示
     MarzAccountEvt account;
     
     /**
@@ -150,7 +162,7 @@ public class MarzSettingAction extends TGKSAction
                 {
                     marzSettingEvt.setCardSellCommon(setting.getValue());
                 }
-                else if (MarzConstant.VALIDATE_SETTING_CARDFUSION == Integer.parseInt(setting.getName()))
+                else if (MarzConstant.VALIDATE_SETTING_CHIARIFUSION == Integer.parseInt(setting.getName()))
                 {
                     marzSettingEvt.setCardFusion(setting.getValue());
                 }
@@ -174,16 +186,18 @@ public class MarzSettingAction extends TGKSAction
                 {
                     marzSettingEvt.setPvp(setting.getValue());
                 }
+                else if (MarzConstant.VALIDATE_SETTING_FAMEFUSION == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setFameFusion(setting.getValue());
+                }
             }
         }
         
         // 查询当前的战斗地图
         allMapList = this.mar_marzMapService.queryMarzMap(new MarzMapReq());
-        
         MarzAccountReq marzAccountReq = new MarzAccountReq();
         marzAccountReq.setTgksId(tgksId);
         account = this.mar_marzAccountService.queryMarzAccount(marzAccountReq).get(0);
-        
         for (MarzMapEvt map : allMapList)
         {
             if (!CommonUtil.isEmpty(account.getBossIds()))
@@ -204,6 +218,36 @@ public class MarzSettingAction extends TGKSAction
             }
         }
         
+        // 查询当前配置的售卡片ID
+        KrsmaCardReq krsmaCardReq = new KrsmaCardReq();
+        krsmaCardReq.setSellFlag(MarConstant.KRSMACARD_SELLFLAG_1);
+        sellCardList = this.mar_krsmaCardService.queryKrsmaCard(krsmaCardReq);
+        for (KrsmaCardEvt sellCard : sellCardList)
+        {
+            if (!CommonUtil.isEmpty(account.getSellCardIds()))
+            {
+                if (account.getSellCardIds().contains(sellCard.getCardId()))
+                {
+                    sellCard.setCheck("1");
+                }
+            }
+        }
+        
+        // 查询当前配置的名声合成卡片ID
+        krsmaCardReq = new KrsmaCardReq();
+        krsmaCardReq.setFameFlag(MarConstant.KRSMACARD_FAMEFLAG_1);
+        fameCardList = this.mar_krsmaCardService.queryKrsmaCard(krsmaCardReq);
+        for (KrsmaCardEvt fameCard : fameCardList)
+        {
+            if (!CommonUtil.isEmpty(account.getFameCardIds()))
+            {
+                if (account.getFameCardIds().contains(fameCard.getCardId()))
+                {
+                    fameCard.setCheck("1");
+                }
+            }
+        }
+        
         return SUCCESS;
     }
     
@@ -214,10 +258,11 @@ public class MarzSettingAction extends TGKSAction
         // 先删除原来的设定
         this.mar_marzSettingService.deleteMarzSettingByTgksId(tgksId);
         
-        // 保存战斗地图ID
         MarzAccountReq marzAccountReq = new MarzAccountReq();
         marzAccountReq.setTgksId(tgksId);
         account = this.mar_marzAccountService.queryMarzAccount(marzAccountReq).get(0);
+        
+        // 保存战斗地图ID
         if (null == marzSettingEvt.getBossIds())
         {
             account.setBossIds("");
@@ -226,6 +271,28 @@ public class MarzSettingAction extends TGKSAction
         {
             account.setBossIds(marzSettingEvt.getBossIds().replace(" ", ""));
         }
+        
+        // 保存自动售卡ID
+        if (null == marzSettingEvt.getSellCardIds())
+        {
+            account.setSellCardIds("");
+        }
+        else
+        {
+            account.setSellCardIds(marzSettingEvt.getSellCardIds().replace(" ", ""));
+        }
+        
+        // 保存自动名声合成ID
+        if (null == marzSettingEvt.getFameCardIds())
+        {
+            account.setFameCardIds("");
+        }
+        else
+        {
+            account.setFameCardIds(marzSettingEvt.getFameCardIds().replace(" ", ""));
+        }
+        
+        // 保存基本信息表中的ID信息
         this.mar_marzAccountService.updateMarzAccount(account);
         
         // 开始保存新设定
@@ -257,7 +324,7 @@ public class MarzSettingAction extends TGKSAction
         setting = new MarzSettingEvt();
         setting.setTgksId(tgksId);
         setting.setType(MarzConstant.MARZSETTING_TYPE_0);
-        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_CARDFUSION));
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_CHIARIFUSION));
         setting.setValue(marzSettingEvt.getCardFusion());
         this.mar_marzSettingService.addMarzSetting(setting);
         
@@ -299,6 +366,14 @@ public class MarzSettingAction extends TGKSAction
         setting.setType(MarzConstant.MARZSETTING_TYPE_0);
         setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_PVP));
         setting.setValue(marzSettingEvt.getPvp());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 名声合成
+        setting = new MarzSettingEvt();
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_0);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_FAMEFUSION));
+        setting.setValue(marzSettingEvt.getFameFusion());
         this.mar_marzSettingService.addMarzSetting(setting);
         
         return SUCCESS;
@@ -388,6 +463,16 @@ public class MarzSettingAction extends TGKSAction
         this.mar_marzMapService = mar_marzMapService;
     }
 
+    public KrsmaCardService getMar_krsmaCardService()
+    {
+        return mar_krsmaCardService;
+    }
+
+    public void setMar_krsmaCardService(KrsmaCardService mar_krsmaCardService)
+    {
+        this.mar_krsmaCardService = mar_krsmaCardService;
+    }
+
     public List<MarzMapEvt> getAllMapList()
     {
         return allMapList;
@@ -396,6 +481,26 @@ public class MarzSettingAction extends TGKSAction
     public void setAllMapList(List<MarzMapEvt> allMapList)
     {
         this.allMapList = allMapList;
+    }
+
+    public List<KrsmaCardEvt> getSellCardList()
+    {
+        return sellCardList;
+    }
+
+    public void setSellCardList(List<KrsmaCardEvt> sellCardList)
+    {
+        this.sellCardList = sellCardList;
+    }
+    
+    public List<KrsmaCardEvt> getFameCardList()
+    {
+        return fameCardList;
+    }
+
+    public void setFameCardList(List<KrsmaCardEvt> fameCardList)
+    {
+        this.fameCardList = fameCardList;
     }
 
     public MarzAccountEvt getAccount()

@@ -9,6 +9,8 @@
                 <th>ID</th>
                 <th>名字</th>
                 <th>图标</th>
+                <th>自动出售</th>
+                <th>名声合成</th>
                 <th>职业</th>
                 <th>稀有度</th>
                 <th>昵称</th>
@@ -21,7 +23,15 @@
 					<td width="20"><input type="checkbox" name="krsmaCardId" value="<s:property value='#evt.id'/>" /></td>
 					<td><b id="<s:property value='#evt.id'/>" class="krsmaCardUpdate"><s:property value="#evt.cardId"/></b></td>
                     <td><s:property value="#evt.name"/></td>
-                    <td><img width="50px" src="<s:property value="#evt.iconUrl"/>" /></td>
+                    <td><img width="40px" src="<s:property value="#evt.iconUrl"/>" /></td>
+                    <td>
+                        <s:if test="#evt.sellFlag == 0">否</s:if>
+                        <s:elseif test="#evt.sellFlag == 1">是</s:elseif>
+                    </td>
+                    <td>
+                        <s:if test="#evt.fameFlag == 0">否</s:if>
+                        <s:elseif test="#evt.fameFlag == 1">是</s:elseif>
+                    </td>
                     <td>
                         <s:if test="#evt.type == 1">佣兵</s:if>
                         <s:elseif test="#evt.type == 2">富豪</s:elseif>

@@ -11,6 +11,13 @@
                          <option value="1" <s:if test="marzSettingEvt.explore == 1">selected="selected"</s:if>>开</option>
                     </select>
                 </td>
+                <td>PVP</td>
+                <td>
+                    <select id="marzSettingEvt.pvp" name="marzSettingEvt.pvp">
+                         <option value="0">关</option>
+                         <option value="1" <s:if test="marzSettingEvt.pvp == 1">selected="selected"</s:if>>开</option>
+                    </select>
+                </td>
                 <td>卖卡</td>
                 <td>
                     <select id="marzSettingEvt.cardSell" name="marzSettingEvt.cardSell">
@@ -25,12 +32,65 @@
                          <option value="1" <s:if test="marzSettingEvt.cardSellCommon == 1">selected="selected"</s:if>>开</option>
                     </select>
                 </td>
+            </tr>
+            <tr>
+                <td>自动卖卡列表</td>
+                <td colspan="7">
+                    <table>
+                        <tr>
+                            <s:iterator value="sellCardList" var="evt" status="idx">
+                              <td>
+                                <input type="checkbox" name="marzSettingEvt.sellCardIds" value="<s:property value='#evt.cardId'/>" <s:if test="#evt.check == 1">checked="checked"</s:if> />
+                              </td>
+                              <td>
+                                <img width="40px" src="<s:property value="#evt.iconUrl"/>" title="<s:property value="#evt.name"/>" alt="<s:property value="#evt.name"/>" />
+                              </td>
+                              <s:if test="#idx.index > 0  && (#idx.index + 1)%7 == 0">
+                        </tr>
+                        <tr>
+                              </s:if>
+                            </s:iterator>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
                 <td>喂狗粮</td>
                 <td>
                     <select id="marzSettingEvt.cardFusion" name="marzSettingEvt.cardFusion">
                          <option value="0">关</option>
                          <option value="1" <s:if test="marzSettingEvt.cardFusion == 1">selected="selected"</s:if>>开</option>
                     </select>
+                </td>
+                <td>名声合成（未开放）</td>
+                <td>
+                    <select id="marzSettingEvt.fameFusion" name="marzSettingEvt.fameFusion">
+                         <option value="0">关</option>
+                         <option value="1" <s:if test="marzSettingEvt.fameFusion == 1">selected="selected"</s:if>>开</option>
+                    </select>
+                </td>
+                <td></td><td></td>
+                <td></td><td></td>
+            </tr>
+            <tr>
+                <td>名声合成列表</td>
+                <td colspan="7">
+                    <table>
+                        <tr>
+                            <s:iterator value="fameCardList" var="evt" status="idx">
+                              <td>
+                                <input type="checkbox" name="marzSettingEvt.fameCardIds" value="<s:property value='#evt.cardId'/>" <s:if test="#evt.check == 1">checked="checked"</s:if> />
+                              </td>
+                              <td>
+                                <img width="40px" src="<s:property value="#evt.iconUrl"/>" title="<s:property value="#evt.name"/>" alt="<s:property value="#evt.name"/>" />
+                              </td>
+                              <s:if test="#idx.index > 0  && (#idx.index + 1)%7 == 0">
+                        </tr>
+                        <tr>
+                              </s:if>
+                            </s:iterator>
+                        </tr>
+                    </table>
                 </td>
             </tr>
             <tr>
@@ -66,18 +126,6 @@
                          </s:iterator>
                     </select>
                 </td>
-            </tr>
-            <tr>
-                <td>PVP</td>
-                <td>
-                    <select id="marzSettingEvt.pvp" name="marzSettingEvt.pvp">
-                         <option value="0">关</option>
-                         <option value="1" <s:if test="marzSettingEvt.pvp == 1">selected="selected"</s:if>>开</option>
-                    </select>
-                </td>
-                <td></td><td></td>
-                <td></td><td></td>
-                <td></td><td></td>
             </tr>
             <tr>
                 <td>战斗副本</td>

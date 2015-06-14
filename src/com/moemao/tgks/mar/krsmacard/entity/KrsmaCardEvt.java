@@ -42,10 +42,57 @@ private String imageUrl;
  */
 private String iconUrl;
 
+/**
+ * 进化后卡牌ID
+ */
+private String evoCardId;
+
+/**
+ * 卖出Flag
+ */
+private String sellFlag;
+
+/**
+ * 名声合成Flag
+ */
+private String fameFlag;
+
+private String check;
+
 @Override
 public String toString()
 {
 return String.format("id:%S\ncardId:%S\nname:%S\nnickName:%S\ntype:%S\nrarity:%S\nimageUrl:%S\niconUrl:%S\n", id, cardId, name, nickName, type, rarity, imageUrl, iconUrl);
+}
+
+public String getEvoCardId()
+{
+    return evoCardId;
+}
+
+public void setEvoCardId(String evoCardId)
+{
+    this.evoCardId = evoCardId;
+}
+
+public String getSellFlag()
+{
+    return sellFlag;
+}
+
+public void setSellFlag(String sellFlag)
+{
+    this.sellFlag = sellFlag;
+}
+
+public String getFameFlag()
+{
+    return fameFlag;
+}
+
+public void setFameFlag(String fameFlag)
+{
+    this.fameFlag = fameFlag;
 }
 
 /**
@@ -174,6 +221,16 @@ public String getIconUrl()
 public void setIconUrl(String iconUrl)
 {
     this.iconUrl = iconUrl;
+}
+
+public String getCheck()
+{
+    return check;
+}
+
+public void setCheck(String check)
+{
+    this.check = check;
 }
 
 }

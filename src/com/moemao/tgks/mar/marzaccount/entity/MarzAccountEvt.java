@@ -119,6 +119,16 @@ private Integer coin;
  */
 private String bossIds;
 
+/**
+ * 出售卡片列表
+ */
+private String sellCardIds;
+
+/**
+ * 名声合成卡片列表
+ */
+private String fameCardIds;
+
 private Date endTime;
 
 private Date createTime;
@@ -494,6 +504,26 @@ public String getBossIds()
 public void setBossIds(String bossIds)
 {
     this.bossIds = bossIds;
+}
+
+public String getSellCardIds()
+{
+    return sellCardIds;
+}
+
+public void setSellCardIds(String sellCardIds)
+{
+    this.sellCardIds = sellCardIds;
+}
+
+public String getFameCardIds()
+{
+    return fameCardIds;
+}
+
+public void setFameCardIds(String fameCardIds)
+{
+    this.fameCardIds = fameCardIds;
 }
 
 public String getRemark()

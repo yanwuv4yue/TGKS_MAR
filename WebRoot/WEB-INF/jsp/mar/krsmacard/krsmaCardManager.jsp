@@ -13,12 +13,27 @@
 		<table>
 			<tr>
 				<td><label>名称: </label></td><td><input type="text" name="krsmaCardReq.name" /></td>
+				<td><label>自动出售: </label></td>
+                <td>
+                    <select name="krsmaCardReq.sellFlag">
+                        <option value="">全部</option>
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                </td>
+				<td><label>名声合成: </label></td>
+                <td>
+                    <select name="krsmaCardReq.fameFlag">
+                        <option value="">全部</option>
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                </td>
 				<td>
-				
 				</td>
 				<td>
-				<button id="clearKrsmaCard">重置</button>
-				<button id="queryKrsmaCard">查询</button>
+					<button id="clearKrsmaCard">重置</button>
+					<button id="queryKrsmaCard">查询</button>
 				</td>
 			</tr>
 		</table>

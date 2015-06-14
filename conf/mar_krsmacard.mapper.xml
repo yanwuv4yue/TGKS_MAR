@@ -6,6 +6,9 @@
     <resultMap id="KrsmaCardEvtMap" type="KrsmaCardEvt">
         <id property="id" column="ID" />
         <result property="cardId" column="CARDID" />
+        <result property="evoCardId" column="EVOCARDID" />
+        <result property="sellFlag" column="SELLFLAG" />
+        <result property="fameFlag" column="FAMEFLAG" />
         <result property="name" column="NAME" />
         <result property="nickName" column="NICKNAME" />
         <result property="type" column="TYPE" />

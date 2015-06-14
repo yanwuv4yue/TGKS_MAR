@@ -35,6 +35,8 @@ private String cardSellCommon;
 
 private String cardFusion;
 
+private String fameFusion;
+
 private String battle;
 
 private String battleNowaste;
@@ -46,6 +48,10 @@ private String battleGetStone;
 private String pvp;
 
 private String bossIds;
+
+private String sellCardIds;
+
+private String fameCardIds;
 
 @Override
 public String toString()
@@ -173,6 +179,16 @@ public void setCardFusion(String cardFusion)
     this.cardFusion = cardFusion;
 }
 
+public String getFameFusion()
+{
+    return fameFusion;
+}
+
+public void setFameFusion(String fameFusion)
+{
+    this.fameFusion = fameFusion;
+}
+
 public String getBattle()
 {
     return battle;
@@ -231,6 +247,26 @@ public String getBossIds()
 public void setBossIds(String bossIds)
 {
     this.bossIds = bossIds;
+}
+
+public String getSellCardIds()
+{
+    return sellCardIds;
+}
+
+public void setSellCardIds(String sellCardIds)
+{
+    this.sellCardIds = sellCardIds;
+}
+
+public String getFameCardIds()
+{
+    return fameCardIds;
+}
+
+public void setFameCardIds(String fameCardIds)
+{
+    this.fameCardIds = fameCardIds;
 }
 
 }

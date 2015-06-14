@@ -154,7 +154,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                 {
                     marzSettingEvt.setCardSellCommon(setting.getValue());
                 }
-                else if (MarzConstant.VALIDATE_SETTING_CARDFUSION == Integer.parseInt(setting.getName()))
+                else if (MarzConstant.VALIDATE_SETTING_CHIARIFUSION == Integer.parseInt(setting.getName()))
                 {
                     marzSettingEvt.setCardFusion(setting.getValue());
                 }
@@ -399,7 +399,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                 }
                 
                 // 狗粮合成
-                if (validateSetting(MarzConstant.VALIDATE_SETTING_CARDFUSION))
+                if (validateSetting(MarzConstant.VALIDATE_SETTING_CHIARIFUSION))
                 {
                     // 只自动喂 蓝狗 红狗 粉狗
                     String[] chiari = {"20000001", "20000002", "20000003"};
@@ -736,7 +736,7 @@ public class MarzTask implements Runnable, ApplicationContextAware
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getCardSell());
             case MarzConstant.VALIDATE_SETTING_CARDSELL_COMMON: // 自动卖卡开关-卖普通卡
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getCardSellCommon());
-            case MarzConstant.VALIDATE_SETTING_CARDFUSION: // 自动合成开关
+            case MarzConstant.VALIDATE_SETTING_CHIARIFUSION: // 自动合成开关
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getCardFusion());
             case MarzConstant.VALIDATE_SETTING_BATTLE: // 自动战斗开关
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattle());

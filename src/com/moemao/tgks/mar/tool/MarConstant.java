@@ -84,6 +84,22 @@ public class MarConstant
      * KRSMA卡片职业 歌姬
      */
     public static final String KRSMACARD_TYPE_4 = "4";
+    /**
+     * KRSMA是否自动卖卡 否
+     */
+    public static final String KRSMACARD_SELLFLAG_0 = "0";
+    /**
+     * KRSMA是否自动卖卡 是
+     */
+    public static final String KRSMACARD_SELLFLAG_1 = "1";
+    /**
+     * KRSMA是否自动合成名声 否
+     */
+    public static final String KRSMACARD_FAMEFLAG_0 = "0";
+    /**
+     * KRSMA是否自动合成名声 是
+     */
+    public static final String KRSMACARD_FAMEFLAG_1 = "1";
     
     /**
      * 注册

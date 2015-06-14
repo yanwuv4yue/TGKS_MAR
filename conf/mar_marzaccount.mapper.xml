@@ -27,6 +27,8 @@
         <result property="fp" column="FP" />
         <result property="coin" column="COIN" />
         <result property="bossIds" column="BOSSIDS" />
+        <result property="sellCardIds" column="SELLCARDIDS" />
+        <result property="fameCardIds" column="FAMECARDIDS" />
         <result property="createTime" column="CREATETIME" />
         <result property="endTime" column="ENDTIME" />
         <result property="remark" column="REMARK" />

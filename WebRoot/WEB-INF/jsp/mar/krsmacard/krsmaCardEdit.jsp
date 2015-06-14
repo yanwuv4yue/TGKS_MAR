@@ -9,8 +9,26 @@
         <td><input type="text" name="krsmaCardEvt.name" id="krsmaCardName" value="${krsmaCardEvt.name }" /></td>
     </tr>
     <tr>
+        <td>进化后ID：</td>
+        <td><input type="text" name="krsmaCardEvt.evoCardId" id="krsmaEvoCardCardId" value="${krsmaCardEvt.evoCardId }" /></td>
         <td>昵称：</td>
-        <td colspan="3"><input type="text" name="krsmaCardEvt.nickName" id="krsmaCardNickName" value="${krsmaCardEvt.nickName }" /></td>
+        <td><input type="text" name="krsmaCardEvt.nickName" id="krsmaCardNickName" value="${krsmaCardEvt.nickName }" /></td>
+    </tr>
+    <tr>
+        <td>自动出售：</td>
+        <td>
+            <select name="krsmaCardEvt.sellFlag">
+                <option value="0" <s:if test='krsmaCardEvt.sellFlag== 0"'>selected="selected"</s:if>>否</option>
+                <option value="1" <s:if test='krsmaCardEvt.sellFlag=="1"'>selected="selected"</s:if>>是</option>
+            </select>
+        </td>
+        <td>名声合成：</td>
+        <td>
+            <select name="krsmaCardEvt.fameFlag">
+                <option value="0" <s:if test='krsmaCardEvt.fameFlag=="0"'>selected="selected"</s:if>>否</option>
+                <option value="1" <s:if test='krsmaCardEvt.fameFlag=="1"'>selected="selected"</s:if>>是</option>
+            </select>
+        </td>
     </tr>
     <tr>
         <td>职业：</td>
