@@ -20,7 +20,7 @@
 </li>
  -->
 <li style="width:80px;">
-    <a id="marzOfflineGuaji" href="#"><b>离线挂机</b></a>
+    <a id="marzOfflineGuaji" href="#"><b>挂机主页</b></a>
 </li>
 <li style="width:80px;">
     <a id="marzCardUsePageA" href="#"><b>点卡充值</b></a>
@@ -30,6 +30,9 @@
 </li>
 <li style="width:80px;">
     <a id="help" href="#" onclick="window.open('http://www.moemao.com/index.php/marweb-help')"><b>使用说明</b></a>
+</li>
+<li style="width:80px;">
+    <a id="help" href="#" onclick="window.open('http://www.kairisei-ma.jp/')"><b>活动公告</b></a>
 </li>
 
 <script type="text/javascript">

@@ -350,6 +350,26 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 {
                     marzSettingEvt.setPvp(setting.getValue());
                 }
+                else if (MarzConstant.VALIDATE_SETTING_FAMEFUSION == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setFameFusion(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_COINGACHA == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCoinGacha(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_COINGACHA_GACHAID == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCoinGachaGachaId(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setAutoUseBPPotion(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setAutoBuyBPPotion(setting.getValue());
+                }
             }
         }
     }
@@ -1464,6 +1484,15 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         return resultCode;
     }
     
+    /**
+     * 
+     * @Title: validateSetting
+     * @Description: 校验开关是否开启
+     * @param settingTag
+     * @return
+     * @return boolean 返回类型
+     * @throws
+     */
     private boolean validateSetting(int settingTag)
     {
         switch (settingTag)
@@ -1485,6 +1514,12 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             case MarzConstant.VALIDATE_SETTING_PVP: // PVP开关
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getPvp());
             case MarzConstant.VALIDATE_SETTING_FAMEFUSION: // 自动名声合成开关
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getFameFusion());
+            case MarzConstant.VALIDATE_SETTING_COINGACHA: // 抽硬币
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getFameFusion());
+            case MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION: // 自动喝药
+                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getFameFusion());
+            case MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION: // 自动买药
                 return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getFameFusion());
             default:
                 return false;

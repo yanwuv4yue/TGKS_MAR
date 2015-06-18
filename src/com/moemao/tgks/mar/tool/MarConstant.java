@@ -100,126 +100,129 @@ public class MarConstant
      * KRSMA是否自动合成名声 是
      */
     public static final String KRSMACARD_FAMEFLAG_1 = "1";
+
+    public static final String URL_PRE_HTTPS = "https://app.login.kairisei-ma.jp:443";
+    public static final String URL_PRE = "http://app.kairisei-ma.jp";
     
     /**
      * 注册
      */
-    public static final String URL_REGIST = "https://app.login.kairisei-ma.jp:443/Auth/login.php";
+    public static final String URL_REGIST = URL_PRE_HTTPS + "/Auth/login.php";
 
     /**
      * 登录
      */
-    public static final String URL_LOGIN = "https://app.login.kairisei-ma.jp:443/Auth/login.php";
+    public static final String URL_LOGIN = URL_PRE_HTTPS + "/Auth/login.php";
 
     /**
      * 连接
      */
-    public static final String URL_CONNECT = "http://app.kairisei-ma.jp/Game/Connect";
+    public static final String URL_CONNECT = URL_PRE + "/Game/Connect";
 
     /**
      * 选职起名
      */
-    public static final String URL_USERCREATE = "http://app.kairisei-ma.jp/Game/UserCreate";
+    public static final String URL_USERCREATE = URL_PRE + "/Game/UserCreate";
 
     /**
      * 主界面
      */
-    public static final String URL_HOMESHOW = "http://app.kairisei-ma.jp/Game/HomeShow";
+    public static final String URL_HOMESHOW = URL_PRE + "/Game/HomeShow";
 
     /**
      * 输入招待号
      */
-    public static final String URL_INVITECODEENTER = "http://app.kairisei-ma.jp/Game/InviteCodeEnter";
+    public static final String URL_INVITECODEENTER = URL_PRE + "/Game/InviteCodeEnter";
 
     /**
      * 批量收取礼物
      */
-    public static final String URL_PRESENTBOXMULTIRECV = "http://app.kairisei-ma.jp/Game/PresentBoxMultiRecv";
+    public static final String URL_PRESENTBOXMULTIRECV = URL_PRE + "/Game/PresentBoxMultiRecv";
     
     /**
      * 抽卡准备
      */
-    public static final String URL_GACHASHOW= "http://app.kairisei-ma.jp/Game/GachaShow";
+    public static final String URL_GACHASHOW= URL_PRE + "/Game/GachaShow";
     
     /**
      * 抽卡
      */
-    public static final String URL_GACHAPLAY = "http://app.kairisei-ma.jp/Game/GachaPlay";
+    public static final String URL_GACHAPLAY = URL_PRE + "/Game/GachaPlay";
 
     /**
      * 卡组信息
      */
-    public static final String URL_CARDSHOW = "http://app.kairisei-ma.jp/Game/CardShow";
+    public static final String URL_CARDSHOW = URL_PRE + "/Game/CardShow";
 
     /**
      * 卡组信息 新
      */
-    public static final String URL_CARDSHOW2 = "http://app.kairisei-ma.jp/Game/CardShow2";
+    public static final String URL_CARDSHOW2 = URL_PRE + "/Game/CardShow2";
 
     /**
      * 卡片合成
      */
-    public static final String URL_CARDFUSION = "http://app.kairisei-ma.jp/Game/CardFusion";
+    public static final String URL_CARDFUSION = URL_PRE + "/Game/CardFusion";
 
     /**
      * 卡组配置
      */
-    public static final String URL_CARDDECKSET = "http://app.kairisei-ma.jp/Game/CardDeckSet";
+    public static final String URL_CARDDECKSET = URL_PRE + "/Game/CardDeckSet";
     
     /**
      * 卡片出售
      */
-    public static final String URL_CARDSELL = "http://app.kairisei-ma.jp/Game/CardSell";
+    public static final String URL_CARDSELL = URL_PRE + "/Game/CardSell";
 
     /**
      * 战斗信息 单人
      */
-    public static final String URL_TEAMBATTLESOLOSHOW = "http://app.kairisei-ma.jp/Game/TeamBattleSoloShow";
+    public static final String URL_TEAMBATTLESOLOSHOW = URL_PRE + "/Game/TeamBattleSoloShow";
 
     /**
      * 战斗开始 单人
      */
-    public static final String URL_TEAMBATTLESOLOSTART = "http://app.kairisei-ma.jp/Game/TeamBattleSoloStart";
+    public static final String URL_TEAMBATTLESOLOSTART = URL_PRE + "/Game/TeamBattleSoloStart";
 
     /**
      * 战斗结束 单人
      */
-    public static final String URL_TEAMBATTLESOLOEND = "http://app.kairisei-ma.jp/Game/TeamBattleSoloEnd";
+    public static final String URL_TEAMBATTLESOLOEND = URL_PRE + "/Game/TeamBattleSoloEnd";
     
     /**
      * 探索 开始
      */
-    public static final String URL_EXPLORESTART = "http://app.kairisei-ma.jp/Game/ExploreStart";
+    public static final String URL_EXPLORESTART = URL_PRE + "/Game/ExploreStart";
     
     /**
      * 探索 结束
      */
-    public static final String URL_EXPLOREEND = "http://app.kairisei-ma.jp/Game/ExploreEnd";
+    public static final String URL_EXPLOREEND = URL_PRE + "/Game/ExploreEnd";
     
     /**
      * 查看PVP信息
      */
-    public static final String URL_PVPSHOW = "http://app.kairisei-ma.jp/Game/PvpShow";
+    public static final String URL_PVPSHOW = URL_PRE + "/Game/PvpShow";
     
     /**
      * PVP开始
      */
-    public static final String URL_PVPSTART = "http://app.kairisei-ma.jp/Game/PvpStart";
+    public static final String URL_PVPSTART = URL_PRE + "/Game/PvpStart";
     
     /**
      * PVP结束
      */
-    public static final String URL_PVPEND = "http://app.kairisei-ma.jp/Game/PvpEnd";
+    public static final String URL_PVPEND = URL_PRE + "/Game/PvpEnd";
     
     /**
      * 查看任务详情
      */
-    public static final String URL_MISSIONSHOW = "http://app.kairisei-ma.jp/Game/MissionShow";
+    public static final String URL_MISSIONSHOW = URL_PRE + "/Game/MissionShow";
     
     /**
      * 收取任务奖励
      */
-    public static final String URL_MISSIONREWARD = "http://app.kairisei-ma.jp/Game/MissionReward";
+    public static final String URL_MISSIONREWARD = URL_PRE + "/Game/MissionReward";
     
     /**
      * 初始地图

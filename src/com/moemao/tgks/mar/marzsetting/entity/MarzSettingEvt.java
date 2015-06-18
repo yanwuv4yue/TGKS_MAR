@@ -35,8 +35,6 @@ private String cardSellCommon;
 
 private String cardFusion;
 
-private String fameFusion;
-
 private String battle;
 
 private String battleNowaste;
@@ -46,6 +44,16 @@ private String battleNowasteBossId;
 private String battleGetStone;
 
 private String pvp;
+
+private String fameFusion;
+
+private String autoUseBPPotion;
+
+private String autoBuyBPPotion;
+
+private String coinGacha;
+
+private String coinGachaGachaId;
 
 private String bossIds;
 
@@ -267,6 +275,46 @@ public String getFameCardIds()
 public void setFameCardIds(String fameCardIds)
 {
     this.fameCardIds = fameCardIds;
+}
+
+public String getAutoUseBPPotion()
+{
+    return autoUseBPPotion;
+}
+
+public void setAutoUseBPPotion(String autoUseBPPotion)
+{
+    this.autoUseBPPotion = autoUseBPPotion;
+}
+
+public String getAutoBuyBPPotion()
+{
+    return autoBuyBPPotion;
+}
+
+public void setAutoBuyBPPotion(String autoBuyBPPotion)
+{
+    this.autoBuyBPPotion = autoBuyBPPotion;
+}
+
+public String getCoinGacha()
+{
+    return coinGacha;
+}
+
+public void setCoinGacha(String coinGacha)
+{
+    this.coinGacha = coinGacha;
+}
+
+public String getCoinGachaGachaId()
+{
+    return coinGachaGachaId;
+}
+
+public void setCoinGachaGachaId(String coinGachaGachaId)
+{
+    this.coinGachaGachaId = coinGachaGachaId;
 }
 
 }

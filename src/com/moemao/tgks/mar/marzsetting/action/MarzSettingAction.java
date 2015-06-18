@@ -190,6 +190,22 @@ public class MarzSettingAction extends TGKSAction
                 {
                     marzSettingEvt.setFameFusion(setting.getValue());
                 }
+                else if (MarzConstant.VALIDATE_SETTING_COINGACHA == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCoinGacha(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_COINGACHA_GACHAID == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCoinGachaGachaId(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setAutoUseBPPotion(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setAutoBuyBPPotion(setting.getValue());
+                }
             }
         }
         
@@ -221,6 +237,7 @@ public class MarzSettingAction extends TGKSAction
         // 查询当前配置的售卡片ID
         KrsmaCardReq krsmaCardReq = new KrsmaCardReq();
         krsmaCardReq.setSellFlag(MarConstant.KRSMACARD_SELLFLAG_1);
+        krsmaCardReq.setSortSql(" t.cardid DESC");
         sellCardList = this.mar_krsmaCardService.queryKrsmaCard(krsmaCardReq);
         for (KrsmaCardEvt sellCard : sellCardList)
         {
@@ -374,6 +391,38 @@ public class MarzSettingAction extends TGKSAction
         setting.setType(MarzConstant.MARZSETTING_TYPE_0);
         setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_FAMEFUSION));
         setting.setValue(marzSettingEvt.getFameFusion());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 自动抽硬币
+        setting = new MarzSettingEvt();
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_0);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_COINGACHA));
+        setting.setValue(marzSettingEvt.getCoinGacha());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 自动抽硬币的ID
+        setting = new MarzSettingEvt();
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_1);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_COINGACHA_GACHAID));
+        setting.setValue(marzSettingEvt.getCoinGachaGachaId());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 自动喝BP药水
+        setting = new MarzSettingEvt();
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_0);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION));
+        setting.setValue(marzSettingEvt.getAutoUseBPPotion());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 自动买BP药水
+        setting = new MarzSettingEvt();
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_0);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION));
+        setting.setValue(marzSettingEvt.getAutoBuyBPPotion());
         this.mar_marzSettingService.addMarzSetting(setting);
         
         return SUCCESS;

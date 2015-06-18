@@ -52,16 +52,20 @@ public class MarzConstant
     public static final String JSON_TAG_MISSIONSHOW = "missionShow";
     public static final String JSON_TAG_MISSIONREWARD = "missionReward";
     
-    public static final int VALIDATE_SETTING_EXPLORE = 1;
-    public static final int VALIDATE_SETTING_CARDSELL = 2;
-    public static final int VALIDATE_SETTING_CARDSELL_COMMON = 3;
-    public static final int VALIDATE_SETTING_CHIARIFUSION = 4;
-    public static final int VALIDATE_SETTING_BATTLE = 5;
-    public static final int VALIDATE_SETTING_BATTLE_NOWASTE = 6;
-    public static final int VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID = 7;
-    public static final int VALIDATE_SETTING_BATTLE_GET_STONE = 8;
-    public static final int VALIDATE_SETTING_PVP = 9;
-    public static final int VALIDATE_SETTING_FAMEFUSION = 10;
+    public static final int VALIDATE_SETTING_EXPLORE = 1; // 探索
+    public static final int VALIDATE_SETTING_CARDSELL = 2; // 卖卡总开关
+    public static final int VALIDATE_SETTING_CARDSELL_COMMON = 3; // 卖普通卡
+    public static final int VALIDATE_SETTING_CHIARIFUSION = 4; // 喂狗粮
+    public static final int VALIDATE_SETTING_BATTLE = 5; // 战斗总开关
+    public static final int VALIDATE_SETTING_BATTLE_NOWASTE = 6; // 不浪费BP模式
+    public static final int VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID = 7; // 不浪费BP模式默认副本ID
+    public static final int VALIDATE_SETTING_BATTLE_GET_STONE = 8; // 优先拿石模式
+    public static final int VALIDATE_SETTING_PVP = 9; // PVP开关
+    public static final int VALIDATE_SETTING_FAMEFUSION = 10; // 名声合成开关
+    public static final int VALIDATE_SETTING_COINGACHA = 11; // 抽硬币
+    public static final int VALIDATE_SETTING_COINGACHA_GACHAID = 12; // 抽硬币的ID
+    public static final int VALIDATE_SETTING_AUTOUSEBPPOTION = 13; // 自动喝药
+    public static final int VALIDATE_SETTING_AUTOBUYBPPOTION = 14; // 自动买药
     
     /**
      * MARZACCOUNT 账号类型 0 IOS
