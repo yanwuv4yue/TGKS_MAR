@@ -11,24 +11,31 @@ public class MarzConstant
     public static final int RES_CODE_SUCCESS_0 = 0;
 
     /**
-     * 登录错误码：-5 服务器维护中
+     * 错误码：-5 服务器维护中
      */
     public static final int RES_CODE_ERROR_M5 = -5;
     
     /**
-     * 登录错误码：-7 账号重新引继过
+     * 错误码：-7 账号重新引继过
      */
     public static final int RES_CODE_ERROR_M7 = -7;
     
     /**
-     * 登录错误码：-8 客户端已更新 服务器需要同步更新
+     * 错误码：-8 客户端已更新 服务器需要同步更新
      */
     public static final int RES_CODE_ERROR_M8 = -8;
     
     /**
-     * 登录错误码：-607 招待已刷满
+     * 错误码：-607 招待已刷满
      */
     public static final int RES_CODE_ERROR_M607 = -607;
+    
+    /**
+     * 错误码：-3204 战斗已经完成
+     * 错误码：-3209 副本已过时间
+     */
+    public static final int RES_CODE_ERROR_M3204 = -3204;
+    public static final int RES_CODE_ERROR_M3209 = -3209;
     
     public static final String OVER = "over";
     
@@ -66,6 +73,8 @@ public class MarzConstant
     public static final int VALIDATE_SETTING_COINGACHA_GACHAID = 12; // 抽硬币的ID
     public static final int VALIDATE_SETTING_AUTOUSEBPPOTION = 13; // 自动喝药
     public static final int VALIDATE_SETTING_AUTOBUYBPPOTION = 14; // 自动买药
+    public static final int VALIDATE_SETTING_CARDSELL_EVO = 15; // 进化素材出售开关
+    public static final int VALIDATE_SETTING_CARDSELL_EVONUM = 16; // 进化素材保留数量
     
     /**
      * MARZACCOUNT 账号类型 0 IOS

@@ -18,7 +18,7 @@
     <style type="text/css">
         .indexDiv
 		{
-		    width: 60%;
+		    width: 80%;
 		}
     </style>    
   </head>

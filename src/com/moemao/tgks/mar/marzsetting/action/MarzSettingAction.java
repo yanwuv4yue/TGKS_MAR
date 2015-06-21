@@ -206,6 +206,14 @@ public class MarzSettingAction extends TGKSAction
                 {
                     marzSettingEvt.setAutoBuyBPPotion(setting.getValue());
                 }
+                else if (MarzConstant.VALIDATE_SETTING_CARDSELL_EVO == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCardSellEvo(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_CARDSELL_EVONUM == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCardSellEvoNum(setting.getValue());
+                }
             }
         }
         
@@ -423,6 +431,22 @@ public class MarzSettingAction extends TGKSAction
         setting.setType(MarzConstant.MARZSETTING_TYPE_0);
         setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION));
         setting.setValue(marzSettingEvt.getAutoBuyBPPotion());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 出售进化素材
+        setting = new MarzSettingEvt();
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_0);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_CARDSELL_EVO));
+        setting.setValue(marzSettingEvt.getCardSellEvo());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 进化素材保留数量
+        setting = new MarzSettingEvt();
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_1);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_CARDSELL_EVONUM));
+        setting.setValue(marzSettingEvt.getCardSellEvoNum());
         this.mar_marzSettingService.addMarzSetting(setting);
         
         return SUCCESS;

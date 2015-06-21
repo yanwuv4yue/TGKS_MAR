@@ -8,7 +8,7 @@
 </div>
 <div id="marzStatusDiv">
     <s:iterator  value="marzThreadList" var="evt">
-        <s:property value='#evt'/>
+        <s:property value='#evt'/><br />
     </s:iterator>
 </div>
 <div id="marzSystemLogDiv">

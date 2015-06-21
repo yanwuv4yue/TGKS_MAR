@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.moemao.tgks.common.tool.CommonUtil;
+import com.moemao.tgks.mar.marz.entity.CardEvt;
 
 public class MarzUtil
 {
@@ -49,5 +50,20 @@ public class MarzUtil
         }
         
         return list;
+    }
+    
+    public static String getFaceImageUrl(CardEvt card)
+    {
+    	return "<img width=\"25px\" src=\"../resources/mar/marweb/face/chr20_" + card.getCardid() + ".png\" />";
+    }
+    
+    public static String getFaceImageUrlByList(List<CardEvt> cardList)
+    {
+    	StringBuffer sb = new StringBuffer();
+    	for (CardEvt card : cardList)
+    	{
+    		sb.append(getFaceImageUrl(card));
+    	}
+    	return sb.toString();
     }
 }

@@ -47,13 +47,18 @@ private String pvp;
 
 private String fameFusion;
 
+private String coinGacha;
+
+private String coinGachaGachaId;
+
 private String autoUseBPPotion;
 
 private String autoBuyBPPotion;
 
-private String coinGacha;
+private String cardSellEvo;
 
-private String coinGachaGachaId;
+private String cardSellEvoNum;
+
 
 private String bossIds;
 
@@ -315,6 +320,26 @@ public String getCoinGachaGachaId()
 public void setCoinGachaGachaId(String coinGachaGachaId)
 {
     this.coinGachaGachaId = coinGachaGachaId;
+}
+
+public String getCardSellEvo()
+{
+	return cardSellEvo;
+}
+
+public void setCardSellEvo(String cardSellEvo)
+{
+	this.cardSellEvo = cardSellEvo;
+}
+
+public String getCardSellEvoNum()
+{
+	return cardSellEvoNum;
+}
+
+public void setCardSellEvoNum(String cardSellEvoNum)
+{
+	this.cardSellEvoNum = cardSellEvoNum;
 }
 
 }
