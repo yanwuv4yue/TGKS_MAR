@@ -1103,7 +1103,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
     
     private int battle()
     {
-        if (!validateSetting(MarzConstant.VALIDATE_SETTING_BATTLE) && account.getBp() <= 5)
+        if (!validateSetting(MarzConstant.VALIDATE_SETTING_BATTLE) || account.getBp() <= 5)
         {
             return MarzConstant.SUCCESS;
         }
