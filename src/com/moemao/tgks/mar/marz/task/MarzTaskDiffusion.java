@@ -85,7 +85,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         marzLogService = (MarzLogService) ContextUtil.getBean("mar_marzLogService");
         marzSettingService = (MarzSettingService) ContextUtil.getBean("mar_marzSettingService");
         marzMapService = (MarzMapService) ContextUtil.getBean("mar_marzMapService");
-        marKrsmaCardService = (KrsmaCardService) ContextUtil.getBean("mar_KrsmaCardService");
+        marKrsmaCardService = (KrsmaCardService) ContextUtil.getBean("mar_krsmaCardService");
         
         // PVP结束参数
         pvpEndMap = new HashMap<String, String>();
@@ -637,6 +637,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     {
                         // 先清空List保证数据准确性 如果List为空时会跳出
                         cardSellIdList.clear();
+                        cardSellCardList.clear();
                         
                     	// 遍历所有卡片 把需要出售的卡片ID放入cardSellList
                         for (CardEvt card : cardList)
@@ -673,8 +674,6 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                             
                             resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
                             
-                            //this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_5, "卡片出售" + MarzUtil.resultCodeStr(resultCode));
-                            
                             if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                             {
                                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
@@ -695,7 +694,6 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 // 名声合成
                 if (validateSetting(MarzConstant.VALIDATE_SETTING_FAMEFUSION) && !CommonUtil.isEmpty(account.getFameCardIds()))
                 {
-                    // TODO
                     // 查出已经设定好的名声合成卡片ID的List，然后遍历整个卡组，把每种卡放入Map<String, List<CardEvt>>中，之后再处理每种卡片
                 	Map<String, List<CardEvt>> fameFusionMap = new HashMap<String, List<CardEvt>>();
                 	List<String> userFameList = MarzUtil.stringToList(account.getFameCardIds());
@@ -721,6 +719,9 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 	// 循环遍历Map中每个List，每次遍历完一个List就合成一次
                 	for (String key : fameFusionMap.keySet())
                 	{
+                		fameFusionIdList.clear();
+    					fameFusionCardList.clear();
+                		
                 		fameCardList = fameFusionMap.get(key);
                 		
                 		if (fameCardList.size() < 2)
@@ -730,7 +731,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 		}
                 		
                 		// 查询该卡的进化信息
-                		KrsmaCardEvt krsmaCard = this.marKrsmaCardService.queryKrsmaCardById(fameCardList.get(0).getCardid());
+                		KrsmaCardEvt krsmaCard = this.marKrsmaCardService.queryKrsmaCardByCardId(fameCardList.get(0).getCardid());
                 		if (null == krsmaCard)
                 		{
                 			continue;
@@ -741,7 +742,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             			{
             				if (krsmaCard.getEvoCardId().equals(card.getCardid()))
             				{
-            					baseFameCard = card;
+            					if (card.getFame() < 100)
+                				{
+            						baseFameCard = card;
+                				}
             				}
             			}
                 		
@@ -796,6 +800,9 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     // 只自动喂 蓝狗 红狗 粉狗
                     String[] chiari = {"20000001", "20000002", "20000003", "20000004"};
                     CardEvt baseCard = null;
+
+                    chiariFusionIdList.clear();
+                    chiariFusionCardList.clear();
                     
                     for (CardEvt card : cardList)
                     {
@@ -805,20 +812,6 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                                 && 0 != card.getIs_lock())
                         {
                             baseCard = card;
-                        }
-                        // 狗粮 一次喂4个 不能是已经出售了的
-                        else if (!cardSellIdList.contains(card.getUniqid()) 
-                                && Arrays.asList(chiari).contains(card.getCardid())
-                                && !chiariFusionIdList.contains(card.getUniqid())
-                                && chiariFusionIdList.size() < 4)
-                        {
-                            chiariFusionIdList.add(card.getUniqid());
-                            chiariFusionCardList.add(card);
-                        }
-                        
-                        if (null != baseCard && chiariFusionIdList.size() == 4)
-                        {
-                            break;
                         }
                     }
                     // 如果没有MR以上的卡 再挑UR喂
@@ -831,20 +824,6 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                                 && 0 != card.getIs_lock())
                             {
                                 baseCard = card;
-                            }
-                            // 狗粮 一次喂4个 不能是已经出售了的
-                            else if (!cardSellIdList.contains(card.getUniqid()) 
-                                    && Arrays.asList(chiari).contains(card.getCardid())
-                                    && !chiariFusionIdList.contains(card.getUniqid())
-                                    && chiariFusionIdList.size() < 4)
-                            {
-                                chiariFusionIdList.add(card.getUniqid());
-                                chiariFusionCardList.add(card);
-                            }
-                            
-                            if (null != baseCard && chiariFusionIdList.size() == 4)
-                            {
-                                break;
                             }
                         }
                     }
@@ -859,20 +838,25 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                             {
                             	baseCard = card;
                             }
-                            // 狗粮 一次喂4个 不能是已经出售了的
-                            else if (!cardSellIdList.contains(card.getUniqid()) 
-                                    && Arrays.asList(chiari).contains(card.getCardid())
-                                    && !chiariFusionIdList.contains(card.getUniqid())
-                                    && chiariFusionIdList.size() < 4)
-                            {
-                                chiariFusionIdList.add(card.getUniqid());
-                                chiariFusionCardList.add(card);
-                            }
-                            
-                            if (null != baseCard && chiariFusionIdList.size() == 4)
-                            {
-                                break;
-                            }
+                        }
+                    }
+                    
+                    for (CardEvt card : cardList)
+                    {
+                        // 狗粮 一次喂4个 不能是已经出售了的
+                        if (!cardSellIdList.contains(card.getUniqid()) 
+                                && Arrays.asList(chiari).contains(card.getCardid())
+                                && !chiariFusionIdList.contains(card.getUniqid())
+                                && chiariFusionIdList.size() < 4
+                                && 0 == card.getIs_lock())
+                        {
+                            chiariFusionIdList.add(card.getUniqid());
+                            chiariFusionCardList.add(card);
+                        }
+                        
+                        if (null != baseCard && chiariFusionIdList.size() == 4)
+                        {
+                            break;
                         }
                     }
                     
@@ -1433,7 +1417,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                             }
                         }
                     }
-                    while (MarzConstant.RES_CODE_SUCCESS_0 == resultCode && account.getBp() >= mapEvt.getBpCost());
+                    while (MarzConstant.RES_CODE_SUCCESS_0 == resultCode && account.getBp() >= mapEvt.getBpCost()
+                    		&&  MarzConstant.MARZMAP_STATE_2.equals(mapEvt.getState())); // 练级模式以及拿石模式下 第一次打的图不重复刷
                 }
                 else
                 {

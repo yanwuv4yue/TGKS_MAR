@@ -40,7 +40,7 @@
                             充值
                         </s:elseif>
                     </td>
-                    <td colspan="2"><s:property value='#evt.info'/></td>
+                    <td colspan="2"><s:property value='#evt.info' escapeHtml="false" /></td>
                 </tr>
             </s:iterator>
         </tbody>

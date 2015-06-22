@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzlog` (
   `id` varchar(30) NOT NULL COMMENT '表唯一主键',
   `tgksId` varchar(30) NOT NULL COMMENT 'TGKS账号的USERNAME',
   `type` varchar(3) NOT NULL COMMENT '类型（0 系统；1 战斗；2 探索；3 道具使用；4 合成；5 出售；9 充值）',
-  `info` varchar(500) default NULL COMMENT '状态（0 未使用；1 已使用）',
+  `info` varchar(5000) default NULL COMMENT '状态（0 未使用；1 已使用）',
   `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='挂机日志表';

@@ -124,7 +124,8 @@ public class HttpRequest
             // flush输出流的缓冲
             out.flush();
             // 定义BufferedReader输入流来读取URL的响应
-            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            // update by ken 20150622 在流处理时就应该把编码格式定义好，这样才不会出现问题
+            in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
             String line;
             while ((line = in.readLine()) != null)
             {
@@ -165,7 +166,8 @@ public class HttpRequest
         try
         {
             byte[] bytes = result.getBytes();
-            result = new String(bytes, "UTF-8");
+            result = new String(bytes);
+            //System.out.println(result);
         }
         catch (Exception e)
         {

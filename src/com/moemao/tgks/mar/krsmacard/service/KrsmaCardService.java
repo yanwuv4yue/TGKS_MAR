@@ -11,6 +11,8 @@ public List<KrsmaCardEvt> queryKrsmaCard(KrsmaCardReq krsmaCardReq);
 
 public KrsmaCardEvt queryKrsmaCardById(String id);
 
+public KrsmaCardEvt queryKrsmaCardByCardId(String cardId);
+
 public int addKrsmaCard(KrsmaCardEvt krsmaCardEvt);
 
 public int updateKrsmaCard(KrsmaCardEvt krsmaCardEvt);

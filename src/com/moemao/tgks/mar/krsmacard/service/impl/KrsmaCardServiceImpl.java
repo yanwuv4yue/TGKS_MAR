@@ -38,6 +38,19 @@ krsmaCardEvt = krsmaCardList.get(0);
 return krsmaCardEvt;
 }
 
+public KrsmaCardEvt queryKrsmaCardByCardId(String cardId)
+{
+KrsmaCardReq krsmaCardReq = new KrsmaCardReq();
+krsmaCardReq.setCardId(cardId);
+KrsmaCardEvt krsmaCardEvt = null;
+List<KrsmaCardEvt> krsmaCardList = mar_krsmaCardDao.mar_queryKrsmaCard(krsmaCardReq);
+if (!CommonUtil.isEmpty(krsmaCardList))
+{
+krsmaCardEvt = krsmaCardList.get(0);
+}
+return krsmaCardEvt;
+}
+
 public int addKrsmaCard(KrsmaCardEvt krsmaCardEvt)
 {
 krsmaCardEvt.setId(MarUtil.createUniqueID());
