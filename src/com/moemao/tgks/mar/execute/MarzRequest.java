@@ -150,6 +150,66 @@ public class MarzRequest
         return map;
     }
     
+    public Map<String, JSONObject> itemShow(String sid) throws Exception
+    {
+        map = new HashMap<String, JSONObject>();
+        
+        String paramStr = sid + "={\"item_type\":0}";
+        String[] result = httpRequest.sendPost(MarConstant.URL_ITEMSHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "itemShow " + Thread.currentThread().getName());
+
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        JSONObject itemShow = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        map.put(MarzConstant.JSON_TAG_ITEMSHOW, itemShow);
+
+        result = null;
+        resCode = null;
+        return map;
+    }
+    
+    public Map<String, JSONObject> itemUse(String sid, String itemId) throws Exception
+    {
+        map = new HashMap<String, JSONObject>();
+        
+        String paramStr = sid + "={\"itemid\":" + itemId + "}";
+        String[] result = httpRequest.sendPost(MarConstant.URL_ITEMUSE, paramStr).split(MarConstant.KRSMA_SPLIT);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "itemUse " + Thread.currentThread().getName());
+
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        JSONObject itemUse = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        map.put(MarzConstant.JSON_TAG_ITEMUSE, itemUse);
+
+        result = null;
+        resCode = null;
+        return map;
+    }
+    
+    public Map<String, JSONObject> itemShopBuy(String sid, String itemId) throws Exception
+    {
+        map = new HashMap<String, JSONObject>();
+        
+        String paramStr = sid + "={\"item_shop_lineupid\":10" + itemId + "}";
+        String[] result = httpRequest.sendPost(MarConstant.URL_ITEMSHOPBUY, paramStr).split(MarConstant.KRSMA_SPLIT);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "itemShopBuy " + Thread.currentThread().getName());
+
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        JSONObject itemShopBuy = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        map.put(MarzConstant.JSON_TAG_ITEMSHOPBUY, itemShopBuy);
+
+        result = null;
+        resCode = null;
+        return map;
+    }
+    
     public Map<String, JSONObject> exploreStart(String sid, String arthurType, String deckIdx) throws Exception
     {
         map = new HashMap<String, JSONObject>();

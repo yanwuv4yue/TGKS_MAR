@@ -19,7 +19,8 @@ INSERT INTO `t_tgks_common_menu` (`id`, `preid`, `name`, `status`, `url`, `level
 ('COMM20141206020826000014', 'COMM20141205024116000001', '挂机地图管理', '1', '../mar/marzMapManager.action', '2', '3304'),
 ('COMM20141206020826000015', 'COMM20141205024116000001', '挂机点卡管理', '1', '../mar/marzCardManager.action', '2', '3305'),
 ('COMM20141206020826000016', 'COMM20141205024116000001', '挂机日志管理', '1', '../mar/marzLogManager.action', '2', '3306'),
-('COMM20141206020826000017', 'COMM20141205024116000001', '挂机池管理', '1', '../mar/marzThreadPoolManager.action', '2', '3307');
+('COMM20141206020826000017', 'COMM20141205024116000001', '挂机池管理', '1', '../mar/marzThreadPoolManager.action', '2', '3307'),
+('COMM20141206020826000018', 'COMM20141205024116000001', '挂机物品管理', '1', '../mar/marzItemManager.action', '2', '3308');
 
 --
 -- 转存表中的数据 `t_tgks_mar_krsmacard`

@@ -4,29 +4,36 @@
     <form id="saveSettingForm" action="../marweb/saveSetting.action">
         <table>
             <tr>
-                <td>卖卡</td>
-                <td>
+                <td width="8%">卖卡</td>
+                <td width="12%">
                     <select id="marzSettingEvt.cardSell" name="marzSettingEvt.cardSell">
                          <option value="0">关</option>
                          <option value="1" <s:if test="marzSettingEvt.cardSell == 1">selected="selected"</s:if>>开</option>
                     </select>
                 </td>
-                <td>卖普通卡</td>
-                <td>
+                <td width="8%">卖普通卡</td>
+                <td width="12%">
                     <select id="marzSettingEvt.cardSellCommon" name="marzSettingEvt.cardSellCommon">
                          <option value="0">关</option>
                          <option value="1" <s:if test="marzSettingEvt.cardSellCommon == 1">selected="selected"</s:if>>开</option>
                     </select>
                 </td>
-                <td>跑图</td>
-                <td>
+                <td width="8%">喂狗粮</td>
+                <td width="12%">
+                    <select id="marzSettingEvt.cardFusion" name="marzSettingEvt.cardFusion">
+                         <option value="0">关</option>
+                         <option value="1" <s:if test="marzSettingEvt.cardFusion == 1">selected="selected"</s:if>>开</option>
+                    </select>
+                </td>
+                <td width="8%">跑图</td>
+                <td width="12%">
                     <select id="marzSettingEvt.explore" name="marzSettingEvt.explore">
                          <option value="0">关</option>
                          <option value="1" <s:if test="marzSettingEvt.explore == 1">selected="selected"</s:if>>开</option>
                     </select>
                 </td>
-                <td>PVP</td>
-                <td>
+                <td width="8%">PVP</td>
+                <td width="12%">
                     <select id="marzSettingEvt.pvp" name="marzSettingEvt.pvp">
                          <option value="0">关</option>
                          <option value="1" <s:if test="marzSettingEvt.pvp == 1">selected="selected"</s:if>>开</option>
@@ -35,17 +42,17 @@
             </tr>
             <tr>
                 <td>卖卡列表</td>
-                <td colspan="7">
+                <td colspan="9">
                     <table>
                         <tr>
                             <s:iterator value="sellCardList" var="evt" status="idx">
-                              <td>
+                              <td width="20px">
                                 <input type="checkbox" name="marzSettingEvt.sellCardIds" value="<s:property value='#evt.cardId'/>" <s:if test="#evt.check == 1">checked="checked"</s:if> />
                               </td>
                               <td>
-                                <img width="40px" src="../resources/mar/marweb/face/chr20_<s:property value="#evt.cardId"/>.png" title="<s:property value="#evt.name"/>" alt="<s:property value="#evt.name"/>" />
+                                <img width="40px" onerror="nofind();" src="../resources/mar/marweb/face/chr20_<s:property value="#evt.cardId"/>.png" title="<s:property value="#evt.name"/>" alt="<s:property value="#evt.name"/>" />
                               </td>
-                              <s:if test="#idx.index > 0  && (#idx.index + 1)%7 == 0">
+                              <s:if test="#idx.index > 0  && (#idx.index + 1)%10 == 0">
                         </tr>
                         <tr>
                               </s:if>
@@ -62,11 +69,20 @@
                          <option value="1" <s:if test="marzSettingEvt.fameFusion == 1">selected="selected"</s:if>>开</option>
                     </select>
                 </td>
-                <td>喂狗粮</td>
+                <td>自动抽硬币</td>
                 <td>
-                    <select id="marzSettingEvt.cardFusion" name="marzSettingEvt.cardFusion">
+                    <select id="marzSettingEvt.coinGacha" name="marzSettingEvt.coinGacha">
                          <option value="0">关</option>
-                         <option value="1" <s:if test="marzSettingEvt.cardFusion == 1">selected="selected"</s:if>>开</option>
+                         <option value="1" <s:if test="marzSettingEvt.coinGacha == 1">selected="selected"</s:if>>开</option>
+                    </select>
+                </td>
+                <td>硬币类型</td>
+                <td>
+                    <select id="marzSettingEvt.coinGachaGachaId" name="marzSettingEvt.coinGachaGachaId">
+                        <option value="0">未选择</option>
+                        <s:iterator value="allCoinGachaList" var="evt" status="idx">
+                            <option value="<s:property value='#evt.gachaId'/>" <s:if test="marzSettingEvt.coinGachaGachaId == #evt.gachaId">selected="selected"</s:if>><s:property value='#evt.gachaName'/></option>
+                        </s:iterator>
                     </select>
                 </td>
                 <td></td><td></td>
@@ -74,17 +90,17 @@
             </tr>
             <tr>
                 <td>名声列表</td>
-                <td colspan="7">
+                <td colspan="9">
                     <table>
                         <tr>
                             <s:iterator value="fameCardList" var="evt" status="idx">
-                              <td>
+                              <td width="20px">
                                 <input type="checkbox" name="marzSettingEvt.fameCardIds" value="<s:property value='#evt.cardId'/>" <s:if test="#evt.check == 1">checked="checked"</s:if> />
                               </td>
                               <td>
-                                <img width="40px" src="../resources/mar/marweb/face/chr20_<s:property value="#evt.cardId"/>.png" title="<s:property value="#evt.name"/>" alt="<s:property value="#evt.name"/>" />
+                                <img width="40px" onerror="nofind();" src="../resources/mar/marweb/face/chr20_<s:property value="#evt.cardId"/>.png" title="<s:property value="#evt.name"/>" alt="<s:property value="#evt.name"/>" />
                               </td>
-                              <s:if test="#idx.index > 0  && (#idx.index + 1)%7 == 0">
+                              <s:if test="#idx.index > 0  && (#idx.index + 1)%10 == 0">
                         </tr>
                         <tr>
                               </s:if>
@@ -101,6 +117,22 @@
                          <option value="1" <s:if test="marzSettingEvt.autoUseBPPotion == 1">selected="selected"</s:if>>开</option>
                     </select>
                 </td>
+                <td>BP不满多少时</td>
+                <td>
+                    <select id="marzSettingEvt.autoUseBPPotionBPLimit" name="marzSettingEvt.autoUseBPPotionBPLimit">
+                         <option value="15" <s:if test="marzSettingEvt.autoUseBPPotionBPLimit == 15">selected="selected"</s:if>>15</option>
+                         <option value="25" <s:if test="marzSettingEvt.autoUseBPPotionBPLimit == 25">selected="selected"</s:if>>25</option>
+                         <option value="35" <s:if test="marzSettingEvt.autoUseBPPotionBPLimit == 35">selected="selected"</s:if>>35</option>
+                         <option value="45" <s:if test="marzSettingEvt.autoUseBPPotionBPLimit == 45">selected="selected"</s:if>>45</option>
+                    </select>
+                </td>
+                <td>药水类型</td>
+                <td>
+                    <select id="marzSettingEvt.autoUseBPPotionItemId" name="marzSettingEvt.autoUseBPPotionItemId">
+                         <option value="1000" <s:if test="marzSettingEvt.autoUseBPPotionItemId == 1000">selected="selected"</s:if>>pt回復薬（全）</option>
+                         <!-- <option value="1100" <s:if test="marzSettingEvt.autoUseBPPotionItemId == 1100">selected="selected"</s:if>>pt回復薬（当日）</option> -->
+                    </select>
+                </td>
                 <td>自动买药</td>
                 <td>
                     <select id="marzSettingEvt.autoBuyBPPotion" name="marzSettingEvt.autoBuyBPPotion">
@@ -108,22 +140,7 @@
                          <option value="1" <s:if test="marzSettingEvt.autoBuyBPPotion == 1">selected="selected"</s:if>>开</option>
                     </select>
                 </td>
-                <td>自动抽硬币</td>
-                <td>
-                    <select id="marzSettingEvt.coinGacha" name="marzSettingEvt.coinGacha">
-                         <option value="0">关</option>
-                         <option value="1" <s:if test="marzSettingEvt.coinGacha == 1">selected="selected"</s:if>>开</option>
-                    </select>
-                </td>
-                <td>硬币类型</td>
-                <td>
-                    <select id="marzSettingEvt.coinGachaGachaId" name="marzSettingEvt.coinGachaGachaId">
-                        <option>梅雨硬币-10000</option>
-                         <s:iterator value="allCoinGachaList" var="evt" status="idx">
-                              <option value="<s:property value='#evt.gachaId'/>" <s:if test="marzSettingEvt.coinGachaGachaId == #evt.gachaId">selected="selected"</s:if>><s:property value='#evt.gachaName'/></option>
-                         </s:iterator>
-                    </select>
-                </td>
+                <td></td><td></td>
             </tr>
             <tr>
                 <td>战斗</td>
@@ -158,14 +175,15 @@
                          </s:iterator>
                     </select>
                 </td>
+                <td></td><td></td>
             </tr>
             <tr>
                 <td>战斗副本</td>
-                <td colspan="7">
+                <td colspan="9">
                     <table>
                         <tr>
 		                    <s:iterator value="allMapList" var="evt" status="idx">
-		                      <td>
+		                      <td width="20px">
 		                        <s:if test="#evt.show == 1">
 		                          <input type="checkbox" name="marzSettingEvt.bossIds" value="<s:property value='#evt.bossId'/>" <s:if test="#evt.check == 1">checked="checked"</s:if> />
 		                        </s:if>
@@ -173,7 +191,7 @@
 		                      <td>
 		                        <s:property value='#evt.bossName'/>
 		                      </td>
-                              <s:if test="#idx.index > 0  && (#idx.index + 1)%5 == 0">
+                              <s:if test="#idx.index > 0  && (#idx.index + 1)%6 == 0">
                         </tr>
                         <tr>
                               </s:if>
@@ -184,7 +202,7 @@
             </tr>
             <tr>
                 <td colspan="4"></td>
-                <td colspan="2"><a id="message" style="color:red;">请在页面上配置挂机方案 点击保存按钮</a></td>
+                <td colspan="4"><a id="message" style="color:red;">请在页面上配置挂机方案 点击保存按钮</a></td>
                 <td><a id="returnAccountButton" class="button" href="#">返回</a></td>
                 <td><a id="saveSettingButton" class="button" href="#">保存</a></td>
             </tr>

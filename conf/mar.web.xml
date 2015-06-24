@@ -328,5 +328,31 @@
         <result name="success">/WEB-INF/jsp/common/success.jsp</result>
         <result name="error">/WEB-INF/jsp/common/error.jsp</result>
     </action>
+    
+    <!-- mar_marzitem -->
+    <action name="marzItemManager" class="com.moemao.tgks.mar.marzitem.action.MarzItemAction" method="marzItemManager">
+        <result name="success">/WEB-INF/jsp/mar/marzitem/marzItemManager.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="queryMarzItem" class="com.moemao.tgks.mar.marzitem.action.MarzItemAction" method="queryMarzItem">
+        <result name="success">/WEB-INF/jsp/mar/marzitem/marzItemList.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="editMarzItemPage" class="com.moemao.tgks.mar.marzitem.action.MarzItemAction" method="editMarzItemPage">
+        <result name="success">/WEB-INF/jsp/mar/marzitem/marzItemEdit.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="editMarzItem" class="com.moemao.tgks.mar.marzitem.action.MarzItemAction" method="editMarzItem">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
+
+    <action name="deleteMarzItem" class="com.moemao.tgks.mar.marzitem.action.MarzItemAction" method="deleteMarzItem">
+        <result name="success">/WEB-INF/jsp/common/success.jsp</result>
+        <result name="error">/WEB-INF/jsp/common/error.jsp</result>
+    </action>
   </package>
 </struts>

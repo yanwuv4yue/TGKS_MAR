@@ -47,6 +47,9 @@ public class MarzConstant
     public static final String JSON_TAG_EXPLORESTART= "exploreStart";
     public static final String JSON_TAG_EXPLOREEND= "exploreEnd";
     public static final String JSON_TAG_CARDSHOW = "cardShow";
+    public static final String JSON_TAG_ITEMSHOW = "itemShow";
+    public static final String JSON_TAG_ITEMUSE = "itemUse";
+    public static final String JSON_TAG_ITEMSHOPBUY = "itemShopBuy";
     public static final String JSON_TAG_CARDFUSION = "cardFusion";
     public static final String JSON_TAG_CARDSELL = "cardSell";
     public static final String JSON_TAG_PRESENTBOXMULTIRECV = "presentBoxMultiRecv";
@@ -72,9 +75,11 @@ public class MarzConstant
     public static final int VALIDATE_SETTING_COINGACHA = 11; // 抽硬币
     public static final int VALIDATE_SETTING_COINGACHA_GACHAID = 12; // 抽硬币的ID
     public static final int VALIDATE_SETTING_AUTOUSEBPPOTION = 13; // 自动喝药
-    public static final int VALIDATE_SETTING_AUTOBUYBPPOTION = 14; // 自动买药
-    public static final int VALIDATE_SETTING_CARDSELL_EVO = 15; // 进化素材出售开关
-    public static final int VALIDATE_SETTING_CARDSELL_EVONUM = 16; // 进化素材保留数量
+    public static final int VALIDATE_SETTING_AUTOUSEBPPOTION_BPLIMIT = 14; // 自动喝药 - BP下限
+    public static final int VALIDATE_SETTING_AUTOUSEBPPOTION_ITEMID = 15; // 自动喝药 - 药水种类
+    public static final int VALIDATE_SETTING_AUTOBUYBPPOTION = 16; // 自动买药
+    public static final int VALIDATE_SETTING_CARDSELL_EVO = 17; // 进化素材出售开关
+    public static final int VALIDATE_SETTING_CARDSELL_EVONUM = 18; // 进化素材保留数量
     
     /**
      * MARZACCOUNT 账号类型 0 IOS
@@ -169,6 +174,31 @@ public class MarzConstant
      * MARZ设置 1 参数
      */
     public static final String MARZSETTING_TYPE_1 = "1";
+    
+    /**
+     * MARZ物品类型 1 药水
+     */
+    public static final String MARZITEM_TYPE_1 = "1";
+    
+    /**
+     * MARZ物品类型 2 钥匙
+     */
+    public static final String MARZITEM_TYPE_2 = "2";
+    
+    /**
+     * MARZ物品类型 3 硬币
+     */
+    public static final String MARZITEM_TYPE_3 = "3";
+    
+    /**
+     * MARZ物品状态 0 已失效
+     */
+    public static final String MARZITEM_STATUS_0 = "0";
+    
+    /**
+     * MARZ物品状态 1 生效中
+     */
+    public static final String MARZITEM_STATUS_1 = "1";
     
     /**
      * MARZ副本状态 0 未战斗

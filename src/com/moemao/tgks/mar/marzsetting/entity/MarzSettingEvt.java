@@ -51,6 +51,10 @@ private String coinGacha;
 
 private String coinGachaGachaId;
 
+private String autoUseBPPotionBPLimit;
+
+private String autoUseBPPotionItemId;
+
 private String autoUseBPPotion;
 
 private String autoBuyBPPotion;
@@ -290,6 +294,26 @@ public String getAutoUseBPPotion()
 public void setAutoUseBPPotion(String autoUseBPPotion)
 {
     this.autoUseBPPotion = autoUseBPPotion;
+}
+
+public String getAutoUseBPPotionBPLimit()
+{
+    return autoUseBPPotionBPLimit;
+}
+
+public void setAutoUseBPPotionBPLimit(String autoUseBPPotionBPLimit)
+{
+    this.autoUseBPPotionBPLimit = autoUseBPPotionBPLimit;
+}
+
+public String getAutoUseBPPotionItemId()
+{
+    return autoUseBPPotionItemId;
+}
+
+public void setAutoUseBPPotionItemId(String autoUseBPPotionItemId)
+{
+    this.autoUseBPPotionItemId = autoUseBPPotionItemId;
 }
 
 public String getAutoBuyBPPotion()

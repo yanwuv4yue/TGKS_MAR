@@ -68,6 +68,13 @@ $(document).ready(function(){
         $("#logDiv").html(table.responseText);
     }
 });
+
+function nofind()
+{
+    var img=event.srcElement;
+    img.src="../resources/mar/marweb/face/default.png";
+    img.onerror=null;
+}
 </script>
 </body>
 </html>

@@ -202,6 +202,14 @@ public class MarzSettingAction extends TGKSAction
                 {
                     marzSettingEvt.setAutoUseBPPotion(setting.getValue());
                 }
+                else if (MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION_BPLIMIT == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setAutoUseBPPotionBPLimit(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION_ITEMID == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setAutoUseBPPotionItemId(setting.getValue());
+                }
                 else if (MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION == Integer.parseInt(setting.getName()))
                 {
                     marzSettingEvt.setAutoBuyBPPotion(setting.getValue());
@@ -423,6 +431,22 @@ public class MarzSettingAction extends TGKSAction
         setting.setType(MarzConstant.MARZSETTING_TYPE_0);
         setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION));
         setting.setValue(marzSettingEvt.getAutoUseBPPotion());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 自动喝BP药水 BP下限
+        setting = new MarzSettingEvt();
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_1);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION_BPLIMIT));
+        setting.setValue(marzSettingEvt.getAutoUseBPPotionBPLimit());
+        this.mar_marzSettingService.addMarzSetting(setting);
+        
+        // 自动喝BP药水 药水类型
+        setting = new MarzSettingEvt();
+        setting.setTgksId(tgksId);
+        setting.setType(MarzConstant.MARZSETTING_TYPE_1);
+        setting.setName(String.valueOf(MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION_ITEMID));
+        setting.setValue(marzSettingEvt.getAutoUseBPPotionItemId());
         this.mar_marzSettingService.addMarzSetting(setting);
         
         // 自动买BP药水

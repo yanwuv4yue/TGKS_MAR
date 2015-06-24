@@ -1,6 +1,9 @@
 package com.moemao.tgks.mar.marzaccount.entity;
 
 import java.util.Date;
+import java.util.List;
+
+import com.moemao.tgks.mar.marz.entity.ItemEvt;
 
 public class MarzAccountEvt
 {
@@ -15,24 +18,24 @@ private String id;
 private String tgksId;
 
 /**
- * IOS UUID
+ * UUID
  */
-private String iosUuid;
+private String uuid;
 
 /**
- * Android UUID
+ * hashToken
  */
-private String androidUuid;
+private String hashToken;
 
 /**
- * IOS KEY
+ * accountKey
  */
-private String iosKey;
+private String accountKey;
 
 /**
- * Android KEY
+ * gachaHash
  */
-private String androidKey;
+private String gachaHash;
 
 /**
  * 类型（0 IOS；1 Android）
@@ -115,6 +118,16 @@ private Integer fp;
 private Integer coin;
 
 /**
+ * 道具
+ */
+private List<ItemEvt> itemList;
+
+/**
+ * 道具信息
+ */
+private String itemInfo;
+
+/**
  * 挂机地图
  */
 private String bossIds;
@@ -141,7 +154,7 @@ private String remark;
 @Override
 public String toString()
 {
-return String.format("id:%S\ntgksId:%S\niosUuid:%S\nandroidUuid:%S\niosKey:%S\nandroidKey:%S\ntype:%S\nstatus:%S\nsessionId:%S\nvip:%S\nname:%S\nuserId:%S\nlv:%S\nap:%S\napMax:%S\nbp:%S\nbpMax:%S\ncardNum:%S\ncardMax:%S\ngold:%S\nfp:%S\ncoin:%S\n", id, tgksId, iosUuid, androidUuid, iosKey, androidKey, type, status, sessionId, vip, name, userId, lv, ap, apMax, bp, bpMax, cardNum, cardMax, gold, fp, coin);
+return String.format("id:%S\ntgksId:%S\niosUuid:%S\nandroidUuid:%S\niosKey:%S\nandroidKey:%S\ntype:%S\nstatus:%S\nsessionId:%S\nvip:%S\nname:%S\nuserId:%S\nlv:%S\nap:%S\napMax:%S\nbp:%S\nbpMax:%S\ncardNum:%S\ncardMax:%S\ngold:%S\nfp:%S\ncoin:%S\n", id, tgksId, uuid, hashToken, accountKey, gachaHash, type, status, sessionId, vip, name, userId, lv, ap, apMax, bp, bpMax, cardNum, cardMax, gold, fp, coin);
 }
 
 /**
@@ -176,68 +189,55 @@ public void setTgksId(String tgksId)
     this.tgksId = tgksId;
 }
 
-/**
- * @return 返回 iosUuid
- */
-public String getIosUuid()
+
+public String getUuid()
 {
-    return iosUuid;
+    return uuid;
 }
 
-/**
- * @param 对iosUuid进行赋值
- */
-public void setIosUuid(String iosUuid)
+public void setUuid(String uuid)
 {
-    this.iosUuid = iosUuid;
+    this.uuid = uuid;
 }
 
-/**
- * @return 返回 androidUuid
- */
-public String getAndroidUuid()
+public String getHashToken()
 {
-    return androidUuid;
+    return hashToken;
 }
 
-/**
- * @param 对androidUuid进行赋值
- */
-public void setAndroidUuid(String androidUuid)
+public void setHashToken(String hashToken)
 {
-    this.androidUuid = androidUuid;
+    this.hashToken = hashToken;
 }
 
-/**
- * @return 返回 iosKey
- */
-public String getIosKey()
+public String getAccountKey()
 {
-    return iosKey;
+    return accountKey;
 }
 
-/**
- * @param 对iosKey进行赋值
- */
-public void setIosKey(String iosKey)
+public void setAccountKey(String accountKey)
 {
-    this.iosKey = iosKey;
+    this.accountKey = accountKey;
 }
 
-/**
- * @return 返回 androidKey
- */
-public String getAndroidKey()
+public String getGachaHash()
 {
-    return androidKey;
+    return gachaHash;
 }
 
-/**
- * @param 对androidKey进行赋值
- */
-public void setAndroidKey(String androidKey)
+public void setGachaHash(String gachaHash)
 {
-    this.androidKey = androidKey;
+    this.gachaHash = gachaHash;
+}
+
+public String getItemInfo()
+{
+    return itemInfo;
+}
+
+public void setItemInfo(String itemInfo)
+{
+    this.itemInfo = itemInfo;
 }
 
 /**
@@ -554,6 +554,16 @@ public Date getCreateTime()
 public void setCreateTime(Date createTime)
 {
     this.createTime = createTime;
+}
+
+public List<ItemEvt> getItemList()
+{
+    return itemList;
+}
+
+public void setItemList(List<ItemEvt> itemList)
+{
+    this.itemList = itemList;
 }
 
 }

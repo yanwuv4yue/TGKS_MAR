@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.moemao.tgks.common.tool.CommonUtil;
 import com.moemao.tgks.mar.marz.entity.CardEvt;
+import com.moemao.tgks.mar.marz.entity.ItemEvt;
+import com.moemao.tgks.mar.marzitem.entity.MarzItemEvt;
 
 public class MarzUtil
 {
@@ -54,7 +56,7 @@ public class MarzUtil
     
     public static String getFaceImageUrl(CardEvt card)
     {
-    	return "<img width=\"25px\" src=\"../resources/mar/marweb/face/chr20_" + card.getCardid() + ".png\" />";
+    	return "<img width=\"25px\" onerror=\"nofind();\" src=\"../resources/mar/marweb/face/chr20_" + card.getCardid() + ".png\" title=\"" + card.getCardid() + "\" />";
     }
     
     public static String getFaceImageUrlByList(List<CardEvt> cardList)
@@ -65,5 +67,23 @@ public class MarzUtil
     		sb.append(getFaceImageUrl(card));
     	}
     	return sb.toString();
+    }
+    
+    public static String getItemInfo(List<ItemEvt> itemList, List<MarzItemEvt> marzItemList)
+    {
+        StringBuffer sb = new StringBuffer();
+        for (ItemEvt item : itemList)
+        {
+            for (MarzItemEvt marzItem : marzItemList)
+            {
+                if (item.getItemId().equals(marzItem.getItemId()))
+                {
+                    sb.append(marzItem.getName() + "：" + item.getNum() + "，");
+                }
+                
+            }
+        }
+        
+        return sb.toString();
     }
 }
