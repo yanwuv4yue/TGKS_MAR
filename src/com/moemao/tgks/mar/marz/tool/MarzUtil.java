@@ -54,6 +54,21 @@ public class MarzUtil
         return list;
     }
     
+    public static String getFaceImageUrl(String cardId)
+    {
+        return "<img width=\"25px\" onerror=\"nofind();\" src=\"../resources/mar/marweb/face/chr20_" + cardId + ".png\" title=\"" + cardId + "\" />";
+    }
+    
+    public static String getFaceImageUrlByIdList(List<String> cardIdList)
+    {
+        StringBuffer sb = new StringBuffer();
+        for (String cardId : cardIdList)
+        {
+            sb.append(getFaceImageUrl(cardId));
+        }
+        return sb.toString();
+    }
+    
     public static String getFaceImageUrl(CardEvt card)
     {
     	return "<img width=\"25px\" onerror=\"nofind();\" src=\"../resources/mar/marweb/face/chr20_" + card.getCardid() + ".png\" title=\"" + card.getCardid() + "\" />";

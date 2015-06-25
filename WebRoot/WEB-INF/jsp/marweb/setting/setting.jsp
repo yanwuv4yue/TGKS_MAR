@@ -79,9 +79,9 @@
                 <td>硬币类型</td>
                 <td>
                     <select id="marzSettingEvt.coinGachaGachaId" name="marzSettingEvt.coinGachaGachaId">
-                        <option value="0">未选择</option>
+                        <option value="">不选择</option>
                         <s:iterator value="allCoinGachaList" var="evt" status="idx">
-                            <option value="<s:property value='#evt.gachaId'/>" <s:if test="marzSettingEvt.coinGachaGachaId == #evt.gachaId">selected="selected"</s:if>><s:property value='#evt.gachaName'/></option>
+                            <option value="<s:property value='#evt.param'/>" <s:if test="marzSettingEvt.coinGachaGachaId == #evt.param">selected="selected"</s:if>><s:property value='#evt.gachaName'/></option>
                         </s:iterator>
                     </select>
                 </td>

@@ -6,7 +6,7 @@
         <td>物品ID</td>
         <td><input type="text" name="marzItemEvt.itemId" id="marzItemItemId" value="${marzItemEvt.itemId }" /></td>
         <td>名称</td>
-        <td colspan="3"><input type="text" name="marzItemEvt.name" id="marzItemName" value="${marzItemEvt.name }" /></td>
+        <td><input type="text" name="marzItemEvt.name" id="marzItemName" value="${marzItemEvt.name }" /></td>
     </tr>
     <tr>
         <td>类型</td>
@@ -24,8 +24,10 @@
                 <option value="1" <s:if test="marzItemEvt.status == 1">selected="selected"</s:if>>生效中</option>
             </select>
         </td>
+    </tr>
+    <tr>
         <td>参数</td>
-        <td><input type="text" name="marzItemEvt.param" id="marzItemParam" value="${marzItemEvt.param }" /></td>
+        <td colspan="3"><textarea name="marzItemEvt.param" cols="80" rows="5">${marzItemEvt.param }</textarea></td>
     </tr>
 </table>
 <script type="text/javascript">

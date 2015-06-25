@@ -1,5 +1,6 @@
 package com.moemao.tgks.mar.marzsetting.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -12,10 +13,15 @@ import com.moemao.tgks.common.tool.StringUtil;
 import com.moemao.tgks.mar.krsmacard.entity.KrsmaCardEvt;
 import com.moemao.tgks.mar.krsmacard.entity.KrsmaCardReq;
 import com.moemao.tgks.mar.krsmacard.service.KrsmaCardService;
+import com.moemao.tgks.mar.marz.entity.CoinGachaEvt;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
+import com.moemao.tgks.mar.marz.tool.MarzUtil;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountReq;
 import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
+import com.moemao.tgks.mar.marzitem.entity.MarzItemEvt;
+import com.moemao.tgks.mar.marzitem.entity.MarzItemReq;
+import com.moemao.tgks.mar.marzitem.service.MarzItemService;
 import com.moemao.tgks.mar.marzmap.entity.MarzMapEvt;
 import com.moemao.tgks.mar.marzmap.entity.MarzMapReq;
 import com.moemao.tgks.mar.marzmap.service.MarzMapService;
@@ -58,6 +64,8 @@ public class MarzSettingAction extends TGKSAction
     
     private MarzMapService mar_marzMapService;
     
+    private MarzItemService mar_marzItemService;
+    
     private KrsmaCardService mar_krsmaCardService;
     
     /**
@@ -71,6 +79,8 @@ public class MarzSettingAction extends TGKSAction
     // 设置页面展示
     List<KrsmaCardEvt> sellCardList;
     List<KrsmaCardEvt> fameCardList;
+    
+    List<CoinGachaEvt> allCoinGachaList = new ArrayList<CoinGachaEvt>();
     
     // 设置页面展示
     MarzAccountEvt account;
@@ -277,6 +287,40 @@ public class MarzSettingAction extends TGKSAction
                 if (account.getFameCardIds().contains(fameCard.getCardId()))
                 {
                     fameCard.setCheck("1");
+                }
+            }
+        }
+        
+        // 查询自动抽硬币的列表
+        MarzItemReq marzItemReq = new MarzItemReq();
+        marzItemReq.setStatus(MarzConstant.MARZITEM_STATUS_1);
+        marzItemReq.setType(MarzConstant.MARZITEM_TYPE_3);
+        List<MarzItemEvt> marzItemList = this.mar_marzItemService.queryMarzItem(marzItemReq);
+        
+        if (!CommonUtil.isEmpty(marzItemList))
+        {
+            this.allCoinGachaList.clear();
+            for (MarzItemEvt item : marzItemList)
+            {
+                List<String> list = MarzUtil.stringToList(item.getParam());
+                
+                for (String param : list)
+                {
+                    String gachaInfo[] = param.split(MarConstant.KRSMA_SPLIT);
+                    String gachaName = gachaInfo[0];
+                    String itemId = gachaInfo[1];
+                    int costNum = Integer.parseInt(gachaInfo[2]);
+                    String gachaId = gachaInfo[3];
+                    String payType = gachaInfo[4];
+                    
+                    CoinGachaEvt coinGachaEvt = new CoinGachaEvt();
+                    coinGachaEvt.setGachaName(gachaName);
+                    coinGachaEvt.setGachaId(gachaId);
+                    coinGachaEvt.setItemId(itemId);
+                    coinGachaEvt.setCostNum(costNum);
+                    coinGachaEvt.setPayType(payType);
+                    coinGachaEvt.setParam(param);
+                    this.allCoinGachaList.add(coinGachaEvt);
                 }
             }
         }
@@ -570,6 +614,16 @@ public class MarzSettingAction extends TGKSAction
         this.mar_krsmaCardService = mar_krsmaCardService;
     }
 
+    public MarzItemService getMar_marzItemService()
+    {
+        return mar_marzItemService;
+    }
+
+    public void setMar_marzItemService(MarzItemService mar_marzItemService)
+    {
+        this.mar_marzItemService = mar_marzItemService;
+    }
+
     public List<MarzMapEvt> getAllMapList()
     {
         return allMapList;
@@ -599,6 +653,16 @@ public class MarzSettingAction extends TGKSAction
     {
         this.fameCardList = fameCardList;
     }
+    
+    public List<CoinGachaEvt> getAllCoinGachaList()
+    {
+        return allCoinGachaList;
+    }
+
+    public void setAllCoinGachaList(List<CoinGachaEvt> allCoinGachaList)
+    {
+        this.allCoinGachaList = allCoinGachaList;
+    }
 
     public MarzAccountEvt getAccount()
     {
@@ -609,5 +673,4 @@ public class MarzSettingAction extends TGKSAction
     {
         this.account = account;
     }
-
 }

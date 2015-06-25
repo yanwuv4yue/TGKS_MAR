@@ -49,7 +49,7 @@
 <button id="deleteMarzItem">删除</button>
 <button id="onMarzItem">启用</button>
 <button id="offMarzItem">禁用</button>
-
+<a style="color:red;">硬币参数规则：抽奖名称|硬币ID|消耗数量|gachaId|payType 多个参数用,分隔</a>
 <div id="marzItemDiv"></div>
 
 <div id="marzItemEdit" title="MarzItem Edit">

@@ -619,6 +619,26 @@ public class MarzRequest
         return map;
     }
     
+    public Map<String, JSONObject> gachaPlay(String sid, String gachaId, String payType, String gachaHash) throws Exception
+    {
+        map = new HashMap<String, JSONObject>();
+        
+        String paramStr = sid + "=" + "{\"gachaid\":" + gachaId + ",\"pay_type\":" + payType + ",\"gacha_hash\":\"" + gachaHash + "\"}";
+        String[] result = httpRequest.sendPost(MarConstant.URL_GACHAPLAY, paramStr).split(MarConstant.KRSMA_SPLIT);
+        System.out.println(MarzConstant.LOG_SYSTEM_INFO + "gachaPlay " + Thread.currentThread().getName());
+        
+        JSONObject resCode= JSONObject.fromObject(result[1].substring(0, result[1].indexOf("}{") + 1));
+        JSONObject gachaPlay = JSONObject.fromObject(result[1].substring(result[1].indexOf("}{") + 1, result[1].length()));
+        
+        map.put(MarzConstant.JSON_TAG_SID, this.sidJSONObject(result[0]));
+        map.put(MarzConstant.JSON_TAG_RESCODE, resCode);
+        map.put(MarzConstant.JSON_TAG_GACHAPLAY, gachaPlay);
+
+        result = null;
+        resCode = null;
+        return map;
+    }
+    
     private String[] requestFilter(String[] result)
     {
         if (result.length > 2)

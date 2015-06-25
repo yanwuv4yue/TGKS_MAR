@@ -143,6 +143,7 @@
     <property name="mar_marzSettingService" ref="mar_marzSettingService" />
     <property name="mar_marzAccountService" ref="mar_marzAccountService" />
     <property name="mar_marzMapService" ref="mar_marzMapService" />
+    <property name="mar_marzItemService" ref="mar_marzItemService" />
   </bean>
   
   <!-- ﻿marzitem_dao 配置 -->

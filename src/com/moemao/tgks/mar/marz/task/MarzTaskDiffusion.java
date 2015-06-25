@@ -524,6 +524,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             
             resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
             
+            List<ItemEvt> itemList = new ArrayList<ItemEvt>();
+            
             if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
@@ -534,7 +536,6 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 
                 JSONObject itemShow = map.get(MarzConstant.JSON_TAG_ITEMSHOW);
                 JSONArray items = itemShow.getJSONArray("items");
-                List<ItemEvt> itemList = new ArrayList<ItemEvt>();
                 JSONObject itemJSON;
                 
                 for (int i = 0, size = items.size(); i < size; i++)
@@ -617,6 +618,53 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     account.setBp(user.getJSONObject("user").getInt("bp"));
                     this.saveAccount(account);
                 }
+            }
+            
+            // 下面开始自动抽硬币
+            if (!validateSetting(MarzConstant.VALIDATE_SETTING_COINGACHA) || CommonUtil.isEmpty(account.getGachaHash()) || itemList.size() == 0)
+            {
+                return MarzConstant.SUCCESS;
+            }
+            
+            // 抽奖名称|硬币ID|消耗数量|gachaId|payType
+            String gachaInfo[] = marzSettingEvt.getCoinGachaGachaId().split(MarConstant.KRSMA_SPLIT);
+            String gachaName = gachaInfo[0];
+            String itemId = gachaInfo[1];
+            int costNum = Integer.parseInt(gachaInfo[2]);
+            String gachaId = gachaInfo[3];
+            String payType = gachaInfo[4];
+            
+            ItemEvt coin = null;
+            
+            for (ItemEvt item : itemList)
+            {
+                if (itemId.equals(item.getItemId()))
+                {
+                    coin = item;
+                    break;
+                }
+            }
+            
+            // 如果没有硬币信息或者硬币数量不足 直接退出
+            if (null == coin || coin.getNum() < costNum)
+            {
+                return MarzConstant.SUCCESS;
+            }
+            
+            map = request.gachaPlay(itemId, gachaId, payType, account.getGachaHash());
+            
+            resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+            
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+            {
+                sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                
+                JSONObject gachaPlay = map.get(MarzConstant.JSON_TAG_GACHAPLAY);
+                
+                List<CardEvt> gachaCardList = new ArrayList<CardEvt>();
+                
+                // TODO 展示抽到了哪些卡
+                this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_7, "自动抽卡 " + gachaName + " " + MarzUtil.getFaceImageUrlByList(gachaCardList));
             }
         }
         catch (Exception e)

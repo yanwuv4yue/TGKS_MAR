@@ -61,6 +61,8 @@ public class MarzConstant
     public static final String JSON_TAG_PVPEND = "pvpEnd";
     public static final String JSON_TAG_MISSIONSHOW = "missionShow";
     public static final String JSON_TAG_MISSIONREWARD = "missionReward";
+    public static final String JSON_TAG_GACHAPLAY = "gachaPlay";
+    
     
     public static final int VALIDATE_SETTING_EXPLORE = 1; // 探索
     public static final int VALIDATE_SETTING_CARDSELL = 2; // 卖卡总开关
@@ -144,6 +146,10 @@ public class MarzConstant
      * MARZLOG TYPE 6 PVP
      */
     public static final String MARZ_LOG_TYPE_6 = "6";
+    /**
+     * MARZLOG TYPE 7 抽卡
+     */
+    public static final String MARZ_LOG_TYPE_7 = "7";
     /**
      * MARZLOG TYPE 9 点卡充值
      */
