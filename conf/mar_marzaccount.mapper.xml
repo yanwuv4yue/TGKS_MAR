@@ -6,10 +6,10 @@
     <resultMap id="MarzAccountEvtMap" type="MarzAccountEvt">
         <id property="id" column="ID" />
         <result property="tgksId" column="TGKSID" />
-        <result property="iosUuid" column="IOSUUID" />
-        <result property="androidUuid" column="ANDROIDUUID" />
-        <result property="iosKey" column="IOSKEY" />
-        <result property="androidKey" column="ANDROIDKEY" />
+        <result property="uuid" column="UUID" />
+        <result property="hashToken" column="HASHTOKEN" />
+        <result property="accountKey" column="ACCOUNTKEY" />
+        <result property="gachaHash" column="GACHAHASH" />
         <result property="type" column="TYPE" />
         <result property="status" column="STATUS" />
         <result property="sessionId" column="SESSIONID" />
@@ -26,6 +26,7 @@
         <result property="gold" column="GOLD" />
         <result property="fp" column="FP" />
         <result property="coin" column="COIN" />
+        <result property="itemInfo" column="ITEMINFO" />
         <result property="bossIds" column="BOSSIDS" />
         <result property="sellCardIds" column="SELLCARDIDS" />
         <result property="fameCardIds" column="FAMECARDIDS" />

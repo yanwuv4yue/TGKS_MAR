@@ -22,7 +22,7 @@
         </thead>
         <tbody>
 			<s:iterator  value="list" var="evt">
-				<tr>
+				<tr <s:if test="#evt.status == 0">style="background-color: #ddd"</s:if>>
 					<td width="20"><input type="checkbox" name="marzAccountId" value="<s:property value='#evt.id'/>" /></td>
 					<td><b id="<s:property value='#evt.id'/>" class="marzAccountUpdate"><s:property value="#evt.id"/></b></td>
                     <td><s:property value='#evt.tgksId'/></td>

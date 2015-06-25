@@ -68,10 +68,10 @@ DROP TABLE IF EXISTS `t_tgks_mar_marzaccount`;
 CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzaccount` (
   `id` varchar(30) NOT NULL COMMENT '表唯一主键',
   `tgksid` varchar(30) default NULL COMMENT 'tgks账号ID',
-  `iosuuid` varchar(50) default NULL COMMENT 'IOS UUID',
-  `androiduuid` varchar(50) default NULL COMMENT 'Android UUID',
-  `ioskey` varchar(200) default NULL COMMENT 'IOS KEY',
-  `androidkey` varchar(200) default NULL COMMENT 'Android KEY',
+  `uuid` varchar(50) default NULL COMMENT 'UUID',
+  `hashtoken` varchar(50) default NULL COMMENT 'hashtoken',
+  `key` varchar(200) default NULL COMMENT '账号KEY',
+  `gachahash` varchar(50) default NULL COMMENT 'gachahash',
   `type` varchar(3) NOT NULL COMMENT '类型（0 IOS；1 Android）',
   `status` varchar(3) NOT NULL COMMENT '状态（0 离线；1 在线）',
   `sessionid` varchar(30) default NULL COMMENT 'SessionId',
@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzaccount` (
   `bossIds` varchar(500) default NULL COMMENT '挂机地图',
   `sellCardIds` varchar(500) default NULL COMMENT '出售卡片ID',
   `fameCardIds` varchar(500) default NULL COMMENT '自动合成名声卡片ID',
+  `itemInfo` varchar(500) default NULL COMMENT '物品信息',
   `endtime` timestamp NULL default NULL COMMENT '到期时间',
   `createtime` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT '创建时间',
   `remark` varchar(500) default NULL COMMENT '备注',
@@ -153,3 +154,17 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzsetting` (
   `value` varchar(3000) default NULL COMMENT '参数值',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='挂机参数表';
+
+--
+-- 表的结构 `t_tgks_mar_marzitem`
+--
+DROP TABLE IF EXISTS `t_tgks_mar_marzitem`;
+CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzitem` (
+  `id` varchar(30) NOT NULL COMMENT '表唯一主键',
+  `itemId` varchar(30) NOT NULL COMMENT '物品ID',
+  `name` varchar(30) NOT NULL COMMENT '名称',
+  `type` varchar(3) NOT NULL COMMENT '类型（1 药水；2 钥匙；3 硬币）',
+  `status` varchar(3) NOT NULL COMMENT '状态（0 已失效；1 生效中）',
+  `param` varchar(100) default NULL COMMENT '参数（多个参数时用|分割）',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='挂机物品表';

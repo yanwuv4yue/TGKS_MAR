@@ -36,5 +36,9 @@
 		<!-- mar_﻿marzsetting -->
 		<typeAlias alias="MarzSettingEvt" type="com.moemao.tgks.mar.marzsetting.entity.MarzSettingEvt" />
 		<typeAlias alias="MarzSettingReq" type="com.moemao.tgks.mar.marzsetting.entity.MarzSettingReq" />
+		
+		<!-- mar_﻿marzitem -->
+		<typeAlias alias="MarzItemEvt" type="com.moemao.tgks.mar.marzitem.entity.MarzItemEvt" />
+		<typeAlias alias="MarzItemReq" type="com.moemao.tgks.mar.marzitem.entity.MarzItemReq" />
 	</typeAliases>
 </configuration>

@@ -27,16 +27,16 @@
 	     </td>
 	</tr>
     <tr>
-        <td>IOS UUID</td>
-        <td><input type="text" name="marzAccountEvt.iosUuid" value="${marzAccountEvt.iosUuid }" /></td>
-        <td>IOS KEY</td>
-        <td><input type="text" name="marzAccountEvt.iosKey" value="${marzAccountEvt.iosKey }" /></td>
+        <td>UUID</td>
+        <td><input type="text" name="marzAccountEvt.uuid" value="${marzAccountEvt.uuid }" /></td>
+        <td>HashToken</td>
+        <td><input type="text" name="marzAccountEvt.hashToken" value="${marzAccountEvt.hashToken }" /></td>
     </tr>
     <tr>
-        <td>Android UUID</td>
-        <td><input type="text" name="marzAccountEvt.androidUuid" value="${marzAccountEvt.androidUuid }" /></td>
-        <td>Android KEY</td>
-        <td><input type="text" name="marzAccountEvt.androidKey" value="${marzAccountEvt.androidKey }" /></td>
+        <td>AccountKey</td>
+        <td><input type="text" name="marzAccountEvt.accountKey" value="${marzAccountEvt.accountKey }" /></td>
+        <td>GachaHash</td>
+        <td><input type="text" name="marzAccountEvt.gachaHash" value="${marzAccountEvt.gachaHash }" /></td>
     </tr>
     <tr>
         <td>状态</td>
@@ -103,6 +103,10 @@
     <tr>
         <td>名声合成</td>
         <td colspan="3"><textarea name="marzAccountEvt.fameCardIds" cols="56" rows="3">${marzAccountEvt.fameCardIds }</textarea></td>
+    </tr>
+    <tr>
+        <td>物品信息</td>
+        <td colspan="3"><textarea name="marzAccountEvt.itemInfo" cols="56" rows="3">${marzAccountEvt.itemInfo }</textarea></td>
     </tr>
     <tr>
         <td>备注</td>

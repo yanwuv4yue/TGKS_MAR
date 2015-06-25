@@ -25,12 +25,16 @@ import com.moemao.tgks.mar.krsmacard.entity.KrsmaCardEvt;
 import com.moemao.tgks.mar.krsmacard.service.KrsmaCardService;
 import com.moemao.tgks.mar.marz.entity.CardEvt;
 import com.moemao.tgks.mar.marz.entity.DeckEvt;
+import com.moemao.tgks.mar.marz.entity.ItemEvt;
 import com.moemao.tgks.mar.marz.entity.MissionEvt;
 import com.moemao.tgks.mar.marz.thread.MarzThreadPoolDiffusion;
 import com.moemao.tgks.mar.marz.tool.MarzConstant;
 import com.moemao.tgks.mar.marz.tool.MarzUtil;
 import com.moemao.tgks.mar.marzaccount.entity.MarzAccountEvt;
 import com.moemao.tgks.mar.marzaccount.service.MarzAccountService;
+import com.moemao.tgks.mar.marzitem.entity.MarzItemEvt;
+import com.moemao.tgks.mar.marzitem.entity.MarzItemReq;
+import com.moemao.tgks.mar.marzitem.service.MarzItemService;
 import com.moemao.tgks.mar.marzlog.service.MarzLogService;
 import com.moemao.tgks.mar.marzmap.entity.MarzMapEvt;
 import com.moemao.tgks.mar.marzmap.entity.MarzMapReq;
@@ -55,6 +59,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
     private MarzMapService marzMapService;
     
     private MarzSettingEvt marzSettingEvt;
+    
+    private MarzItemService marzItemService;
     
     private KrsmaCardService marKrsmaCardService;
     
@@ -85,6 +91,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         marzLogService = (MarzLogService) ContextUtil.getBean("mar_marzLogService");
         marzSettingService = (MarzSettingService) ContextUtil.getBean("mar_marzSettingService");
         marzMapService = (MarzMapService) ContextUtil.getBean("mar_marzMapService");
+        marzItemService = (MarzItemService) ContextUtil.getBean("mar_marzItemService");
         marKrsmaCardService = (KrsmaCardService) ContextUtil.getBean("mar_krsmaCardService");
         
         // PVP结束参数
@@ -226,6 +233,14 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     break;
                 }
                 
+                // 2-1、道具信息（嗑药买药也在这里面执行）
+                resultCode = this.item();
+                
+                if (Thread.currentThread().getName().contains(MarzConstant.OVER))
+                {
+                    break;
+                }
+                
                 // 3、探索
                 resultCode = this.explore();
                 
@@ -255,10 +270,9 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 
                 // 最后要保存一下sessionId
                 account.setSessionId(sid);
-                MarzAccountEvt tempAccount = this.marzAccountService.queryMarzAccountById(account.getId());
-                account.setBossIds(tempAccount.getBossIds());
-                account.setStatus(tempAccount.getStatus());
-                this.marzAccountService.updateMarzAccount(account);
+                
+                // 保存之前都要读取数据库中最新的数据  防止脏数据发生
+                this.saveAccount(account);
                 
                 this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_0, account.getTgksId() + "本轮执行完毕，等待下一次执行...");
                 
@@ -371,9 +385,25 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 {
                     marzSettingEvt.setAutoUseBPPotion(setting.getValue());
                 }
+                else if (MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION_BPLIMIT == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setAutoUseBPPotionBPLimit(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION_ITEMID == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setAutoUseBPPotionItemId(setting.getValue());
+                }
                 else if (MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION == Integer.parseInt(setting.getName()))
                 {
                     marzSettingEvt.setAutoBuyBPPotion(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_CARDSELL_EVO == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCardSellEvo(setting.getValue());
+                }
+                else if (MarzConstant.VALIDATE_SETTING_CARDSELL_EVONUM == Integer.parseInt(setting.getName()))
+                {
+                    marzSettingEvt.setCardSellEvoNum(setting.getValue());
                 }
             }
         }
@@ -412,15 +442,15 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         {
             if (MarzConstant.MARZ_ACCOUNT_TYPE_0.equals(account.getType()))
             {
-                map = request.loginIOS(account.getIosUuid(), account.getIosKey());
+                map = request.loginIOS(account.getUuid(), account.getHashToken());
             }
             else if (MarzConstant.MARZ_ACCOUNT_TYPE_1.equals(account.getType()))
             {
-                map = request.loginAndroid(account.getAndroidUuid(), account.getAndroidKey());
+                map = request.loginAndroid(account.getUuid(), account.getHashToken());
             }
             else
             {
-                map = request.loginIOS(account.getIosUuid(), account.getIosKey());
+                map = request.loginIOS(account.getUuid(), account.getHashToken());
             }
             
             resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
@@ -434,7 +464,6 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 map = request.connect(sid);
                 
                 account.setSessionId(sid);
-                //sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
             }
         }
         catch (Exception e)
@@ -475,11 +504,119 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 account.setUserId(user.getJSONObject("user").getString("userid"));
                 
                 account.setSessionId(sid);
-                // 保存之前先查询最新的BOSSID 防止
-                MarzAccountEvt tempAccount = this.marzAccountService.queryMarzAccountById(account.getId());
-                account.setBossIds(tempAccount.getBossIds());
-                account.setStatus(tempAccount.getStatus());
-                this.marzAccountService.updateMarzAccount(account);
+                
+                this.saveAccount(account);
+            }
+        }
+        catch (Exception e)
+        {
+            return MarzConstant.FAILED;
+        }
+        
+        return resultCode;
+    }
+    
+    private int item()
+    {
+        try
+        {
+            map = request.itemShow(sid);
+            
+            resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+            
+            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+            {
+                sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                
+                // 匹配物品信息
+                MarzItemReq marzItemReq = new MarzItemReq();
+                List<MarzItemEvt> marzItemList = this.marzItemService.queryMarzItem(marzItemReq);
+                
+                JSONObject itemShow = map.get(MarzConstant.JSON_TAG_ITEMSHOW);
+                JSONArray items = itemShow.getJSONArray("items");
+                List<ItemEvt> itemList = new ArrayList<ItemEvt>();
+                JSONObject itemJSON;
+                
+                for (int i = 0, size = items.size(); i < size; i++)
+                {
+                    itemJSON = JSONObject.fromObject(items.get(i));
+                    itemList.add(new ItemEvt(itemJSON));
+                }
+                
+                account.setItemList(itemList);
+                
+                // 记录道具信息
+                account.setItemInfo(MarzUtil.getItemInfo(itemList, marzItemList));
+                this.saveAccount(account);
+                
+                // 开始自动嗑药逻辑处理
+                // 嗑药需要保证开关打开 BP小于阀值
+                if (!validateSetting(MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION) || account.getBp() >= Integer.parseInt(marzSettingEvt.getAutoUseBPPotionBPLimit()))
+                {
+                    return MarzConstant.SUCCESS;
+                }
+                
+                // 查看当前药水数量
+                int bpNum = 0;
+                for (ItemEvt item : itemList)
+                {
+                    if (item.getItemId().equals(marzSettingEvt.getAutoUseBPPotionItemId()))
+                    {
+                        bpNum = item.getNum();
+                        break;
+                    }
+                }
+                
+                // 如果药水已经用完 看是否开启了自动买药
+                if (0 == bpNum)
+                {
+                    if (validateSetting(MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION))
+                    {
+                        // 如果石头足够
+                        if (account.getCoin() >= 5)
+                        {
+                            map = request.itemShopBuy(sid, marzSettingEvt.getAutoUseBPPotionItemId());
+                            
+                            resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+                            
+                            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+                            {
+                                sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                            }
+                            else
+                            {
+                                // 购买失败
+                                this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_3, "药水够买失败！");
+                                return MarzConstant.SUCCESS;
+                            }
+                        }
+                        else
+                        {
+                            this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_3, "药水已经用完，且水晶不够买药！");
+                            return MarzConstant.SUCCESS;
+                        }
+                    }
+                    else
+                    {
+                        // 药水已经用完 并且没有开买药 记录日志直接跳出
+                        this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_3, "药水已经用完，且未开启自动买药！");
+                        return MarzConstant.SUCCESS;
+                    }
+                }
+                
+                // 有药水了可以直接嗑药
+                map = request.itemUse(sid, marzSettingEvt.getAutoUseBPPotionItemId());
+                
+                resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+                
+                if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+                {
+                    sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                    
+                    JSONObject user = map.get(MarzConstant.JSON_TAG_ITEMUSE);
+                    account.setBp(user.getJSONObject("user").getInt("bp"));
+                    this.saveAccount(account);
+                }
             }
         }
         catch (Exception e)
@@ -519,6 +656,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 account.setCardMax(user.getJSONObject("user").getInt("card_max"));
                 account.setCardNum(user.getJSONObject("user").getInt("card_num"));
                 account.setGold(user.getJSONObject("user").getInt("gold"));
+                this.saveAccount(account);
             }
         }
         catch (Exception e)
@@ -798,7 +936,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 if (validateSetting(MarzConstant.VALIDATE_SETTING_CHIARIFUSION))
                 {
                     // 只自动喂 蓝狗 红狗 粉狗
-                    String[] chiari = {"20000001", "20000002", "20000003", "20000004"};
+                    String[] chiari = {"20000001", "20000002", "20000003"};
                     CardEvt baseCard = null;
 
                     chiariFusionIdList.clear();
@@ -1414,6 +1552,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                                 account.setLv(user.getJSONObject("user").getInt("lv"));
                                 account.setName(user.getJSONObject("user").getString("name"));
                                 account.setUserId(user.getJSONObject("user").getString("userid"));
+                                this.saveAccount(account);
                             }
                         }
                     }
@@ -1628,6 +1767,26 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             default:
                 return false;
         }
+    }
+    
+    /**
+     * 
+     * @Title: saveAccount
+     * @Description: 保存之前先查询最新的数据 防止脏数据情况发生
+     * @param account
+     * @return void 返回类型
+     * @throws
+     */
+    private void saveAccount(MarzAccountEvt account)
+    {
+        // 保存之前先查询最新的数据 防止脏数据情况发生
+        MarzAccountEvt tempAccount = this.marzAccountService.queryMarzAccountById(account.getId());
+        account.setBossIds(tempAccount.getBossIds());
+        account.setSellCardIds(tempAccount.getSellCardIds());
+        account.setFameCardIds(tempAccount.getFameCardIds());
+        account.setStatus(tempAccount.getStatus());
+        
+        this.marzAccountService.updateMarzAccount(account);
     }
 
     @Override

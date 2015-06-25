@@ -128,6 +128,21 @@ public class MarConstant
      * 主界面
      */
     public static final String URL_HOMESHOW = URL_PRE + "/Game/HomeShow";
+    
+    /**
+     * 物品信息
+     */
+    public static final String URL_ITEMSHOW = URL_PRE + "/Game/ItemShow";
+    
+    /**
+     * 物品使用
+     */
+    public static final String URL_ITEMUSE = URL_PRE + "/Game/ItemUse";
+    
+    /**
+     * 物品购买
+     */
+    public static final String URL_ITEMSHOPBUY = URL_PRE + "/Game/ItemShopBuy";
 
     /**
      * 输入招待号

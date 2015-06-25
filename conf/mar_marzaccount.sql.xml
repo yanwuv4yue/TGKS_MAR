@@ -5,7 +5,7 @@
 <mapper namespace="com.moemao.tgks.mar.marzaccount.dao.MarzAccountDao">
 <select id="mar_queryMarzAccount" parameterType="MarzAccountReq" resultType="MarzAccountEvt" resultMap="MarzAccountEvtMap">
         <![CDATA[  
-            SELECT t.id, t.tgksid, t.iosuuid, t.androiduuid, t.ioskey, t.androidkey, t.type, t.status, t.sessionid, t.vip, t.name, t.userid, t.lv, t.ap, t.apmax, t.bp, t.bpmax, t.cardnum, t.cardmax, t.gold, t.fp, t.coin, t.bossids, t.sellCardIds, t.fameCardIds, t.createtime, t.endtime, t.remark FROM t_tgks_mar_marzaccount t
+            SELECT t.id, t.tgksid, t.uuid, t.hashtoken, t.accountKey, t.gachahash, t.type, t.status, t.sessionid, t.vip, t.name, t.userid, t.lv, t.ap, t.apmax, t.bp, t.bpmax, t.cardnum, t.cardmax, t.gold, t.fp, t.coin, t.bossids, t.sellCardIds, t.fameCardIds, t.itemInfo, t.createtime, t.endtime, t.remark FROM t_tgks_mar_marzaccount t
         ]]>
         <where>
                 1=1
@@ -15,17 +15,11 @@
             <if test="tgksId !=null and tgksId !='' ">
                 AND t.TGKSID = #{tgksId}
             </if>
-            <if test="iosUuid !=null and iosUuid !='' ">
-                AND t.IOSUUID = #{iosUuid}
+            <if test="uuid !=null and uuid !='' ">
+                AND t.UUID = #{uuid}
             </if>
-            <if test="androidUuid !=null and androidUuid !='' ">
-                AND t.ANDROIDUUID = #{androidUuid}
-            </if>
-            <if test="iosKey !=null and iosKey !='' ">
-                AND t.IOSKEY = #{iosKey}
-            </if>
-            <if test="androidKey !=null and androidKey !='' ">
-                AND t.ANDROIDKEY = #{androidKey}
+            <if test="accountKey !=null and accountKey !='' ">
+                AND t.ACCOUNTKEY = #{accountKey}
             </if>
             <if test="type !=null and type !='' ">
                 AND t.TYPE = #{type}
@@ -87,7 +81,7 @@
 
 <select id="mar_queryMarzAccountByIds" parameterType="list" resultType="MarzAccountEvt" resultMap="MarzAccountEvtMap">
         <![CDATA[  
-            SELECT t.id, t.tgksid, t.iosuuid, t.androiduuid, t.ioskey, t.androidkey, t.type, t.status, t.sessionid, t.vip, t.name, t.userid, t.lv, t.ap, t.apmax, t.bp, t.bpmax, t.cardnum, t.cardmax, t.gold, t.fp, t.coin, t.bossids, t.sellCardIds, t.fameCardIds, t.createtime, t.endtime, t.remark FROM t_tgks_mar_marzaccount t WHERE id IN
+            SELECT t.id, t.tgksid, t.uuid, t.hashtoken, t.accountKey, t.gachahash, t.type, t.status, t.sessionid, t.vip, t.name, t.userid, t.lv, t.ap, t.apmax, t.bp, t.bpmax, t.cardnum, t.cardmax, t.gold, t.fp, t.coin, t.bossids, t.sellCardIds, t.fameCardIds, t.createtime, t.endtime, t.remark FROM t_tgks_mar_marzaccount t WHERE id IN
         ]]>
         <foreach collection="list" item="ids"  open="(" separator="," close=")">
             #{ids}
@@ -96,8 +90,8 @@
 
 <insert id="mar_addMarzAccount" parameterType="MarzAccountEvt">
         <![CDATA[  
-            INSERT INTO t_tgks_mar_marzaccount (id, tgksid, iosuuid, androiduuid, ioskey, androidkey, type, status, sessionid, vip, name, userid, lv, ap, apmax, bp, bpmax, cardnum, cardmax, gold, fp, coin, bossids, sellCardIds, fameCardIds, createtime, endtime, remark) 
-            VALUES (#{id}, #{tgksId}, #{iosUuid}, #{androidUuid}, #{iosKey}, #{androidKey}, #{type}, #{status}, #{sessionId}, #{vip}, #{name}, #{userId}, #{lv}, #{ap}, #{apMax}, #{bp}, #{bpMax}, #{cardNum}, #{cardMax}, #{gold}, #{fp}, #{coin}, #{bossIds}, #${sellCardIds}, #{fameCardIds}, #{createTime}, #{endTime}, #{remark}) 
+            INSERT INTO t_tgks_mar_marzaccount (id, tgksid, uuid, hashtoken, accountKey, gachahash, type, status, sessionid, vip, name, userid, lv, ap, apmax, bp, bpmax, cardnum, cardmax, gold, fp, coin, bossids, sellCardIds, fameCardIds, itemInfo, createtime, endtime, remark) 
+            VALUES (#{id}, #{tgksId}, #{uuid}, #{hashToken}, #{accountKey}, #{gachaHash}, #{type}, #{status}, #{sessionId}, #{vip}, #{name}, #{userId}, #{lv}, #{ap}, #{apMax}, #{bp}, #{bpMax}, #{cardNum}, #{cardMax}, #{gold}, #{fp}, #{coin}, #{bossIds}, #${sellCardIds}, #{fameCardIds}, #{itemInfo}, #{createTime}, #{endTime}, #{remark}) 
         ]]>
 </insert>
 
@@ -105,10 +99,10 @@
         <![CDATA[  
             UPDATE t_tgks_mar_marzaccount SET 
                        tgksid = #{tgksId},
-                       iosuuid = #{iosUuid},
-                       androiduuid = #{androidUuid},
-                       ioskey = #{iosKey},
-                       androidkey = #{androidKey},
+                       uuid = #{uuid},
+                       hashtoken = #{hashToken},
+                       accountKey = #{accountKey},
+                       gachahash = #{gachaHash},
                        type = #{type},
                        status = #{status},
                        sessionid = #{sessionId},
@@ -128,6 +122,7 @@
                        bossids = #{bossIds},
                        sellCardIds = #{sellCardIds},
                        fameCardIds = #{fameCardIds},
+                       itemInfo = #{itemInfo},
                        endtime = #{endTime},
                        remark = #{remark}
              WHERE ID = #{id}

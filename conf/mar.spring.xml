@@ -144,5 +144,18 @@
     <property name="mar_marzAccountService" ref="mar_marzAccountService" />
     <property name="mar_marzMapService" ref="mar_marzMapService" />
   </bean>
-
+  
+  <!-- ﻿marzitem_dao 配置 -->
+  <bean id="mar_marzItemDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.moemao.tgks.mar.marzitem.dao.MarzItemDao" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean>
+  <!-- ﻿marzitem_service 配置 -->
+  <bean id="mar_marzItemService" class="com.moemao.tgks.mar.marzitem.service.impl.MarzItemServiceImpl">
+    <property name="mar_marzItemDao" ref="mar_marzItemDao" />
+  </bean>
+  <!-- ﻿marzitem_action 配置 -->
+  <bean id="mar_marzItemAction" class="com.moemao.tgks.mar.marzitem.action.MarzItemAction">
+    <property name="mar_marzItemService" ref="mar_marzItemService" />
+  </bean>
 </beans>
