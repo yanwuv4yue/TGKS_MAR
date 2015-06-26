@@ -80,7 +80,9 @@ public class MarzSettingAction extends TGKSAction
     List<KrsmaCardEvt> sellCardList;
     List<KrsmaCardEvt> fameCardList;
     
+    // 设置页面下拉框
     List<CoinGachaEvt> allCoinGachaList = new ArrayList<CoinGachaEvt>();
+    List<MarzItemEvt> allBPRecoverList = new ArrayList<MarzItemEvt>();
     
     // 设置页面展示
     MarzAccountEvt account;
@@ -294,33 +296,41 @@ public class MarzSettingAction extends TGKSAction
         // 查询自动抽硬币的列表
         MarzItemReq marzItemReq = new MarzItemReq();
         marzItemReq.setStatus(MarzConstant.MARZITEM_STATUS_1);
-        marzItemReq.setType(MarzConstant.MARZITEM_TYPE_3);
         List<MarzItemEvt> marzItemList = this.mar_marzItemService.queryMarzItem(marzItemReq);
         
         if (!CommonUtil.isEmpty(marzItemList))
         {
             this.allCoinGachaList.clear();
+            this.allBPRecoverList.clear();
+            
             for (MarzItemEvt item : marzItemList)
             {
-                List<String> list = MarzUtil.stringToList(item.getParam());
-                
-                for (String param : list)
-                {
-                    String gachaInfo[] = param.split(MarConstant.KRSMA_SPLIT);
-                    String gachaName = gachaInfo[0];
-                    String itemId = gachaInfo[1];
-                    int costNum = Integer.parseInt(gachaInfo[2]);
-                    String gachaId = gachaInfo[3];
-                    String payType = gachaInfo[4];
-                    
-                    CoinGachaEvt coinGachaEvt = new CoinGachaEvt();
-                    coinGachaEvt.setGachaName(gachaName);
-                    coinGachaEvt.setGachaId(gachaId);
-                    coinGachaEvt.setItemId(itemId);
-                    coinGachaEvt.setCostNum(costNum);
-                    coinGachaEvt.setPayType(payType);
-                    coinGachaEvt.setParam(param);
-                    this.allCoinGachaList.add(coinGachaEvt);
+            	if (MarzConstant.MARZITEM_TYPE_1.equals(item.getType()))
+            	{
+            		this.allBPRecoverList.add(item);
+            	}
+            	else if (MarzConstant.MARZITEM_TYPE_3.equals(item.getType()))
+            	{
+	                List<String> list = MarzUtil.stringToList(item.getParam());
+	                
+	                for (String param : list)
+	                {
+	                    String gachaInfo[] = param.split(MarConstant.KRSMA_SPLIT);
+	                    String gachaName = gachaInfo[0];
+	                    String itemId = gachaInfo[1];
+	                    int costNum = Integer.parseInt(gachaInfo[2]);
+	                    String gachaId = gachaInfo[3];
+	                    String payType = gachaInfo[4];
+	                    
+	                    CoinGachaEvt coinGachaEvt = new CoinGachaEvt();
+	                    coinGachaEvt.setGachaName(gachaName);
+	                    coinGachaEvt.setGachaId(gachaId);
+	                    coinGachaEvt.setItemId(itemId);
+	                    coinGachaEvt.setCostNum(costNum);
+	                    coinGachaEvt.setPayType(payType);
+	                    coinGachaEvt.setParam(param);
+	                    this.allCoinGachaList.add(coinGachaEvt);
+	                }
                 }
             }
         }
@@ -664,7 +674,17 @@ public class MarzSettingAction extends TGKSAction
         this.allCoinGachaList = allCoinGachaList;
     }
 
-    public MarzAccountEvt getAccount()
+    public List<MarzItemEvt> getAllBPRecoverList()
+    {
+    	return allBPRecoverList;
+    }
+
+	public void setAllBPRecoverList(List<MarzItemEvt> allBPRecoverList)
+    {
+    	this.allBPRecoverList = allBPRecoverList;
+    }
+
+	public MarzAccountEvt getAccount()
     {
         return account;
     }

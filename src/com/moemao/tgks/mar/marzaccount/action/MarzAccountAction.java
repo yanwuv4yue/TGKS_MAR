@@ -79,6 +79,12 @@ public class MarzAccountAction extends TGKSAction
             marzAccountEvt = list.get(0);
         }
         
+        // 设置售卡信息
+        marzAccountEvt.setSellCardIds(MarzUtil.getFaceImageUrlByIdList(CommonUtil.stringToList(marzAccountEvt.getSellCardIds())));
+        
+        // 设置名声信息
+        marzAccountEvt.setFameCardIds(MarzUtil.getFaceImageUrlByIdList(CommonUtil.stringToList(marzAccountEvt.getFameCardIds())));
+        
         // 处理设置的战斗地图
         String battleMapName = "";
         List<MarzMapEvt> mapList = this.mar_marzMapService.queryMarzMap(new MarzMapReq());

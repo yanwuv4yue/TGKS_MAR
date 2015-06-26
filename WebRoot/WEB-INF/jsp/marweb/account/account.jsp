@@ -23,8 +23,6 @@
 	        </td>
 	    </tr>
 	    <tr>
-	        <td><!-- 角色ID --></td>
-	        <td><!-- ${marzAccountEvt.userId } --></td>
 	        <td>角色等级</td>
 	        <td>${marzAccountEvt.lv }</td>
 	        <td>VIP等级</td>
@@ -34,6 +32,8 @@
 		        <s:if test="marzAccountEvt.vip == 2">白金</s:if>
 		        <s:if test="marzAccountEvt.vip == 3">钻石</s:if>
 	        </td>
+	        <td><!-- 角色ID --></td>
+	        <td><!-- ${marzAccountEvt.userId } --></td>
 	    </tr>
 	    <tr>
 	        <td>AP</td>
@@ -63,6 +63,16 @@
                 </s:if>
             </td>
 	        <td><a id="settingButton" class="button" href="#">挂机设置</a></td>
+	    </tr>
+	    <tr>
+	        <td>售卡列表</td>
+	        <td>${marzAccountEvt.sellCardIds }</td>
+	        <td>名声列表</td>
+	        <td>${marzAccountEvt.fameCardIds }</td>
+	    </tr>
+	    <tr>
+	        <td>道具信息</td>
+	        <td colspan="5">${marzAccountEvt.itemInfo }</td>
 	    </tr>
 	    <tr>
 	        <td>战斗地图</td>

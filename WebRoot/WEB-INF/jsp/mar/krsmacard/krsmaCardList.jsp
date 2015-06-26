@@ -14,7 +14,7 @@
                 <th>职业</th>
                 <th>稀有度</th>
                 <th>昵称</th>
-                <th>卡图</th>
+                <!-- <th>卡图</th> -->
             </tr>
         </thead>
         <tbody>
@@ -23,7 +23,8 @@
 					<td width="20"><input type="checkbox" name="krsmaCardId" value="<s:property value='#evt.id'/>" /></td>
 					<td><b id="<s:property value='#evt.id'/>" class="krsmaCardUpdate"><s:property value="#evt.cardId"/></b></td>
                     <td><s:property value="#evt.name"/></td>
-                    <td><img width="40px" src="<s:property value="#evt.iconUrl"/>" /></td>
+                    <!-- <td><img width="40px" src="<s:property value="#evt.iconUrl"/>" /></td> -->
+                    <td><img width="40px" src="../resources/mar/marweb/face/chr20_<s:property value="#evt.cardId"/>.png" /></td>
                     <td>
                         <s:if test="#evt.sellFlag == 0">否</s:if>
                         <s:elseif test="#evt.sellFlag == 1">是</s:elseif>
@@ -40,7 +41,7 @@
                     </td>
                     <td><s:property value="#evt.rarity"/></td>
                     <td><s:property value="#evt.nickName"/></td>
-                    <td><img width="80px" src="<s:property value="#evt.imageUrl"/>" /></td>
+                    <!-- <td><img width="80px" src="<s:property value="#evt.imageUrl"/>" /></td> -->
 				</tr>
 			</s:iterator>
 		</tbody>

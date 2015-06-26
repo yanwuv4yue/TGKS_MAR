@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `t_tgks_mar_marzaccount` (
   `tgksid` varchar(30) default NULL COMMENT 'tgks账号ID',
   `uuid` varchar(50) default NULL COMMENT 'UUID',
   `hashtoken` varchar(50) default NULL COMMENT 'hashtoken',
-  `key` varchar(200) default NULL COMMENT '账号KEY',
+  `accountKey` varchar(200) default NULL COMMENT '账号KEY',
   `gachahash` varchar(50) default NULL COMMENT 'gachahash',
   `type` varchar(3) NOT NULL COMMENT '类型（0 IOS；1 Android）',
   `status` varchar(3) NOT NULL COMMENT '状态（0 离线；1 在线）',

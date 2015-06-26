@@ -50,7 +50,7 @@
                                 <input type="checkbox" name="marzSettingEvt.sellCardIds" value="<s:property value='#evt.cardId'/>" <s:if test="#evt.check == 1">checked="checked"</s:if> />
                               </td>
                               <td>
-                                <img width="40px" onerror="nofind();" src="../resources/mar/marweb/face/chr20_<s:property value="#evt.cardId"/>.png" title="<s:property value="#evt.name"/>" alt="<s:property value="#evt.name"/>" />
+                                <img width="35px" onerror="nofind();" src="../resources/mar/marweb/face/chr20_<s:property value="#evt.cardId"/>.png" title="<s:property value="#evt.name"/>" alt="<s:property value="#evt.name"/>" />
                               </td>
                               <s:if test="#idx.index > 0  && (#idx.index + 1)%10 == 0">
                         </tr>
@@ -98,7 +98,7 @@
                                 <input type="checkbox" name="marzSettingEvt.fameCardIds" value="<s:property value='#evt.cardId'/>" <s:if test="#evt.check == 1">checked="checked"</s:if> />
                               </td>
                               <td>
-                                <img width="40px" onerror="nofind();" src="../resources/mar/marweb/face/chr20_<s:property value="#evt.cardId"/>.png" title="<s:property value="#evt.name"/>" alt="<s:property value="#evt.name"/>" />
+                                <img width="35px" onerror="nofind();" src="../resources/mar/marweb/face/chr20_<s:property value="#evt.cardId"/>.png" title="<s:property value="#evt.name"/>" alt="<s:property value="#evt.name"/>" />
                               </td>
                               <s:if test="#idx.index > 0  && (#idx.index + 1)%10 == 0">
                         </tr>
@@ -129,8 +129,10 @@
                 <td>药水类型</td>
                 <td>
                     <select id="marzSettingEvt.autoUseBPPotionItemId" name="marzSettingEvt.autoUseBPPotionItemId">
-                         <option value="1000" <s:if test="marzSettingEvt.autoUseBPPotionItemId == 1000">selected="selected"</s:if>>pt回復薬（全）</option>
-                         <!-- <option value="1100" <s:if test="marzSettingEvt.autoUseBPPotionItemId == 1100">selected="selected"</s:if>>pt回復薬（当日）</option> -->
+                    	 <option value="">不选择</option>
+                         <s:iterator value="allBPRecoverList" var="evt" status="idx">
+                            <option value="<s:property value='#evt.itemId'/>" <s:if test="marzSettingEvt.autoUseBPPotionItemId == #evt.itemId">selected="selected"</s:if>><s:property value='#evt.name' /></option>
+                        </s:iterator>
                     </select>
                 </td>
                 <td>自动买药</td>

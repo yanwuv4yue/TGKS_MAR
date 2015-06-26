@@ -562,7 +562,9 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 // 如果药水已经用完 看是否开启了自动买药
                 if (0 == bpNum)
                 {
-                    if (validateSetting(MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION))
+                	// 仅当开启了买药并且设定自动可ID为1000的大药时才会自动买药
+                    if (validateSetting(MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION)
+                    		&& MarConstant.ITEM_ID_BP_RECOVER_FULL.equals(marzSettingEvt.getAutoUseBPPotionItemId()))
                     {
                         // 如果石头足够
                         if (account.getCoin() >= 5)
@@ -617,7 +619,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 return MarzConstant.SUCCESS;
             }
             
-            // 抽奖名称|硬币ID|消耗数量|gachaId|payType
+            // 抽奖名称=硬币ID=消耗数量=gachaId=payType
             String gachaInfo[] = marzSettingEvt.getCoinGachaGachaId().split(MarConstant.KRSMA_SPLIT);
             String gachaName = gachaInfo[0];
             String itemId = gachaInfo[1];

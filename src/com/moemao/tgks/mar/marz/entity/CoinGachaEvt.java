@@ -5,6 +5,7 @@ public class CoinGachaEvt extends GachaEvt
     private String itemId;
     private int costNum;
     
+    // 表中保存的参数值
     private String param;
     
     public String getItemId()
