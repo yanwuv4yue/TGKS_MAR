@@ -490,7 +490,7 @@ public class MarzRequest
      * @return Map<String,JSONObject> 返回类型
      * @throws
      */
-    public Map<String, JSONObject> pvpStart(String sid, String arthur_type, Map<String, String> deckMap) throws Exception
+    public Map<String, JSONObject> pvpStart(String sid, String pvpType, String arthur_type, Map<String, String> deckMap) throws Exception
     {
         map = new HashMap<String, JSONObject>();
         
@@ -504,7 +504,7 @@ public class MarzRequest
             }
         }
         
-        String startInfo = "{\"type\":1,\"pvp_my_deck\":["
+        String startInfo = "{\"type\":" + pvpType + ",\"pvp_my_deck\":["
             + "{\"arthur_type\":" + arthur_type + ",\"job_type\":" + arthur_type + ",\"deck_idx\":0,\"leader_card_idx\":0,\"card_uniqid\":[" + deckMap.get(arthur_type) + "]},"
             + "{\"arthur_type\":" + typeList.get(0) + ",\"job_type\":" + typeList.get(0) + ",\"deck_idx\":0,\"leader_card_idx\":0,\"card_uniqid\":[" + deckMap.get(typeList.get(0)) + "]},"
             + "{\"arthur_type\":" + typeList.get(1) + ",\"job_type\":" + typeList.get(1) + ",\"deck_idx\":0,\"leader_card_idx\":0,\"card_uniqid\":[" + deckMap.get(typeList.get(1)) + "]},"

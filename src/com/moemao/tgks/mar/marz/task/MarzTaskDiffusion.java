@@ -24,6 +24,7 @@ import com.moemao.tgks.mar.execute.MarzRequest;
 import com.moemao.tgks.mar.krsmacard.entity.KrsmaCardEvt;
 import com.moemao.tgks.mar.krsmacard.service.KrsmaCardService;
 import com.moemao.tgks.mar.marz.entity.CardEvt;
+import com.moemao.tgks.mar.marz.entity.CardTagEvt;
 import com.moemao.tgks.mar.marz.entity.DeckEvt;
 import com.moemao.tgks.mar.marz.entity.ItemEvt;
 import com.moemao.tgks.mar.marz.entity.MissionEvt;
@@ -489,21 +490,11 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
-                JSONObject user = map.get(MarzConstant.JSON_TAG_HOMWSHOW);
-                account.setAp(user.getJSONObject("user").getInt("ap"));
-                account.setApMax(user.getJSONObject("user").getInt("ap_max"));
-                account.setBp(user.getJSONObject("user").getInt("bp"));
-                account.setBpMax(user.getJSONObject("user").getInt("bp_max"));
-                account.setCardMax(user.getJSONObject("user").getInt("card_max"));
-                account.setCardNum(user.getJSONObject("user").getInt("card_num"));
-                account.setCoin(user.getJSONObject("user").getInt("coin") + user.getJSONObject("user").getInt("coin_free"));
-                account.setFp(user.getJSONObject("user").getInt("fp"));
-                account.setGold(user.getJSONObject("user").getInt("gold"));
-                account.setLv(user.getJSONObject("user").getInt("lv"));
-                account.setName(user.getJSONObject("user").getString("name"));
-                account.setUserId(user.getJSONObject("user").getString("userid"));
-                
                 account.setSessionId(sid);
+                
+                JSONObject user = map.get(MarzConstant.JSON_TAG_HOMWSHOW).getJSONObject("user");
+
+                this.jsonUser(account, user);
                 
                 this.saveAccount(account);
             }
@@ -660,10 +651,17 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
                 JSONObject gachaPlay = map.get(MarzConstant.JSON_TAG_GACHAPLAY);
+                JSONArray cards = gachaPlay.getJSONArray("cards");
+                JSONObject cardJSON;
                 
                 List<CardEvt> gachaCardList = new ArrayList<CardEvt>();
                 
-                // TODO 展示抽到了哪些卡
+                for (int i = 0, size = cards.size(); i < size; i++)
+                {
+                    cardJSON = JSONObject.fromObject(cards.get(i));
+                    gachaCardList.add(new CardTagEvt(cardJSON));
+                }
+                
                 this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_7, "自动抽卡 " + gachaName + " " + MarzUtil.getFaceImageUrlByList(gachaCardList));
             }
         }
@@ -698,12 +696,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             {
                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                 
-                JSONObject user = map.get(MarzConstant.JSON_TAG_EXPLOREEND);
-                account.setAp(user.getJSONObject("user").getInt("ap"));
-                account.setApMax(user.getJSONObject("user").getInt("ap_max"));
-                account.setCardMax(user.getJSONObject("user").getInt("card_max"));
-                account.setCardNum(user.getJSONObject("user").getInt("card_num"));
-                account.setGold(user.getJSONObject("user").getInt("gold"));
+                JSONObject user = map.get(MarzConstant.JSON_TAG_EXPLOREEND).getJSONObject("user");
+                this.jsonUser(account, user);
                 this.saveAccount(account);
             }
         }
@@ -1587,19 +1581,9 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                             {
                                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                                 
-                                JSONObject user = map.get(MarzConstant.JSON_TAG_TEAMBATTLESOLOEND);
-                                account.setAp(user.getJSONObject("user").getInt("ap"));
-                                account.setApMax(user.getJSONObject("user").getInt("ap_max"));
-                                account.setBp(user.getJSONObject("user").getInt("bp"));
-                                account.setBpMax(user.getJSONObject("user").getInt("bp_max"));
-                                account.setCardMax(user.getJSONObject("user").getInt("card_max"));
-                                account.setCardNum(user.getJSONObject("user").getInt("card_num"));
-                                account.setCoin(user.getJSONObject("user").getInt("coin") + user.getJSONObject("user").getInt("coin_free"));
-                                account.setFp(user.getJSONObject("user").getInt("fp"));
-                                account.setGold(user.getJSONObject("user").getInt("gold"));
-                                account.setLv(user.getJSONObject("user").getInt("lv"));
-                                account.setName(user.getJSONObject("user").getString("name"));
-                                account.setUserId(user.getJSONObject("user").getString("userid"));
+                                JSONObject user = map.get(MarzConstant.JSON_TAG_TEAMBATTLESOLOEND).getJSONObject("user");
+                                
+                                this.jsonUser(account, user);
                                 this.saveAccount(account);
                             }
                         }
@@ -1676,31 +1660,55 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     
                     // 这里选出PVP的主职业
                     String arthur_type = "1";
+                    boolean freePVP = false;
                     for (MissionEvt m : missionList)
                     {
                         if ("2003001".equals(m.getMissionid()) && "0".equals(m.getState()))
                         {
                             arthur_type = "1";
-                            break;
                         }
                         else if ("2003002".equals(m.getMissionid()) && "0".equals(m.getState()))
                         {
                             arthur_type = "2";
-                            break;
                         }
                         else if ("2003003".equals(m.getMissionid()) && "0".equals(m.getState()))
                         {
                             arthur_type = "3";
-                            break;
                         }
                         else if ("2003004".equals(m.getMissionid()) && "0".equals(m.getState()))
                         {
                             arthur_type = "4";
-                            break;
+                        }
+                        else if ("2004001".equals(m.getMissionid()) && "0".equals(m.getState()))
+                        {
+                            freePVP = true;
                         }
                     }
                     
-                    map = this.request.pvpStart(sid, arthur_type, deckMap);
+                    // 防止PVP经常少一场
+                    if (freePVP)
+                    {
+                        map = this.request.pvpStart(sid, MarzConstant.MARZPVP_TYPE_0, arthur_type, deckMap);
+                        resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+                        
+                        if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+                        {
+                            sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                            
+                            JSONObject pvpStart = map.get(MarzConstant.JSON_TAG_PVPSTART);
+                            String btluid = pvpStart.getString("btluid");
+                            Thread.sleep(MarzConstant.SLEEPTIME_BATTLE_SOLO);
+                            map = this.request.pvpEnd(sid, btluid, pvpEndMap.get(arthur_type));
+                            resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
+                            
+                            if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
+                            {
+                                sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
+                            }
+                        }
+                    }
+                    
+                    map = this.request.pvpStart(sid, MarzConstant.MARZPVP_TYPE_1, arthur_type, deckMap);
                     resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
                     
                     if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
@@ -1815,6 +1823,31 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
             default:
                 return false;
         }
+    }
+    
+    /**
+     * 
+     * @Title: jsonUser
+     * @Description: 根据JSON更新account数据
+     * @param account
+     * @param user
+     * @return void 返回类型
+     * @throws
+     */
+    private void jsonUser(MarzAccountEvt account, JSONObject user)
+    {
+        account.setAp(user.getInt("ap"));
+        account.setApMax(user.getInt("ap_max"));
+        account.setBp(user.getInt("bp"));
+        account.setBpMax(user.getInt("bp_max"));
+        account.setCardMax(user.getInt("card_max"));
+        account.setCardNum(user.getInt("card_num"));
+        account.setCoin(user.getInt("coin") + user.getInt("coin_free"));
+        account.setFp(user.getInt("fp"));
+        account.setGold(user.getInt("gold"));
+        account.setLv(user.getInt("lv"));
+        account.setName(user.getString("name"));
+        account.setUserId(user.getString("userid"));
     }
     
     /**

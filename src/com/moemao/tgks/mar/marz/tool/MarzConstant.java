@@ -220,4 +220,14 @@ public class MarzConstant
      * MARZ副本状态 2 已通过
      */
     public static final String MARZMAP_STATE_2 = "2";
+    
+    /**
+     * MARZ PVP TYPE 0 普通
+     */
+    public static final String MARZPVP_TYPE_0 = "0";
+    
+    /**
+     * MARZ PVP TYPE 1 排位
+     */
+    public static final String MARZPVP_TYPE_1 = "1";
 }
