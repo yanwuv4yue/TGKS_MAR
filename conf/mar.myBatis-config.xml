@@ -3,7 +3,6 @@
 "-//mybatis.org//DTD Config 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<!-- 别名 需要整合到COMMON的myBatis-config.xml中-->
 	<typeAliases>
 		<!-- mar_﻿passwordcard -->
 		<typeAlias alias="PasswordCardEvt" type="com.moemao.tgks.mar.passwordcard.entity.PasswordCardEvt" />
