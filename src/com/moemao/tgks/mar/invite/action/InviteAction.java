@@ -95,7 +95,7 @@ public class InviteAction extends TGKSAction
             // 更新状态为任务中
             passwordCardEvt.setStatus(MarConstant.PASSWORDCARD_STATUS_1);
             this.mar_passwordCardService.updatePasswordCard(passwordCardEvt);
-        }        
+        }
         
         // 开始刷招待
         CommonUtil.systemLog("mar/invite.action", CommonConstant.SYSTEMLOG_TYPE_2, CommonConstant.SUCCESS, MessageFormat.format("执行招待任务 卡密号码：{0} 招待ID：{1}", password, inviteCode));
