@@ -330,84 +330,6 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
         
         List<MarzSettingEvt> marzSettinglist = this.marzSettingService.queryMarzSetting(marzSettingReq);
         
-        if (!CommonUtil.isEmpty(marzSettinglist))
-        {
-            for (MarzSettingEvt setting : marzSettinglist)
-            {
-                if (MarzConstant.VALIDATE_SETTING_EXPLORE == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setExplore(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_CARDSELL == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setCardSell(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_CARDSELL_COMMON == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setCardSellCommon(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_CHIARIFUSION == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setCardFusion(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_BATTLE == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setBattle(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setBattleNowaste(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE_BOSSID == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setBattleNowasteBossId(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setBattleGetStone(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_PVP == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setPvp(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_FAMEFUSION == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setFameFusion(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_COINGACHA == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setCoinGacha(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_COINGACHA_GACHAID == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setCoinGachaGachaId(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setAutoUseBPPotion(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION_BPLIMIT == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setAutoUseBPPotionBPLimit(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION_ITEMID == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setAutoUseBPPotionItemId(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setAutoBuyBPPotion(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_CARDSELL_EVO == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setCardSellEvo(setting.getValue());
-                }
-                else if (MarzConstant.VALIDATE_SETTING_CARDSELL_EVONUM == Integer.parseInt(setting.getName()))
-                {
-                    marzSettingEvt.setCardSellEvoNum(setting.getValue());
-                }
-            }
-        }
     }
     
     /**
@@ -575,6 +497,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                             
                             if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                             {
+                                this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_3, "药水够买成功！");
                                 sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                             }
                             else
@@ -605,6 +528,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 
                 if (MarzConstant.RES_CODE_SUCCESS_0 == resultCode)
                 {
+                    this.marzLogService.marzLog(account, MarzConstant.MARZ_LOG_TYPE_3, "药水使用成功！");
+                    
                     sid = map.get(MarzConstant.JSON_TAG_SID).getString(MarzConstant.JSON_TAG_SID);
                     
                     JSONObject user = map.get(MarzConstant.JSON_TAG_ITEMUSE);
@@ -981,6 +906,8 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                 {
                     // 只自动喂 蓝狗 红狗 粉狗
                     String[] chiari = {"20000001", "20000002", "20000003"};
+                    // 都喂光了 再上MR
+                    String chiariMr = "20000004";
                     CardEvt baseCard = null;
 
                     chiariFusionIdList.clear();
@@ -1039,6 +966,28 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         if (null != baseCard && chiariFusionIdList.size() == 4)
                         {
                             break;
+                        }
+                    }
+                    
+                    if (null != baseCard && chiariFusionIdList.size() == 0)
+                    {
+                        for (CardEvt card : cardList)
+                        {
+                            // 如果只剩下MR狗粮 那一次喂2张
+                            if (!cardSellIdList.contains(card.getUniqid()) 
+                                    && chiariMr.equals(card.getCardid())
+                                    && !chiariFusionIdList.contains(card.getUniqid())
+                                    && chiariFusionIdList.size() < 2
+                                    && 0 == card.getIs_lock())
+                            {
+                                chiariFusionIdList.add(card.getUniqid());
+                                chiariFusionCardList.add(card);
+                            }
+                            
+                            if (null != baseCard && chiariFusionIdList.size() == 2)
+                            {
+                                break;
+                            }
                         }
                     }
                     
@@ -1794,37 +1743,7 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
      */
     private boolean validateSetting(int settingTag)
     {
-        switch (settingTag)
-        {
-            case MarzConstant.VALIDATE_SETTING_EXPLORE: // 自动跑图开关
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getExplore());
-            case MarzConstant.VALIDATE_SETTING_CARDSELL: // 自动卖卡开关
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getCardSell());
-            case MarzConstant.VALIDATE_SETTING_CARDSELL_COMMON: // 自动卖卡开关-卖普通卡
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getCardSellCommon());
-            case MarzConstant.VALIDATE_SETTING_CHIARIFUSION: // 自动喂狗粮开关
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getCardFusion());
-            case MarzConstant.VALIDATE_SETTING_BATTLE: // 自动战斗开关
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattle());
-            case MarzConstant.VALIDATE_SETTING_BATTLE_NOWASTE: // 自动战斗开关-不浪费BP
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattleNowaste());
-            case MarzConstant.VALIDATE_SETTING_BATTLE_GET_STONE: // 优先拿石开关
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getBattleGetStone());
-            case MarzConstant.VALIDATE_SETTING_PVP: // PVP开关
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getPvp());
-            case MarzConstant.VALIDATE_SETTING_FAMEFUSION: // 自动名声合成开关
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getFameFusion());
-            case MarzConstant.VALIDATE_SETTING_COINGACHA: // 抽硬币
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getFameFusion());
-            case MarzConstant.VALIDATE_SETTING_AUTOUSEBPPOTION: // 自动喝药
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getFameFusion());
-            case MarzConstant.VALIDATE_SETTING_AUTOBUYBPPOTION: // 自动买药
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getFameFusion());
-            case MarzConstant.VALIDATE_SETTING_CARDSELL_EVO: // 出售进化素材
-                return MarzConstant.MARZSETTING_ON.equals(marzSettingEvt.getCardSellEvo());
-            default:
-                return false;
-        }
+        return true;
     }
     
     /**
