@@ -20,8 +20,6 @@ public class MarzRequest
     
     private HttpRequest httpRequest = new HttpRequest();
     
-    private boolean bDebug = false;
-    
     private Map<String, JSONObject> map;
     
     public static synchronized MarzRequest getInstance()
@@ -49,11 +47,6 @@ public class MarzRequest
         //String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"4\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\",\"os_ver\":\"iPhone OS 7.1.2\"}";
         String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"8\",\"os\":0,\"carrier\":3,\"market\":1,\"lang\":0,\"device\":\"iPhone5S\",\"token\":\"\",\"os_ver\":\"iPhone OS 7.1.2\"}";
         
-        if (bDebug)
-        {
-            System.out.println(paramStr);
-        }
-        
         String result = httpRequest.sendPost(MarConstant.URL_LOGIN, paramStr);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "loginIOS " + uuid + " " + Thread.currentThread().getName());
 
@@ -75,11 +68,6 @@ public class MarzRequest
         //String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"3\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\"}";
         //String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"4\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\",\"os_ver\":\"Android OS 4.4.3 / API-19 (FUCK YOU)\"}";
         String paramStr = "{\"uuid\":\"" + uuid + "\",\"hash_token\":\"" + hashToken + "\",\"clver\":\"8\",\"os\":1,\"carrier\":1,\"market\":2,\"lang\":0,\"device\":\"LGE Nexus 5\",\"token\":\"\",\"os_ver\":\"Android OS 4.4.3 / API-19 (FUCK YOU)\"}";
-        
-        if (bDebug)
-        {
-            System.out.println(paramStr);
-        }
         
         String result = httpRequest.sendPost(MarConstant.URL_LOGIN, paramStr);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "loginAndroid " + uuid + " " + Thread.currentThread().getName());
@@ -216,11 +204,6 @@ public class MarzRequest
         
         String paramStr = sid + "={\"arthur_type\":" + arthurType + ",\"deck_idx\":" + deckIdx + "}";
 
-        if (bDebug)
-        {
-            System.out.println(paramStr);
-        }
-        
         String[] result = httpRequest.sendPost(MarConstant.URL_EXPLORESTART, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "exploreStart " + Thread.currentThread().getName());
 
@@ -305,11 +288,6 @@ public class MarzRequest
         
         String paramStr = sid + "={\"base_uniqid\":" + baseId + ",\"add_uniqids\":[" + addId + "]}";
         
-        if (bDebug)
-        {
-            System.out.println(paramStr);
-        }
-        
         String[] result = httpRequest.sendPost(MarConstant.URL_CARDFUSION, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardFusion " + Thread.currentThread().getName());
         
@@ -330,11 +308,6 @@ public class MarzRequest
         map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "={\"uniqids\":["+uniqiIds+"]}";
-
-        if (bDebug)
-        {
-            System.out.println(paramStr);
-        }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_CARDSELL, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "cardSell " + Thread.currentThread().getName());
@@ -399,11 +372,6 @@ public class MarzRequest
         map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "={\"bossid\":" + bossId + ",\"deck_arthur_type\":3,\"deck_arthur_type_idx\":0,\"partner_deck_selects\":[{\"userid\":" + userOne + ",\"arthur_type\":1,\"deck_idx\":0},{\"userid\":" + userTwo + ",\"arthur_type\":2,\"deck_idx\":0},{\"userid\":" + userFour + ",\"arthur_type\":4,\"deck_idx\":0}]}";
-
-        if (bDebug)
-        {
-            System.out.println(paramStr);
-        }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOSTART, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "teamBattleSoloStart " + Thread.currentThread().getName());
@@ -425,11 +393,6 @@ public class MarzRequest
         map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "=" + battleInfo;
-
-        if (bDebug)
-        {
-            System.out.println(paramStr);
-        }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_TEAMBATTLESOLOEND, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "teamBattleSoloEnd " + Thread.currentThread().getName());
@@ -454,11 +417,6 @@ public class MarzRequest
         map = new HashMap<String, JSONObject>();
         
         String paramStr = sid + "=";
-
-        if (bDebug)
-        {
-            System.out.println(paramStr);
-        }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_PVPSHOW, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "pvpShow " + Thread.currentThread().getName());
@@ -511,11 +469,6 @@ public class MarzRequest
             + "{\"arthur_type\":" + typeList.get(2) + ",\"job_type\":" + typeList.get(2) + ",\"deck_idx\":0,\"leader_card_idx\":0,\"card_uniqid\":[" + deckMap.get(typeList.get(2)) + "]}]}";
         
         String paramStr = sid + "=" + startInfo;
-
-        if (bDebug)
-        {
-            System.out.println(paramStr);
-        }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_PVPSTART, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "pvpStart " + Thread.currentThread().getName());
@@ -542,11 +495,6 @@ public class MarzRequest
         String endInfo = "{\"btluid\":" + btluid + pvpEndStr;
         
         String paramStr = sid + "=" + endInfo;
-
-        if (bDebug)
-        {
-            System.out.println(paramStr);
-        }
         
         String[] result = httpRequest.sendPost(MarConstant.URL_PVPEND, paramStr).split(MarConstant.KRSMA_SPLIT);
         System.out.println(MarzConstant.LOG_SYSTEM_INFO + "pvpEnd " + Thread.currentThread().getName());

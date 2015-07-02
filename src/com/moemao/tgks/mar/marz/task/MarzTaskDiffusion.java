@@ -491,7 +491,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                         // 如果石头足够
                         if (account.getCoin() >= 5)
                         {
-                            map = request.itemShopBuy(sid, marzSettingEvt.getAutoUseBPPotionItemId());
+                            for (int i=0; i < account.getCoin()/5; i++)
+                            {
+                                map = request.itemShopBuy(sid, MarConstant.ITEM_ID_BP_RECOVER_FULL);
+                            }
                             
                             resultCode = map.get(MarzConstant.JSON_TAG_RESCODE).getInt(MarzConstant.JSON_TAG_RESCODE);
                             
@@ -749,22 +752,10 @@ public class MarzTaskDiffusion implements Runnable, ApplicationContextAware
                     	// 遍历所有卡片 把需要出售的卡片ID放入cardSellList
                         for (CardEvt card : cardList)
                         {
-                            // 只能出售未锁定以及是1级的卡
-                            if (0 == card.getIs_lock() && 1 == card.getLv())
+                            if (0 == card.getIs_lock())
                             {
-                                // 先卖 出售列表中的卡
-                                if (userSellList.contains(card.getCardid()))
-                                {
-                                    cardSellIdList.add(card.getUniqid());
-                                    cardSellCardList.add(card);
-                                }
-                                // 然后卖一些基础的垃圾卡 10~30
-                                else if (validateSetting(MarzConstant.VALIDATE_SETTING_CARDSELL_COMMON)
-                                        && card.getLv_max() >= 10 && card.getLv_max() <= 30)
-                                {
-                                    cardSellIdList.add(card.getUniqid());
-                                    cardSellCardList.add(card);
-                                }
+                                cardSellIdList.add(card.getUniqid());
+                                cardSellCardList.add(card);
                             }
                             
                             // 当出售的卡片满10张时 跳出
